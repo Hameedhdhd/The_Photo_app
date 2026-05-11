@@ -13,7 +13,12 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^3.0.2",
+    "@supabase/supabase-js": "^2.105.4",
     "expo": "~52.0.36",
+    "expo-camera": "~17.0.10",
+    "expo-file-system": "~19.0.22",
+    "expo-image-picker": "~17.0.11",
     "expo-status-bar": "~2.0.1",
     "react": "19.1.0",
     "react-native": "0.77.1"

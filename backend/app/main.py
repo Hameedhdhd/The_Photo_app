@@ -3,6 +3,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
 import shutil
+from dotenv import load_dotenv
+
+# Load backend environment variables
+load_dotenv()
 
 app = FastAPI(title="The Photo App API", version="1.0.0")
 
@@ -56,13 +60,35 @@ async def analyze_image(file: UploadFile = File(...)):
         from app.vision import vision_engine
         ai_result = vision_engine.analyze_image(file_path)
         
-        return ListingResponse(
+        # Format the response
+        response_data = ListingResponse(
             title=ai_result.get("title", f"Analyzed: {file.filename}"),
             description=ai_result.get("description", "No description generated."),
             price=ai_result.get("price", "TBD"),
             category=ai_result.get("category", "Uncategorized"),
             image_url=None
         )
+        
+        # Save to database if connected
+        from app.database import supabase
+        if supabase:
+            try:
+                # We don't have user_auth yet, so we insert anonymously for now
+                db_data = {
+                    "title": response_data.title,
+                    "description": response_data.description,
+                    "price": response_data.price,
+                    "category": response_data.category,
+                    "status": "draft"
+                }
+                # This assumes an 'items' table exists in your Supabase database
+                supabase.table("items").insert(db_data).execute()
+                print("Successfully saved analyzed item to Supabase!")
+            except Exception as db_err:
+                # We catch the error so the API doesn't fail if the table isn't created yet
+                print(f"Warning: Could not save to database. Have you created the 'items' table? Error: {db_err}")
+
+        return response_data
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
