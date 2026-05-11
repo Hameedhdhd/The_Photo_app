@@ -41,7 +41,7 @@ async def analyze_image(file: UploadFile = File(...)):
             shutil.copyfileobj(file.file, buffer)
             
         # Call the actual Vision API
-        from app.vision import vision_engine
+        # Only import and instantiate if we are not mocking
         
         # If no API key is set, return mock data to prevent crashing
         if not os.environ.get("OPENAI_API_KEY"):
@@ -53,6 +53,7 @@ async def analyze_image(file: UploadFile = File(...)):
                 image_url=None
             )
             
+        from app.vision import vision_engine
         ai_result = vision_engine.analyze_image(file_path)
         
         return ListingResponse(

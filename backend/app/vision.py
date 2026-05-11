@@ -5,8 +5,10 @@ from openai import OpenAI
 
 class VisionEngine:
     def __init__(self):
-        # Using environment variable for API key
-        self.openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+        # Using environment variable for API key. 
+        # Don't instantiate if no key is present to avoid OpenAI error on boot/import
+        api_key = os.environ.get("OPENAI_API_KEY")
+        self.openai_client = OpenAI(api_key=api_key) if api_key else None
 
     def encode_image(self, image_path):
         with open(image_path, "rb") as image_file:
@@ -14,6 +16,9 @@ class VisionEngine:
 
     def analyze_image(self, image_path):
         """Analyzes a single image for the FastAPI backend."""
+        if not self.openai_client:
+            raise ValueError("OpenAI client is not initialized. Please set OPENAI_API_KEY.")
+            
         base64_image = self.encode_image(image_path)
         prompt = self._get_single_image_prompt()
 
