@@ -7,7 +7,6 @@ import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '../../supabase';
-import ImageCropper from '../components/ImageCropper';
 
 // Backend API URL — update when localtunnel URL changes
 const API_URL = 'https://short-insects-clap.loca.lt/api/analyze-image';
@@ -15,13 +14,11 @@ const API_URL = 'https://short-insects-clap.loca.lt/api/analyze-image';
 const ROOMS = ['Kitchen', 'Bathroom', 'Bedroom', 'Living Room', 'Garage', 'Electrical', 'Other'];
 
 export default function HomeScreen({ navigation }) {
-  const [rawImageUri, setRawImageUri] = useState(null);
-  const [croppedImageUri, setCroppedImageUri] = useState(null);
+  const [imageUri, setImageUri] = useState(null);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [selectedRoom, setSelectedRoom] = useState('Other');
   const [lang, setLang] = useState('de'); // 'en' or 'de'
-  const [isCropping, setIsCropping] = useState(false);
   
   // Animation values
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -64,31 +61,27 @@ export default function HomeScreen({ navigation }) {
     }
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ['images'],
-      allowsEditing: false, // Use our custom cropper instead
-      quality: 1,
+      allowsEditing: true, // Use built-in cropper for stability
+      aspect: [4, 3],
+      quality: 0.7,
     });
     if (!result.canceled) {
-      setRawImageUri(result.assets[0].uri);
-      setIsCropping(true);
+      setImageUri(result.assets[0].uri);
+      analyzeImage(result.assets[0].uri);
     }
   };
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
-      allowsEditing: false, // Use our custom cropper instead
-      quality: 1,
+      allowsEditing: true, // Use built-in cropper for stability
+      aspect: [4, 3],
+      quality: 0.7,
     });
     if (!result.canceled) {
-      setRawImageUri(result.assets[0].uri);
-      setIsCropping(true);
+      setImageUri(result.assets[0].uri);
+      analyzeImage(result.assets[0].uri);
     }
-  };
-
-  const onCropDone = (uri) => {
-    setIsCropping(false);
-    setCroppedImageUri(uri);
-    analyzeImage(uri);
   };
 
   const analyzeImage = async (uri) => {
@@ -117,7 +110,7 @@ export default function HomeScreen({ navigation }) {
     } catch (error) {
       console.error('Analysis error:', error);
       Alert.alert('Analysis Failed', 'Could not connect to backend.');
-      setCroppedImageUri(null);
+      setImageUri(null);
     } finally { setLoading(false); }
   };
 
@@ -138,16 +131,7 @@ export default function HomeScreen({ navigation }) {
       </LinearGradient>
 
       <View style={styles.contentContainer}>
-        {/* Custom Image Cropper Modal */}
-        <Modal visible={isCropping} animationType="slide">
-           <ImageCropper 
-              imageUri={rawImageUri} 
-              onCrop={onCropDone} 
-              onCancel={() => setIsCropping(false)} 
-           />
-        </Modal>
-
-        {!croppedImageUri && !loading && (
+        {!imageUri && !loading && (
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.roomSection}>
               <Text style={styles.sectionLabel}>Select Room / Section:</Text>
@@ -185,9 +169,9 @@ export default function HomeScreen({ navigation }) {
           </ScrollView>
         )}
 
-        {croppedImageUri && (
+        {imageUri && (
           <View style={styles.imageWrapper}>
-            <Image source={{ uri: croppedImageUri }} style={styles.previewImage} />
+            <Image source={{ uri: imageUri }} style={styles.previewImage} />
             {loading && (
               <Animated.View style={[styles.loadingOverlay, { transform: [{ scale: pulseAnim }] }]}>
                 <View style={styles.glassCard}>
@@ -235,7 +219,7 @@ export default function HomeScreen({ navigation }) {
               </Text>
             </View>
 
-            <TouchableOpacity style={styles.primaryButton} onPress={() => {setCroppedImageUri(null); setResult(null);}}>
+            <TouchableOpacity style={styles.primaryButton} onPress={() => {setImageUri(null); setResult(null);}}>
               <LinearGradient colors={['#4c669f', '#192f6a']} style={styles.buttonGradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
                 <Text style={styles.buttonText}>Scan Another</Text>
               </LinearGradient>
@@ -285,7 +269,7 @@ const styles = StyleSheet.create({
   rowCards: { flexDirection: 'row', gap: 10 },
   flexCard: { flex: 1 },
   resultLabel: { fontSize: 11, color: '#94a3b8', textTransform: 'uppercase', fontWeight: '700', marginBottom: 5 },
-  resultItemId: { fontSize: 14, color: '#4c669f', fontWeight: '800', fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace' },
+  resultItemId: { fontSize: 14, color: '#4c669f', fontWeight: '800' },
   resultTitleValue: { fontSize: 18, color: '#1e293b', fontWeight: '700' },
   resultPrice: { fontSize: 22, color: '#FF6B6B', fontWeight: '900' },
   resultCategory: { fontSize: 16, color: '#4c669f', fontWeight: '600' },
