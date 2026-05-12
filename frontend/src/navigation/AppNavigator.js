@@ -74,8 +74,7 @@ export default function AppNavigator() {
     return () => subscription?.unsubscribe();
   }, []);
 
-  // Expose mock login to LoginScreen context if needed
-  // But simpler is to just handle the toggle logic here
+  if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F8FAFC' }}>
         <ActivityIndicator size="large" color="#FF6B6B" />
