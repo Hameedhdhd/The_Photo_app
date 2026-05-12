@@ -10,7 +10,7 @@ import { supabase } from '../../supabase';
 
 // Backend API URL — update when localtunnel URL changes
 // Backend API URL — update when localtunnel URL changes
-const API_URL = 'https://itchy-moons-invent.loca.lt/api/analyze-image';
+const API_URL = 'https://short-insects-clap.loca.lt/api/analyze-image';
 
 export default function HomeScreen({ navigation }) {
   const [imageUri, setImageUri] = useState(null);
