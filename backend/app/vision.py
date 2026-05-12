@@ -50,7 +50,8 @@ class VisionEngine:
         Extract and return the following information as a JSON object:
         {
           "title": "A short, catchy title for the listing",
-          "description": "A detailed description of the item, highlighting features and potential condition based on the image.",
+          "description_en": "A detailed description of the item in English, highlighting features and potential condition based on the image.",
+          "description_de": "The exact same detailed description, but translated into fluent, natural German.",
           "price": "A suggested price in EUR (e.g., '45 EUR' or 'VB 50 EUR')",
           "category": "The most appropriate category for this item"
         }
