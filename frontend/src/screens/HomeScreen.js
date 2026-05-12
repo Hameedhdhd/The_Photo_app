@@ -214,7 +214,12 @@ export default function HomeScreen({ navigation }) {
             </View>
 
             <View style={styles.card}>
-              <Text style={styles.resultLabel}>Title</Text>
+              <Text style={styles.resultLabel}>Item ID</Text>
+              <Text style={styles.resultItemId}>{result.item_id || 'N/A'}</Text>
+            </View>
+
+            <View style={styles.card}>
+              <Text style={styles.resultLabel}>Suggested Title</Text>
               <Text style={styles.resultTitleValue}>{result.title}</Text>
             </View>
             
@@ -280,6 +285,7 @@ const styles = StyleSheet.create({
   rowCards: { flexDirection: 'row', gap: 10 },
   flexCard: { flex: 1 },
   resultLabel: { fontSize: 11, color: '#94a3b8', textTransform: 'uppercase', fontWeight: '700', marginBottom: 5 },
+  resultItemId: { fontSize: 14, color: '#4c669f', fontWeight: '800', fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace' },
   resultTitleValue: { fontSize: 18, color: '#1e293b', fontWeight: '700' },
   resultPrice: { fontSize: 22, color: '#FF6B6B', fontWeight: '900' },
   resultCategory: { fontSize: 16, color: '#4c669f', fontWeight: '600' },

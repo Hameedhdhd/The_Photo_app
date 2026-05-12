@@ -24,6 +24,7 @@ class ListingResponse(BaseModel):
     price: str
     category: str
     room: str | None = None
+    item_id: str | None = None
     image_url: str | None = None
     user_id: str | None = None
 
@@ -56,6 +57,7 @@ async def analyze_image(
                 price="45 EUR",
                 category="Electronics",
                 room=room,
+                item_id=f"ITEM-{file.filename[:8]}",
                 image_url=None,
                 user_id=user_id
             )
@@ -70,6 +72,7 @@ async def analyze_image(
                 price=ai_result.get("price", "TBD"),
                 category=ai_result.get("category", "Uncategorized"),
                 room=room,
+                item_id=f"ITEM-{os.urandom(4).hex().upper()}",
                 image_url=None,
                 user_id=user_id
             )
@@ -85,6 +88,7 @@ async def analyze_image(
                     "price": response_data.price,
                     "category": response_data.category,
                     "room": response_data.room,
+                    "item_id": response_data.item_id,
                     "status": "draft",
                 }
                 if user_id:
