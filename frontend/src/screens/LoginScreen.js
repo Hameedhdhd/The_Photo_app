@@ -7,7 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '../../supabase';
 
-export default function LoginScreen() {
+export default function LoginScreen({ onMockLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,6 +20,14 @@ export default function LoginScreen() {
     }
     setLoading(true);
     try {
+      // Mock login for testing
+      if (email === '0' && password === '0') {
+        // We simulate a successful login by bypassing Supabase check
+        setLoading(false);
+        if (onMockLogin) onMockLogin();
+        return;
+      }
+
       if (isRegister) {
         const { error } = await supabase.auth.signUp({ email, password });
         if (error) throw error;

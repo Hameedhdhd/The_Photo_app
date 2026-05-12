@@ -56,6 +56,7 @@ function MainTabs() {
 
 export default function AppNavigator() {
   const [session, setSession] = useState(null);
+  const [isMockLogin, setIsMockLogin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -73,7 +74,8 @@ export default function AppNavigator() {
     return () => subscription?.unsubscribe();
   }, []);
 
-  if (loading) {
+  // Expose mock login to LoginScreen context if needed
+  // But simpler is to just handle the toggle logic here
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F8FAFC' }}>
         <ActivityIndicator size="large" color="#FF6B6B" />
@@ -84,10 +86,12 @@ export default function AppNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {session ? (
+        {session || isMockLogin ? (
           <Stack.Screen name="Main" component={MainTabs} />
         ) : (
-          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Login">
+            {(props) => <LoginScreen {...props} onMockLogin={() => setIsMockLogin(true)} />}
+          </Stack.Screen>
         )}
       </Stack.Navigator>
     </NavigationContainer>
