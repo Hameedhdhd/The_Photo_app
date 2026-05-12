@@ -1,54 +1,47 @@
-import base64
 import json
 import os
-from openai import OpenAI
+from PIL import Image
 
 class VisionEngine:
     def __init__(self):
-        # Deepseek provides an OpenAI compatible API endpoint
-        api_key = os.environ.get("DEEPSEEK_API_KEY")
-        
-        self.openai_client = None
+        api_key = os.environ.get("GEMINI_API_KEY")
+        self.client = None
         if api_key:
-            self.openai_client = OpenAI(
-                api_key=api_key,
-                base_url="https://api.deepseek.com"
-            )
-
-    def encode_image(self, image_path):
-        with open(image_path, "rb") as image_file:
-            return base64.b64encode(image_file.read()).decode('utf-8')
+            try:
+                from google import genai
+                self.client = genai.Client(api_key=api_key)
+            except ImportError:
+                print("google-genai is not installed")
 
     def analyze_image(self, image_path):
-        """Analyzes a single image for the FastAPI backend."""
-        if not self.openai_client:
-            raise ValueError("Deepseek client is not initialized. Please set DEEPSEEK_API_KEY.")
+        """Analyzes a single image for the FastAPI backend using Gemini."""
+        if not self.client:
+            raise ValueError("Gemini client is not initialized. Please set GEMINI_API_KEY.")
             
-        base64_image = self.encode_image(image_path)
         prompt = self._get_single_image_prompt()
+        
+        # Load image with PIL
+        pil_image = Image.open(image_path)
 
-        messages = [
-            {
-                "role": "user",
-                "content": [
-                    {"type": "text", "text": prompt},
-                    {
-                        "type": "image_url",
-                        "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}
-                    }
-                ]
-            }
-        ]
-
-        response = self.openai_client.chat.completions.create(
-            model="deepseek-v4-flash",
-            messages=messages,
-            response_format={"type": "json_object"},
-            max_tokens=1000,
-            reasoning_effort="high",
-            extra_body={"thinking": {"type": "enabled"}}
+        # We must explicitly instruct it to return ONLY JSON, no markdown
+        full_prompt = prompt + "\n\nCRITICAL: Return ONLY a raw JSON object. Do not wrap it in ```json blocks or any markdown."
+        
+        response = self.client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=[full_prompt, pil_image],
         )
-        return json.loads(response.choices[0].message.content)
+
+        text = response.text.strip()
+        
+        # Clean up any potential markdown formatting if the AI disobeys
+        if text.startswith("```json"):
+            text = text[7:]
+        if text.startswith("```"):
+            text = text[3:]
+        if text.endswith("```"):
+            text = text[:-3]
+            
+        return json.loads(text.strip())
 
     def _get_single_image_prompt(self):
         return """

@@ -23,9 +23,9 @@ def test_analyze_image_mock():
 
     try:
         # Temporarily unset API key to ensure mock response is returned
-        original_api_key = os.environ.get("DEEPSEEK_API_KEY")
-        if "DEEPSEEK_API_KEY" in os.environ:
-            del os.environ["DEEPSEEK_API_KEY"]
+        original_api_key = os.environ.get("GEMINI_API_KEY")
+        if "GEMINI_API_KEY" in os.environ:
+            del os.environ["GEMINI_API_KEY"]
 
         with open(test_image_path, "rb") as f:
             response = client.post(
@@ -45,6 +45,6 @@ def test_analyze_image_mock():
     finally:
         # Restore API key and cleanup file
         if original_api_key is not None:
-            os.environ["DEEPSEEK_API_KEY"] = original_api_key
+            os.environ["GEMINI_API_KEY"] = original_api_key
         if os.path.exists(test_image_path):
             os.remove(test_image_path)

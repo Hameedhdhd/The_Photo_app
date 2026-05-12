@@ -48,10 +48,10 @@ async def analyze_image(file: UploadFile = File(...)):
         # Only import and instantiate if we are not mocking
         
         # If no API key is set, return mock data to prevent crashing
-        if not os.environ.get("DEEPSEEK_API_KEY"):
+        if not os.environ.get("GEMINI_API_KEY"):
             return ListingResponse(
                 title=f"Mock AI: {file.filename}",
-                description="Please set DEEPSEEK_API_KEY to see real AI results. This is mock data.",
+                description="Please set GEMINI_API_KEY to see real AI results. This is mock data.",
                 price="45 EUR",
                 category="Electronics",
                 image_url=None

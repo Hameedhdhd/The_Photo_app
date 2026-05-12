@@ -6,7 +6,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 
 // Ensure you start the backend server with: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-const API_URL = 'http://192.168.178.61:8000/api/analyze-image';
+// Using localtunnel to bypass firewall for testing
+const API_URL = 'https://itchy-moons-invent.loca.lt/api/analyze-image';
 
 export default function App() {
   const [imageUri, setImageUri] = useState(null);
