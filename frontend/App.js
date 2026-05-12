@@ -5,9 +5,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 
-// Update this to your local IP address when running on a physical device
-// E.g., 'http://192.168.1.5:8000/api/analyze-image'
-const API_URL = 'http://127.0.0.1:8000/api/analyze-image';
+// Ensure you start the backend server with: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+const API_URL = 'http://192.168.178.61:8000/api/analyze-image';
 
 export default function App() {
   const [imageUri, setImageUri] = useState(null);
@@ -62,7 +61,7 @@ export default function App() {
     }
 
     const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       allowsEditing: true,
       aspect: [4, 3],
       quality: 0.7,
@@ -76,7 +75,7 @@ export default function App() {
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       allowsEditing: true,
       aspect: [4, 3],
       quality: 0.7,
