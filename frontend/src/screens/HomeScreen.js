@@ -9,7 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '../supabase';
 
 // Backend API URL — update when localtunnel URL changes
-const API_URL = 'https://fifty-phones-battle.loca.lt/api/analyze-image';
+const API_URL = 'http://192.168.178.61:8000/api/analyze-image';
 
 export default function HomeScreen({ navigation }) {
   const [imageUri, setImageUri] = useState(null);
