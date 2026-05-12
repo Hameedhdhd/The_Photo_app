@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { ActivityIndicator, View } from 'react-native';
 
-import { supabase } from '../supabase';
+import { supabase } from '../../supabase';
 import LoginScreen from '../screens/LoginScreen';
 import HomeScreen from '../screens/HomeScreen';
 import MyListingsScreen from '../screens/MyListingsScreen';

@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { supabase } from '../supabase';
+import { supabase } from '../../supabase';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
