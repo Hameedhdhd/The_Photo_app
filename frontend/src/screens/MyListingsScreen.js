@@ -108,7 +108,7 @@ export default function MyListingsScreen() {
         <FlatList
           data={listings}
           renderItem={renderListingItem}
-          keyExtractor={(item) => item.item_id}
+          keyExtractor={(item) => String(item.id || item.item_id)}
           contentContainerStyle={styles.listContentContainer}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#FF6B6B']} />

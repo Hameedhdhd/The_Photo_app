@@ -8,8 +8,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '../../supabase';
 
-// Backend API URL — IMPORTANT: Update this URL whenever localtunnel restarts.
-const API_URL = 'https://short-insects-clap.loca.lt/api/analyze-image';
+// Backend API URL — IMPORTANT: Update this URL in .env whenever localtunnel restarts.
+const API_URL = process.env.EXPO_PUBLIC_API_URL || 'http://192.168.178.61:8000/api/analyze-image';
 
 const ROOMS = ['Kitchen', 'Bathroom', 'Bedroom', 'Living Room', 'Garage', 'Electrical', 'Other'];
 
