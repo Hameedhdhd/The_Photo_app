@@ -41,10 +41,12 @@ class VisionEngine:
         ]
 
         response = self.openai_client.chat.completions.create(
-            model="deepseek-chat",
+            model="deepseek-v4-flash",
             messages=messages,
             response_format={"type": "json_object"},
-            max_tokens=1000
+            max_tokens=1000,
+            reasoning_effort="high",
+            extra_body={"thinking": {"type": "enabled"}}
         )
         return json.loads(response.choices[0].message.content)
 
