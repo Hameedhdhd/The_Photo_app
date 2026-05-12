@@ -1,106 +1,86 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  View, Text, FlatList, StyleSheet, TouchableOpacity,
-  ActivityIndicator, Alert, RefreshControl
+  StyleSheet, Text, View, FlatList, ActivityIndicator,
+  RefreshControl, Image, TouchableOpacity, Alert
 } from 'react-native';
+import { supabase } from '../../supabase';
+import { useFocusEffect } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { supabase } from '../../supabase';
 
-export default function MyListingsScreen({ navigation }) {
-  const [listings, setListings] = useState([]);
+export default function MyListingsScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [deleting, setDeleting] = useState(null);
+  const [listings, setListings] = useState([]);
+  const [userId, setUserId] = useState(null);
 
-  const fetchListings = useCallback(async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.user?.id) return;
-
-      const { data, error } = await supabase
-        .from('items')
-        .select('*')
-        .eq('user_id', session.user.id)
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      setListings(data || []);
-    } catch (error) {
-      console.error('Error fetching listings:', error);
-      Alert.alert('Error', 'Could not load your listings.');
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchListings();
-  }, [fetchListings]);
-
-  // Refresh when tab is focused
-  useEffect(() => {
-    const unsubscribe = navigation?.addListener?.('focus', () => {
-      fetchListings();
-    });
-    return unsubscribe;
-  }, [navigation, fetchListings]);
-
-  const deleteListing = async (id) => {
-    Alert.alert('Delete Listing', 'Are you sure?', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Delete',
-        style: 'destructive',
-        onPress: async () => {
-          setDeleting(id);
-          try {
-            const { error } = await supabase.from('items').delete().eq('id', id);
-            if (error) throw error;
-            setListings(prev => prev.filter(item => item.id !== id));
-          } catch (error) {
-            console.error('Delete error:', error);
-            Alert.alert('Error', 'Could not delete listing.');
-          } finally {
-            setDeleting(null);
-          }
-        },
-      },
-    ]);
+  const getSessionUserId = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    return session?.user?.id;
   };
 
-  const renderItem = ({ item }) => (
+  const fetchListings = useCallback(async () => {
+    if (!userId) return;
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('items')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching listings:', error);
+      Alert.alert('Error', 'Could not fetch your listings.');
+      setListings([]);
+    } else {
+      setListings(data);
+    }
+    setLoading(false);
+  }, [userId]);
+
+  useEffect(() => {
+    const loadUserId = async () => {
+      const id = await getSessionUserId();
+      setUserId(id);
+    };
+    loadUserId();
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (userId) {
+        fetchListings();
+      }
+    }, [userId, fetchListings])
+  );
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await fetchListings();
+    setRefreshing(false);
+  }, [fetchListings]);
+
+  const renderListingItem = ({ item }) => (
     <View style={styles.card}>
-      <View style={styles.cardHeader}>
-        <View style={styles.cardTitleArea}>
-          <Text style={styles.cardCategory}>{item.category || 'Uncategorized'}</Text>
-          <Text style={styles.cardTitle} numberOfLines={2}>{item.title}</Text>
+      {item.image_url && (
+        <Image source={{ uri: item.image_url }} style={styles.listingImage} />
+      )}
+      <View style={styles.cardContent}>
+        <Text style={styles.title}>{item.title}</Text>
+        <Text style={styles.price}>{item.price}</Text>
+        <View style={styles.detailsRow}>
+          <Text style={styles.category}>{item.category}</Text>
+          <Text style={styles.room}>• {item.room}</Text>
         </View>
-        <TouchableOpacity onPress={() => deleteListing(item.id)} disabled={deleting === item.id}>
-          {deleting === item.id ? (
-            <ActivityIndicator size="small" color="#FF6B6B" />
-          ) : (
-            <Ionicons name="trash-outline" size={20} color="#94a3b8" />
-          )}
-        </TouchableOpacity>
-      </View>
-      <View style={styles.cardFooter}>
-        <View style={styles.priceTag}>
-          <Text style={styles.priceText}>{item.price || 'N/A'}</Text>
-        </View>
-        <View style={[styles.statusBadge, { backgroundColor: item.status === 'published' ? '#d4edda' : '#fff3cd' }]}>
-          <Text style={[styles.statusText, { color: item.status === 'published' ? '#155724' : '#856404' }]}>
-            {item.status === 'published' ? 'Published' : 'Draft'}
-          </Text>
-        </View>
+        <Text style={styles.description} numberOfLines={2}>{item.description_en}</Text>
+        {/* Potentially add more details or actions here */}
       </View>
     </View>
   );
 
-  if (loading) {
+  if (loading && !refreshing) {
     return (
-      <View style={styles.centerContainer}>
+      <View style={styles.centered}>
         <ActivityIndicator size="large" color="#FF6B6B" />
         <Text style={styles.loadingText}>Loading your listings...</Text>
       </View>
@@ -110,26 +90,28 @@ export default function MyListingsScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <LinearGradient colors={['#4c669f', '#3b5998', '#192f6a']} style={styles.header}>
-        <Ionicons name="list-outline" size={32} color="#fff" />
-        <Text style={styles.title}>My Listings</Text>
-        <Text style={styles.subtitle}>{listings.length} item{listings.length !== 1 ? 's' : ''} saved</Text>
+        <Text style={styles.headerTitle}>My Listings</Text>
       </LinearGradient>
 
       {listings.length === 0 ? (
-        <View style={styles.emptyContainer}>
-          <Ionicons name="cube-outline" size={80} color="#cbd5e1" />
-          <Text style={styles.emptyTitle}>No listings yet</Text>
-          <Text style={styles.emptyText}>Take a photo of an item to generate your first AI-powered listing!</Text>
-        </View>
+        <ScrollView
+          contentContainerStyle={styles.centered}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#FF6B6B']} />
+          }
+        >
+          <Ionicons name="pricetags-outline" size={100} color="#cbd5e1" />
+          <Text style={styles.emptyStateText}>No listings yet!</Text>
+          <Text style={styles.emptyStateSubText}>Go to the Scan tab to create your first listing.</Text>
+        </ScrollView>
       ) : (
         <FlatList
           data={listings}
-          renderItem={renderItem}
-          keyExtractor={item => String(item.id)}
-          contentContainerStyle={styles.listContent}
-          showsVerticalScrollIndicator={false}
+          renderItem={renderListingItem}
+          keyExtractor={(item) => item.item_id}
+          contentContainerStyle={styles.listContentContainer}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); fetchListings(); }} colors={['#FF6B6B']} />
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#FF6B6B']} />
           }
         />
       )}
@@ -138,69 +120,102 @@ export default function MyListingsScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F8FAFC' },
-  centerContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F8FAFC' },
-  loadingText: { marginTop: 15, fontSize: 16, color: '#64748b' },
+  container: {
+    flex: 1,
+    backgroundColor: '#F8FAFC',
+  },
   header: {
-    paddingTop: 55,
-    paddingBottom: 25,
+    paddingTop: 50,
+    paddingBottom: 20,
     paddingHorizontal: 20,
-    alignItems: 'center',
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 10,
     elevation: 8,
+    zIndex: 10,
+    alignItems: 'center',
   },
-  title: { fontSize: 28, fontWeight: '800', color: '#fff', marginTop: 5 },
-  subtitle: { fontSize: 14, color: '#e2e8f0', marginTop: 3 },
-  listContent: { padding: 20, paddingBottom: 30 },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: '#fff',
+  },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#64748b',
+    fontWeight: '600',
+  },
+  emptyStateText: {
+    marginTop: 20,
+    fontSize: 18,
+    color: '#94a3b8',
+    fontWeight: '600',
+  },
+  emptyStateSubText: {
+    marginTop: 5,
+    fontSize: 14,
+    color: '#94a3b8',
+    textAlign: 'center',
+  },
+  listContentContainer: {
+    padding: 20,
+  },
   card: {
     backgroundColor: '#fff',
     borderRadius: 16,
-    padding: 18,
     marginBottom: 15,
+    elevation: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 5,
-    elevation: 2,
-    borderWidth: 1,
-    borderColor: '#f1f5f9',
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    overflow: 'hidden', // Ensures image corners are rounded
   },
-  cardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+  listingImage: {
+    width: '100%',
+    height: 200, // Fixed height for consistency
+    resizeMode: 'cover',
   },
-  cardTitleArea: { flex: 1, marginRight: 15 },
-  cardCategory: { fontSize: 12, color: '#4c669f', fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 5 },
-  cardTitle: { fontSize: 16, color: '#1e293b', fontWeight: '600', lineHeight: 22 },
-  cardFooter: {
+  cardContent: {
+    padding: 15,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#1e293b',
+    marginBottom: 5,
+  },
+  price: {
+    fontSize: 20,
+    fontWeight: '900',
+    color: '#FF6B6B',
+    marginBottom: 5,
+  },
+  detailsRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 15,
-    paddingTop: 15,
-    borderTopWidth: 1,
-    borderTopColor: '#f1f5f9',
+    marginBottom: 10,
   },
-  priceTag: {
-    backgroundColor: '#fef2f2',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
+  category: {
+    fontSize: 13,
+    color: '#4c669f',
+    fontWeight: '600',
   },
-  priceText: { fontSize: 16, fontWeight: '800', color: '#FF6B6B' },
-  statusBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
+  room: {
+    fontSize: 13,
+    color: '#64748b',
+    fontWeight: '500',
+    marginLeft: 5,
   },
-  statusText: { fontSize: 12, fontWeight: '700' },
-  emptyContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 40 },
-  emptyTitle: { fontSize: 22, fontWeight: '700', color: '#64748b', marginTop: 20 },
-  emptyText: { fontSize: 16, color: '#94a3b8', textAlign: 'center', marginTop: 10, lineHeight: 24 },
+  description: {
+    fontSize: 14,
+    color: '#475569',
+    lineHeight: 20,
+  },
 });

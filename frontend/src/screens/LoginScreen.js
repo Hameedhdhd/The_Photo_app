@@ -14,34 +14,14 @@ export default function LoginScreen({ onMockLogin }) {
   const [isRegister, setIsRegister] = useState(false);
 
   const handleAuth = async () => {
-    if (!email || !password) {
-      Alert.alert('Error', 'Please enter email and password.');
-      return;
-    }
     setLoading(true);
-    try {
-      // Mock login for testing
-      if (email === '0' && password === '0') {
-        // We simulate a successful login by bypassing Supabase check
-        setLoading(false);
-        if (onMockLogin) onMockLogin();
-        return;
-      }
-
-      if (isRegister) {
-        const { error } = await supabase.auth.signUp({ email, password });
-        if (error) throw error;
-        Alert.alert('Success!', 'Check your email for the confirmation link.');
-      } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        // Navigation handled automatically by the auth state listener
-      }
-    } catch (error) {
-      Alert.alert('Error', error.message);
-    } finally {
+    // Shortcut for testing: bypass all auth and log in immediately
+    setTimeout(() => {
       setLoading(false);
-    }
+      if (onMockLogin) {
+        onMockLogin();
+      }
+    }, 500);
   };
 
   return (
