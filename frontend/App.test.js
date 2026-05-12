@@ -37,15 +37,15 @@ describe('<App />', () => {
   it('renders correctly', () => {
     const { getByText } = render(<App />);
     
-    expect(getByText('The Photo App')).toBeTruthy();
-    expect(getByText('Snap an item. Sell it instantly.')).toBeTruthy();
-    expect(getByText('Take a Photo')).toBeTruthy();
+    expect(getByText('List It Fast')).toBeTruthy();
+    expect(getByText('AI-Powered Selling Assistant')).toBeTruthy();
+    expect(getByText('Take Photo')).toBeTruthy();
     expect(getByText('Choose from Gallery')).toBeTruthy();
   });
 
   it('camera button triggers image picker and shows results', async () => {
     const { getByText, findByText } = render(<App />);
-    const cameraButton = getByText('Take a Photo');
+    const cameraButton = getByText('Take Photo');
     
     fireEvent.press(cameraButton);
     

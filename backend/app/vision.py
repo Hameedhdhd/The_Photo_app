@@ -5,10 +5,15 @@ from openai import OpenAI
 
 class VisionEngine:
     def __init__(self):
-        # Using environment variable for API key. 
-        # Don't instantiate if no key is present to avoid OpenAI error on boot/import
-        api_key = os.environ.get("OPENAI_API_KEY")
-        self.openai_client = OpenAI(api_key=api_key) if api_key else None
+        # Deepseek provides an OpenAI compatible API endpoint
+        api_key = os.environ.get("DEEPSEEK_API_KEY")
+        
+        self.openai_client = None
+        if api_key:
+            self.openai_client = OpenAI(
+                api_key=api_key,
+                base_url="https://api.deepseek.com"
+            )
 
     def encode_image(self, image_path):
         with open(image_path, "rb") as image_file:
@@ -17,7 +22,7 @@ class VisionEngine:
     def analyze_image(self, image_path):
         """Analyzes a single image for the FastAPI backend."""
         if not self.openai_client:
-            raise ValueError("OpenAI client is not initialized. Please set OPENAI_API_KEY.")
+            raise ValueError("Deepseek client is not initialized. Please set DEEPSEEK_API_KEY.")
             
         base64_image = self.encode_image(image_path)
         prompt = self._get_single_image_prompt()
@@ -36,7 +41,7 @@ class VisionEngine:
         ]
 
         response = self.openai_client.chat.completions.create(
-            model="gpt-4o",
+            model="deepseek-chat",
             messages=messages,
             response_format={"type": "json_object"},
             max_tokens=1000
