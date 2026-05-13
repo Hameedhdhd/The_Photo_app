@@ -4,10 +4,7 @@ import {
   ScrollView, Dimensions, TouchableWithoutFeedback
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Animated, {
-  useAnimatedStyle, useSharedValue, withSpring,
-  withTiming, runOnJS, FadeIn, FadeOut
-} from 'react-native-reanimated';
+import Animated, { FadeIn, FadeInDown, FadeInUp, FadeOut, useAnimatedStyle, useSharedValue, withSpring, withTiming, withRepeat, runOnJS } from 'react-native-reanimated';
 import { supabase } from '../../supabase';
 import { colors, typography, spacing, radius, shadows } from '../theme';
 

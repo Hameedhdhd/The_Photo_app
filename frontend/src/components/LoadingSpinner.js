@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, ActivityIndicator, Text, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Animated, FadeInDown, FadeInUp, FadeIn, useAnimatedStyle, useSharedValue, withSpring, withTiming, withRepeat, runOnJS } from 'react-native-reanimated';
+import Animated, { FadeIn, FadeInDown, FadeInUp, FadeOut, useAnimatedStyle, useSharedValue, withSpring, withTiming, withRepeat, runOnJS } from 'react-native-reanimated';
 import { useEffect } from 'react';
 import { colors, typography, spacing, radius } from '../theme';
 
