@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(15, 23, 42, 0.6)',
     justifyContent: 'center',
     alignItems: 'center',
-    backdropFilter: 'blur(8px)',
   },
   glassCard: {
     backgroundColor: 'rgba(255, 255, 255, 0.95)',

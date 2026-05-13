@@ -189,7 +189,7 @@ export default function HomeScreen({ navigation }) {
     } finally {
       setLoading(false);
     }
-  }, [imageUris, analyzeSingleImage, getSessionUserId]);
+  }, [imageUris, uploadAndAnalyze, getSessionUserId]);
 
   const handleLogout = useCallback(async () => {
     await supabase.auth.signOut();
