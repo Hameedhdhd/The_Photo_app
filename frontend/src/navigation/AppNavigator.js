@@ -3,8 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import { View, StyleSheet, Platform } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import { View, StyleSheet, Platform, Animated as RNAnimated, Easing } from 'react-native';
 
 import { supabase } from '../../supabase';
 import LoginScreen from '../screens/LoginScreen';
@@ -24,24 +23,23 @@ const DEV_EMAIL = 'Hameed@Hd.com';
 const DEV_PASSWORD = 'Hameed2024!';
 
 const AnimatedTabIcon = ({ name, focused, size }) => {
-  const scale = useSharedValue(1);
+  const scaleAnim = React.useRef(new RNAnimated.Value(1)).current;
 
   useEffect(() => {
-    scale.value = withSpring(focused ? 1.15 : 1, { damping: 15, stiffness: 300 });
+    RNAnimated.spring(scaleAnim, {
+      toValue: focused ? 1.15 : 1,
+      useNativeDriver: true,
+    }).start();
   }, [focused]);
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
-
   return (
-    <Animated.View style={[styles.tabIconContainer, focused && styles.tabIconActive, animatedStyle]}>
+    <RNAnimated.View style={[styles.tabIconContainer, focused && styles.tabIconActive, { transform: [{ scale: scaleAnim }] }]}>
       <Ionicons
         name={name}
         size={focused ? size + 2 : size}
         color={focused ? colors.primary : colors.textTertiary}
       />
-    </Animated.View>
+    </RNAnimated.View>
   );
 };
 
