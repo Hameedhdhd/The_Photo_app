@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Animated, { FadeIn, FadeInDown, FadeInUp, FadeOut, useAnimatedStyle, useSharedValue, withSpring, withTiming, withRepeat, runOnJS } from 'react-native-reanimated';
+import Animated, { FadeIn, FadeInDown, FadeInUp, FadeOut, useAnimatedStyle, useSharedValue, withSpring, withTiming, withRepeat, runOnJS } from '../utils/reanimated-compat';
 import { colors, typography, spacing, radius, shadows, layout } from '../theme';
 
 const CARD_WIDTH = (layout.screenWidth - 45) / 2;

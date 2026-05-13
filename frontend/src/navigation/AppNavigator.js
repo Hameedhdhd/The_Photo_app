@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { View, StyleSheet, Platform } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from '../utils/reanimated-compat';
 
 import { supabase } from '../../supabase';
 import LoginScreen from '../screens/LoginScreen';
