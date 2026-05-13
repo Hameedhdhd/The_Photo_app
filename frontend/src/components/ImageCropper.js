@@ -6,7 +6,7 @@ import {
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle, useSharedValue, withSpring, runOnJS
-} from '../utils/reanimated-compat';
+} from 'react-native-reanimated';
 import { Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';

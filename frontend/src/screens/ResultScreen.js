@@ -4,7 +4,7 @@ import {
   KeyboardAvoidingView, Platform, Alert, TouchableOpacity, Dimensions
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Animated, FadeInDown, FadeInUp, FadeIn, useAnimatedStyle, useSharedValue, withSpring, withTiming, withRepeat, runOnJS } from '../utils/reanimated-compat';
+import { Animated, FadeInDown, FadeInUp, FadeIn, useAnimatedStyle, useSharedValue, withSpring, withTiming, withRepeat, runOnJS } from 'react-native-reanimated';
 import { supabase } from '../../supabase';
 import Header from '../components/Header';
 import Button from '../components/Button';

@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Animated, {
   useAnimatedStyle, useSharedValue, withSpring,
   withTiming, runOnJS, FadeIn, FadeOut
-} from '../utils/reanimated-compat';
+} from 'react-native-reanimated';
 import { supabase } from '../../supabase';
 import { colors, typography, spacing, radius, shadows } from '../theme';
 
