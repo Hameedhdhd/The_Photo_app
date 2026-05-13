@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  View, Text, StyleSheet, KeyboardAvoidingView, Platform, Dimensions
+  View, Text, StyleSheet, KeyboardAvoidingView, Platform, Dimensions, Alert
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,10 +15,16 @@ export default function LoginScreen({ onMockLogin }) {
 
   const handleLogin = async () => {
     setLoading(true);
-    setTimeout(() => {
+    try {
+      if (onMockLogin) {
+        await onMockLogin();
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+      Alert.alert('Login Error', err.message || 'Unknown error occurred');
+    } finally {
       setLoading(false);
-      if (onMockLogin) onMockLogin();
-    }, 500);
+    }
   };
 
   return (

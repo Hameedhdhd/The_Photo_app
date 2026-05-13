@@ -112,19 +112,34 @@ export default function AppNavigator() {
         ) : (
           <Stack.Screen name="Login">
             {(props) => <LoginScreen {...props} onMockLogin={async () => {
-              // Sign in with a dev account so items can be saved/fetched
               const devEmail = 'Hameed@Hd.com';
               const devPass = 'Hameed2024!';
-              // Try sign in first (account may already exist)
-              let { error } = await supabase.auth.signInWithPassword({ email: devEmail, password: devPass });
-              if (error) {
-                // If account doesn't exist, create it
-                const { error: signUpError } = await supabase.auth.signUp({ email: devEmail, password: devPass });
-                if (signUpError) {
-                  console.error('Dev auth error:', signUpError);
-                  setIsMockLogin(true); // fallback
+              console.log('Starting auth for', devEmail);
+              try {
+                // Try sign in first
+                let signInResult = await supabase.auth.signInWithPassword({ email: devEmail, password: devPass });
+                console.log('Sign in result:', signInResult.error ? `ERROR: ${signInResult.error.message}` : 'SUCCESS');
+                
+                if (signInResult.error) {
+                  // Try sign up (may succeed but require email confirmation)
+                  const signUpResult = await supabase.auth.signUp({ email: devEmail, password: devPass });
+                  console.log('Sign up result:', signUpResult.error ? `ERROR: ${signUpResult.error.message}` : 'SUCCESS');
+                  
+                  // Try sign in again after sign-up
+                  signInResult = await supabase.auth.signInWithPassword({ email: devEmail, password: devPass });
+                  console.log('Retry sign in:', signInResult.error ? `ERROR: ${signInResult.error.message}` : 'SUCCESS');
                 }
-                // signUp triggers onAuthStateChange automatically
+                
+                if (signInResult.data?.session) {
+                  setSession(signInResult.data.session);
+                } else {
+                  // All auth methods failed — use mock mode as fallback
+                  console.log('Using mock login mode');
+                  setIsMockLogin(true);
+                }
+              } catch (err) {
+                console.error('Auth exception:', err);
+                setIsMockLogin(true); // fallback
               }
             }} />}
           </Stack.Screen>
