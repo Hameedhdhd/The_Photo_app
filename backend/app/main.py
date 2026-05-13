@@ -18,6 +18,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+VALID_ROOMS = ['Kitchen', 'Bathroom', 'Bedroom', 'Living Room', 'Garage', 'Office', 'Other']
+
 class ListingResponse(BaseModel):
     title: str
     description_en: str
@@ -75,13 +77,19 @@ async def analyze_image(
                 raise HTTPException(status_code=500, detail="AI engine not initialized. Check GEMINI_API_KEY.")
             ai_result = vision_engine.analyze_image(file_path)
 
+            # Use AI-suggested room if user didn't pick one or picked "Other"
+            ai_room = ai_result.get("room", "Other")
+            if ai_room not in VALID_ROOMS:
+                ai_room = "Other"
+            final_room = room if room and room != "Other" else ai_room
+
             response_data = ListingResponse(
                 title=ai_result.get("title", f"Analyzed: {file.filename}"),
                 description_en=ai_result.get("description_en", "No description generated."),
                 description_de=ai_result.get("description_de", "Keine Beschreibung erstellt."),
                 price=ai_result.get("price", "TBD"),
                 category=ai_result.get("category", "Uncategorized"),
-                room=room,
+                room=final_room,
                 item_id=f"ITEM-{uuid.uuid4().hex[:8].upper()}",
                 image_url=None,
                 user_id=user_id

@@ -118,7 +118,9 @@ USING (bucket_id = 'item_images');
 -- ============================================================
 
 DROP VIEW IF EXISTS api.items CASCADE;
-CREATE VIEW api.items AS SELECT * FROM public.items;
+CREATE VIEW api.items
+WITH (security_invoker=on)
+AS SELECT * FROM public.items;
 
 -- Grant permissions on the view
 GRANT ALL ON SCHEMA api TO service_role;

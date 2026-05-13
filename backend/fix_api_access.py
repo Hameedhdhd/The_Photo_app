@@ -13,11 +13,13 @@ token = os.environ.get('SUPABASE_ACCESS_TOKEN', '')
 project = 'awwahpecfvdljgupnzft'
 
 sql = """
--- Drop existing view if any
+-- Drop existing view
 DROP VIEW IF EXISTS api.items CASCADE;
 
--- Create view in api schema that mirrors public.items
-CREATE VIEW api.items AS SELECT * FROM public.items;
+-- Create view with security_invoker so RLS policies are respected
+CREATE VIEW api.items
+WITH (security_invoker=on)
+AS SELECT * FROM public.items;
 
 -- Grant permissions
 GRANT SELECT ON api.items TO anon;
@@ -28,6 +30,8 @@ GRANT UPDATE ON api.items TO anon;
 GRANT UPDATE ON api.items TO authenticated;
 GRANT DELETE ON api.items TO anon;
 GRANT DELETE ON api.items TO authenticated;
+GRANT ALL ON api.items TO service_role;
+GRANT ALL ON SCHEMA api TO service_role;
 """
 
 resp = requests.post(

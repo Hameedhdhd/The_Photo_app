@@ -60,7 +60,8 @@ class VisionEngine:
           "description_en": "A detailed description of the item in English, highlighting features and potential condition based on the image.",
           "description_de": "The exact same detailed description, but translated into fluent, natural German.",
           "price": "A suggested price in EUR (e.g., '45 EUR' or 'VB 50 EUR')",
-          "category": "The most appropriate category for this item"
+          "category": "The most appropriate category for this item",
+          "room": "The room where this item would most likely be found. Must be exactly one of: Kitchen, Bathroom, Bedroom, Living Room, Garage, Office, Other"
         }
         """
 

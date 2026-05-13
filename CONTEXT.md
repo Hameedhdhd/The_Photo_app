@@ -125,8 +125,10 @@ The_Photo_app/
 
 ### View: `api.items`
 - Mirrors `public.items` for REST API access
+- Uses `security_invoker=on` so RLS policies on `public.items` are respected
 - The Supabase project only exposes the `api` schema
 - All CRUD operations go through this view
+- **⚠️ If you alter `public.items`, recreate the view:** `CREATE OR REPLACE VIEW api.items WITH (security_invoker=on) AS SELECT * FROM public.items;`
 
 ### Storage Bucket: `item_images`
 - Public access for reading
@@ -334,7 +336,7 @@ npm start
 
 ## Known Issues
 
-1. **API schema:** REST API uses `api.items` view, not `public.items` directly. If you alter the `public.items` table, you MUST recreate the view: `CREATE OR REPLACE VIEW api.items AS SELECT * FROM public.items;`
+1. **API schema:** REST API uses `api.items` view with `security_invoker=on`, not `public.items` directly. If you alter the `public.items` table, you MUST recreate the view: `CREATE OR REPLACE VIEW api.items WITH (security_invoker=on) AS SELECT * FROM public.items;`
 2. **Mock login:** No real auth enforcement — anyone can access all items
 3. **Backend is local:** Needs cloud deployment (Railway, Fly.io) for production
 4. **Multi-photo:** Only first photo sent to AI; additional photos stored but not analyzed

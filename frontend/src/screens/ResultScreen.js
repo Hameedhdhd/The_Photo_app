@@ -10,7 +10,12 @@ import Header from '../components/Header';
 import Button from '../components/Button';
 import Card from '../components/Card';
 import LanguageToggle from '../components/LanguageToggle';
+import CategoryScroll from '../components/CategoryScroll';
 import { colors, typography, spacing, radius, shadows } from '../theme';
+
+const ROOMS = [
+  'Kitchen', 'Bathroom', 'Bedroom', 'Living Room', 'Garage', 'Office', 'Other'
+];
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const IMAGE_HEIGHT = SCREEN_WIDTH * 0.5;
@@ -28,6 +33,7 @@ export default function ResultScreen({ route, navigation }) {
   const [saving, setSaving] = useState(false);
   const [activePhotoIndex, setActivePhotoIndex] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [roomValue, setRoomValue] = useState(room || result?.room || 'Other');
 
   const titleRef = useRef(null);
   const descRef = useRef(null);
@@ -43,6 +49,7 @@ export default function ResultScreen({ route, navigation }) {
       const updateData = {
         title,
         price,
+        room: roomValue,
         description_de: descriptionDe,
         description_en: descriptionEn,
       };
@@ -51,7 +58,7 @@ export default function ResultScreen({ route, navigation }) {
         const { error } = await supabase
           .from('items')
           .update(updateData)
-          .eq('id', itemId);
+          .eq('item_id', itemId);
 
         if (error) throw error;
       }
@@ -63,7 +70,7 @@ export default function ResultScreen({ route, navigation }) {
     } finally {
       setSaving(false);
     }
-  }, [title, price, descriptionDe, descriptionEn, itemId]);
+  }, [title, price, descriptionDe, descriptionEn, roomValue, itemId]);
 
   const toggleFavorite = useCallback(async () => {
     const newValue = !isFavorite;
@@ -73,7 +80,7 @@ export default function ResultScreen({ route, navigation }) {
         await supabase
           .from('items')
           .update({ favorite: newValue })
-          .eq('id', itemId);
+          .eq('item_id', itemId);
       }
     } catch (err) {
       console.error('Favorite toggle error:', err);
@@ -257,16 +264,21 @@ export default function ResultScreen({ route, navigation }) {
           </Card>
         </Animated.View>
 
-        {/* Room */}
+        {/* Room Selector */}
         <Animated.View entering={FadeInDown.duration(300).delay(250)}>
           <Card shadow="sm" style={styles.fieldCard}>
             <View style={styles.fieldHeader}>
               <View style={styles.fieldHeaderLeft}>
-                <Ionicons name="location-outline" size={16} color={colors.textTertiary} />
-                <Text style={styles.fieldLabel}>Room / Section</Text>
+                <Ionicons name="location-outline" size={16} color={colors.primary} />
+                <Text style={[styles.fieldLabel, { color: colors.primary }]}>Room / Section</Text>
               </View>
             </View>
-            <Text style={styles.roomValue}>{room || 'Other'}</Text>
+            <CategoryScroll
+              categories={ROOMS}
+              selectedCategory={roomValue}
+              onSelect={setRoomValue}
+              showAllOption={false}
+            />
           </Card>
         </Animated.View>
 
@@ -479,12 +491,6 @@ const styles = StyleSheet.create({
     color: colors.accent,
     paddingVertical: spacing.xs,
     paddingHorizontal: 0,
-  },
-  // Room Value
-  roomValue: {
-    ...typography.h4,
-    color: colors.primary,
-    paddingVertical: spacing.xs,
   },
   // Description Input
   descriptionInput: {

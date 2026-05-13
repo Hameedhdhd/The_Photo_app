@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-from supabase import create_client, Client
+from supabase import create_client, Client, ClientOptions
 
 # Load .env from multiple possible locations
 env_paths = [
@@ -26,6 +26,6 @@ def get_supabase_client() -> Client:
         print(f"  SUPABASE_SERVICE_ROLE_KEY: {'set' if supabase_key else 'NOT SET'}")
         return None
         
-    return create_client(supabase_url, supabase_key)
+    return create_client(supabase_url, supabase_key, options=ClientOptions(schema="api"))
 
 supabase = get_supabase_client()

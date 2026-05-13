@@ -10,7 +10,12 @@ import Header from '../components/Header';
 import Button from '../components/Button';
 import Card from '../components/Card';
 import LanguageToggle from '../components/LanguageToggle';
+import CategoryScroll from '../components/CategoryScroll';
 import { colors, typography, spacing, radius } from '../theme';
+
+const ROOMS = [
+  'Kitchen', 'Bathroom', 'Bedroom', 'Living Room', 'Garage', 'Office', 'Other'
+];
 
 export default function ItemDetailScreen({ route, navigation }) {
   const { item } = route.params;
@@ -23,14 +28,14 @@ export default function ItemDetailScreen({ route, navigation }) {
   const [editingField, setEditingField] = useState(null);
   const [saving, setSaving] = useState(false);
   const [isFavorite, setIsFavorite] = useState(item?.favorite || false);
+  const [roomValue, setRoomValue] = useState(item?.room || 'Other');
 
   const titleRef = useRef(null);
   const descRef = useRef(null);
   const priceRef = useRef(null);
 
-  const itemId = item?.id || item?.item_id;
+  const itemId = item?.item_id || item?.id;
   const imageUrl = item?.image_url;
-  const room = item?.room;
   const category = item?.category;
 
   const currentDescription = lang === 'en' ? descriptionEn : descriptionDe;
@@ -44,7 +49,7 @@ export default function ItemDetailScreen({ route, navigation }) {
         await supabase
           .from('items')
           .update({ favorite: newValue })
-          .eq('id', itemId);
+          .eq('item_id', itemId);
       }
     } catch (err) {
       console.error('Favorite toggle error:', err);
@@ -58,6 +63,7 @@ export default function ItemDetailScreen({ route, navigation }) {
       const updateData = {
         title,
         price,
+        room: roomValue,
         description_de: descriptionDe,
         description_en: descriptionEn,
       };
@@ -66,7 +72,7 @@ export default function ItemDetailScreen({ route, navigation }) {
         const { error } = await supabase
           .from('items')
           .update(updateData)
-          .eq('id', itemId);
+          .eq('item_id', itemId);
 
         if (error) throw error;
       }
@@ -78,7 +84,7 @@ export default function ItemDetailScreen({ route, navigation }) {
     } finally {
       setSaving(false);
     }
-  }, [title, price, descriptionDe, descriptionEn, itemId]);
+  }, [title, price, descriptionDe, descriptionEn, roomValue, itemId]);
 
   const copyToClipboard = useCallback(async () => {
     const text = currentDescription;
@@ -222,16 +228,21 @@ export default function ItemDetailScreen({ route, navigation }) {
           </Card>
         </Animated.View>
 
-        {/* Room */}
+        {/* Room Selector */}
         <Animated.View entering={FadeInDown.duration(300).delay(250)}>
           <Card shadow="sm" style={styles.fieldCard}>
             <View style={styles.fieldHeader}>
               <View style={styles.fieldHeaderLeft}>
-                <Ionicons name="location-outline" size={16} color={colors.textTertiary} />
-                <Text style={styles.fieldLabel}>Room / Section</Text>
+                <Ionicons name="location-outline" size={16} color={colors.primary} />
+                <Text style={[styles.fieldLabel, { color: colors.primary }]}>Room / Section</Text>
               </View>
             </View>
-            <Text style={styles.roomValue}>{room || 'Other'}</Text>
+            <CategoryScroll
+              categories={ROOMS}
+              selectedCategory={roomValue}
+              onSelect={setRoomValue}
+              showAllOption={false}
+            />
           </Card>
         </Animated.View>
 
@@ -398,12 +409,6 @@ const styles = StyleSheet.create({
     color: colors.accent,
     paddingVertical: spacing.xs,
     paddingHorizontal: 0,
-  },
-  // Room Value
-  roomValue: {
-    ...typography.h4,
-    color: colors.primary,
-    paddingVertical: spacing.xs,
   },
   // Description Input
   descriptionInput: {

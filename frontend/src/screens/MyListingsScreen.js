@@ -17,6 +17,10 @@ import { colors, typography, spacing, radius } from '../theme';
 
 const FILTER_TABS = ['All', 'Favorites'];
 
+const ROOMS = [
+  'Kitchen', 'Bathroom', 'Bedroom', 'Living Room', 'Garage', 'Office', 'Other'
+];
+
 export default function MyListingsScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -24,6 +28,7 @@ export default function MyListingsScreen({ navigation }) {
   const [filteredListings, setFilteredListings] = useState([]);
   const [userId, setUserId] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedRoom, setSelectedRoom] = useState('All');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [categories, setCategories] = useState(['All']);
   const [activeFilter, setActiveFilter] = useState('All');
@@ -76,13 +81,13 @@ export default function MyListingsScreen({ navigation }) {
     }, [fetchListings])
   );
 
-  // Extract categories from listings
+  // Extract categories from listings (rooms use predefined list)
   useEffect(() => {
-    const roomSet = new Set();
+    const categorySet = new Set();
     listings.forEach(item => {
-      if (item.room) roomSet.add(item.room);
+      if (item.category) categorySet.add(item.category);
     });
-    setCategories(['All', ...Array.from(roomSet)]);
+    setCategories(['All', ...Array.from(categorySet)]);
   }, [listings]);
 
   // Filter listings based on search, category, and favorites
@@ -94,9 +99,14 @@ export default function MyListingsScreen({ navigation }) {
       result = result.filter(item => item.favorite);
     }
 
+    // Room filter
+    if (selectedRoom !== 'All') {
+      result = result.filter(item => item.room === selectedRoom);
+    }
+
     // Category filter
     if (selectedCategory !== 'All') {
-      result = result.filter(item => item.room === selectedCategory);
+      result = result.filter(item => item.category === selectedCategory);
     }
 
     // Search filter
@@ -112,7 +122,7 @@ export default function MyListingsScreen({ navigation }) {
     }
 
     setFilteredListings(result);
-  }, [listings, searchQuery, selectedCategory, activeFilter]);
+  }, [listings, searchQuery, selectedRoom, selectedCategory, activeFilter]);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -126,20 +136,21 @@ export default function MyListingsScreen({ navigation }) {
 
   const handleToggleFavorite = useCallback(async (item) => {
     const newValue = !item.favorite;
+    const itemId = item.item_id || item.id;
     // Optimistic update
     setListings(prev =>
-      prev.map(li => li.id === item.id ? { ...li, favorite: newValue } : li)
+      prev.map(li => (li.item_id || li.id) === itemId ? { ...li, favorite: newValue } : li)
     );
     try {
       await supabase
         .from('items')
         .update({ favorite: newValue })
-        .eq('id', item.id);
+        .eq('item_id', itemId);
     } catch (err) {
       console.error('Favorite toggle error:', err);
       // Revert on error
       setListings(prev =>
-        prev.map(li => li.id === item.id ? { ...li, favorite: !newValue } : li)
+        prev.map(li => (li.item_id || li.id) === itemId ? { ...li, favorite: !newValue } : li)
       );
     }
   }, []);
@@ -168,7 +179,7 @@ export default function MyListingsScreen({ navigation }) {
     return <LoadingScreen message="Loading your items..." />;
   }
 
-  const hasFilters = searchQuery.trim() || selectedCategory !== 'All' || activeFilter === 'Favorites';
+  const hasFilters = searchQuery.trim() || selectedRoom !== 'All' || selectedCategory !== 'All' || activeFilter === 'Favorites';
   const favoriteCount = listings.filter(i => i.favorite).length;
 
   return (
@@ -210,12 +221,31 @@ export default function MyListingsScreen({ navigation }) {
           ))}
         </View>
 
-        {/* Category Scroll */}
+        {/* Room Filter */}
+        <View style={styles.filterLabel}>
+          <Ionicons name="location-outline" size={12} color={colors.textTertiary} />
+          <Text style={styles.filterLabelText}>Room</Text>
+        </View>
         <CategoryScroll
-          categories={categories}
-          selectedCategory={selectedCategory}
-          onSelect={setSelectedCategory}
+          categories={['All', ...ROOMS]}
+          selectedCategory={selectedRoom}
+          onSelect={setSelectedRoom}
         />
+
+        {/* Category Filter */}
+        {categories.length > 1 && (
+          <>
+            <View style={styles.filterLabel}>
+              <Ionicons name="pricetag-outline" size={12} color={colors.textTertiary} />
+              <Text style={styles.filterLabelText}>Category</Text>
+            </View>
+            <CategoryScroll
+              categories={categories}
+              selectedCategory={selectedCategory}
+              onSelect={setSelectedCategory}
+            />
+          </>
+        )}
       </Animated.View>
 
       {/* Items Grid or Empty State */}
@@ -314,6 +344,20 @@ const styles = StyleSheet.create({
   },
   filterTabTextActive: {
     color: colors.white,
+  },
+  filterLabel: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: spacing.page,
+    marginTop: spacing.xs,
+    marginBottom: 2,
+  },
+  filterLabelText: {
+    ...typography.overline,
+    color: colors.textTertiary,
+    fontWeight: '600',
+    textTransform: 'uppercase',
   },
   emptyContainer: {
     flex: 1,
