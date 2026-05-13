@@ -39,7 +39,9 @@ export const FadeOutDown = mockAnim;
 export const FadeOutUp = mockAnim;
 
 // Hooks (return standard values or no-ops)
-export const useSharedValue = (initialValue) => useRef(initialValue).current;
+export const useSharedValue = (initialValue) => {
+  return useRef({ value: initialValue }).current;
+};
 export const useAnimatedStyle = () => ({});
 export const withSpring = (value) => value;
 export const withTiming = (value) => value;
