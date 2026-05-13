@@ -269,9 +269,10 @@ async def analyze_image(
             from app.vision import get_vision_engine, get_deepseek_engine
             vision_engine = get_vision_engine()
             
-            # Step 1: Gemini identifies the product from ALL images
-            gemini_result = vision_engine.analyze_images(saved_file_paths)
-            print(f"Gemini identification: {json.dumps(gemini_result, ensure_ascii=False)[:200]}")
+            # Step 1: Gemini identifies the product from the FIRST image only
+            # (as requested: saves tokens/time, user provides other photos for listing)
+            gemini_result = vision_engine.analyze_images([saved_file_paths[0]])
+            print(f"Gemini identification (first image): {json.dumps(gemini_result, ensure_ascii=False)[:200]}")
 
             # Step 2: DeepSeek generates rich listing text
             deepseek_engine = get_deepseek_engine()
