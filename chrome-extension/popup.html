@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=400, initial-scale=1.0">
+  <title>Kleinanzeigen Sync</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <!-- Login Screen -->
+  <div id="login-screen" class="screen">
+    <div class="header">
+      <h1>⚡ Kleinanzeigen Sync</h1>
+      <p class="subtitle">Connect your Photo App account</p>
+    </div>
+    <form id="login-form">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="your@email.com" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Your password" required>
+      </div>
+      <div id="login-error" class="error-message hidden"></div>
+      <button type="submit" id="login-btn" class="btn btn-primary">Log In</button>
+      <div class="signup-toggle">
+        <span id="signup-text">Don't have an account?</span>
+        <a href="#" id="signup-toggle-link">Sign Up</a>
+      </div>
+    </form>
+  </div>
+
+  <!-- Items Screen (shown after login) -->
+  <div id="items-screen" class="screen hidden">
+    <div class="header">
+      <h1>⚡ Kleinanzeigen Sync</h1>
+      <div class="user-info">
+        <span id="user-email"></span>
+        <button id="logout-btn" class="btn btn-small btn-outline">Logout</button>
+      </div>
+    </div>
+
+    <div id="status-bar" class="status-bar">
+      <span id="status-text">Ready to sync</span>
+      <span id="status-icon">✅</span>
+    </div>
+
+    <div class="instructions">
+      <p>📌 <strong>How to use:</strong></p>
+      <ol>
+        <li>Select an item below</li>
+        <li>Go to <a href="https://www.kleinanzeigen.de/p-anzeige-aufgeben.html" target="_blank">Kleinanzeigen listing page</a></li>
+        <li>Click the <strong>⚡ Fill from My App</strong> button</li>
+      </ol>
+    </div>
+
+    <div class="items-header">
+      <h2>Your Items</h2>
+      <button id="refresh-btn" class="btn btn-small btn-outline" title="Refresh items">🔄</button>
+    </div>
+    <div id="items-loading" class="loading hidden">Loading items...</div>
+    <div id="items-list" class="items-list"></div>
+    <div id="items-empty" class="empty-state hidden">
+      <p>No items found. Add items in your Photo App first!</p>
+    </div>
+  </div>
+
+  <!-- Item Detail Screen (shown when item selected) -->
+  <div id="detail-screen" class="screen hidden">
+    <div class="header">
+      <button id="back-btn" class="btn btn-small btn-outline">← Back</button>
+      <h1>Item Details</h1>
+    </div>
+    <div id="item-detail" class="item-detail"></div>
+    <div class="detail-actions">
+      <button id="fill-form-btn" class="btn btn-primary btn-large">
+        ⚡ Fill Kleinanzeigen Form
+      </button>
+      <button id="mark-listed-btn" class="btn btn-secondary">
+        ✅ Mark as Listed on Kleinanzeigen
+      </button>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

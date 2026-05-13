@@ -25,9 +25,23 @@ The Photo App is a **personal inventory & marketplace listing tool**. Users phot
 │                  │◀────│  - Returns result  │     │  - Auth          │
 │                  │     │  - Saves to DB     │     │  - Storage       │
 └─────────────────┘     └──────────────────┘     └─────────────────┘
+                               ▲
+                               │ JWT Auth
+                               │
+                        ┌──────────────────┐
+                        │  Chrome Extension │
+                        │  (Manifest V3)    │
+                        │                   │
+                        │  - Supabase Auth  │
+                        │  - Item Picker    │
+                        │  - Form Filler    │────▶ Kleinanzeigen.de
+                        │  - Image Upload   │      (listing page)
+                        └──────────────────┘
 ```
 
 **Data Flow:** Photo → FastAPI → Gemini analysis → Save to Supabase → Return to frontend → Display in inventory
+
+**Chrome Extension Flow:** Login (Supabase Auth) → Fetch items (FastAPI) → Select item → Fill Kleinanzeigen form (content script) → Mark as listed
 
 ---
 
@@ -43,7 +57,7 @@ The_Photo_app/
 ├── PROJECT_PLAN.md               # Original project plan (archived)
 │
 ├── backend/
-│   ├── .env                      # Backend env (SUPABASE_URL, SERVICE_ROLE_KEY, GEMINI_API_KEY)
+│   ├── .env                      # Backend env (SUPABASE_URL, SERVICE_ROLE_KEY, GEMINI_API_KEY, SUPABASE_JWT_SECRET)
 │   ├── .gitignore
 │   ├── fix_api_access.py         # Script: Creates api.items view for REST API access
 │   ├── migrate_db.py             # Script: Run database migrations
@@ -52,7 +66,8 @@ The_Photo_app/
 │   ├── venv/                     # Python virtual environment
 │   ├── app/
 │   │   ├── __init__.py
-│   │   ├── main.py               # FastAPI app — single endpoint: POST /api/analyze-image
+│   │   ├── main.py               # FastAPI app — endpoints: POST /api/analyze-image, GET/PATCH /api/items
+│   │   ├── auth.py               # JWT authentication (verifies Supabase tokens for Chrome Extension)
 │   │   ├── vision.py             # Gemini AI vision engine (analyze_image)
 │   │   ├── database.py           # Supabase client initialization
 │   │   └── temp_uploads/         # Temp storage for uploaded images (cleaned after processing)
@@ -97,8 +112,20 @@ The_Photo_app/
 │       └── utils/
 │           └── DebugLogger.js     # Dev logging utility
 │
+├── chrome-extension/              # Chrome Extension for Kleinanzeigen cross-listing
+│   ├── manifest.json              # Extension manifest (MV3)
+│   ├── config.js                  # API URL + Supabase config (EDIT THIS)
+│   ├── popup.html                 # Login + item picker UI
+│   ├── popup.css                  # Popup styling
+│   ├── popup.js                   # Auth + item management logic
+│   ├── content.js                 # Kleinanzeigen form filler (injected into listing page)
+│   ├── background.js              # Service worker for message routing
+│   ├── icons/                     # Extension icons (16, 48, 128px)
+│   └── README.md                  # Extension setup guide
+│
 └── supabase/
-    └── migration.sql              # Full DB schema — table, RLS policies, API view, storage
+    ├── migration.sql              # Full DB schema — table, RLS policies, API view, storage
+    └── migration_kleinanzeigen_sync.sql  # Adds listing_status, listed_at, listing_url columns
 ```
 
 ---
@@ -122,6 +149,9 @@ The_Photo_app/
 | `created_at` | TIMESTAMPTZ | `now()` | Creation timestamp |
 | `updated_at` | TIMESTAMPTZ | `now()` | Last update timestamp |
 | `favorite` | BOOLEAN | `false` | User favorite flag |
+| `listing_status` | VARCHAR(50) | `'draft'` | Marketplace listing status (draft/listed_kleinanzeigen/listed_ebay/sold) |
+| `listed_at` | TIMESTAMPTZ | null | When item was listed on a marketplace |
+| `listing_url` | TEXT | null | URL of the marketplace listing |
 
 ### View: `api.items`
 - Mirrors `public.items` for REST API access
@@ -175,6 +205,57 @@ The_Photo_app/
 
 ### `GET /`
 Health check endpoint.
+
+### Chrome Extension API Endpoints (JWT Auth Required)
+
+All endpoints below require a `Authorization: Bearer <token>` header with a valid Supabase JWT.
+
+### `GET /api/items`
+List all items for the authenticated user.
+| Query Param | Type | Default | Description |
+|-------------|------|---------|-------------|
+| `status` | string | null | Filter by listing_status |
+| `limit` | int | 50 | Max items to return |
+| `offset` | int | 0 | Pagination offset |
+
+**Response:** `ItemListResponse` JSON
+```json
+{
+  "items": [{ ... }, { ... }],
+  "total": 42
+}
+```
+
+### `GET /api/items/{item_id}`
+Get a single item by item_id (must belong to authenticated user).
+
+**Response:** `ItemResponse` JSON
+```json
+{
+  "item_id": "ITEM-A1B2C3D4",
+  "title": "Vintage Camera",
+  "description_de": "Eine tolle Kamera...",
+  "description_en": "A great camera...",
+  "price": "45 EUR",
+  "category": "Electronics",
+  "image_url": "https://...supabase.co/storage/...",
+  "listing_status": "draft",
+  ...
+}
+```
+
+### `PATCH /api/items/{item_id}/mark-listed`
+Mark an item as listed on a marketplace.
+
+**Request Body:**
+```json
+{
+  "platform": "kleinanzeigen",
+  "listing_url": "https://www.kleinanzeigen.de/..."  // optional
+}
+```
+
+**Response:** Updated `ItemResponse` with `listing_status: "listed_kleinanzeigen"`.
 
 ---
 
@@ -249,6 +330,7 @@ API_URL=http://192.168.178.61:8000/api/analyze-image
 ```
 SUPABASE_URL=https://awwahpecfvdljgupnzft.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=sb_secret_...
+SUPABASE_JWT_SECRET=... (from Supabase Dashboard > Settings > API > JWT Secret, for Chrome Extension auth)
 GEMINI_API_KEY=... (set for real AI, omit for mock mode)
 ```
 
@@ -325,12 +407,14 @@ npm start
 
 ## Recent Changes (May 2026)
 
-1. **Favorites feature** — Added `favorite` column (BOOLEAN DEFAULT false) to items table
-2. **Copy description** — One-tap clipboard copy on ResultScreen and ItemDetailScreen
-3. **API schema fix** — Created `api.items` view because REST API only exposes `api` schema, not `public`
-4. **Root .env** — Centralized env file with SUPABASE_ACCESS_TOKEN for Management API
-5. **Item detail navigation** — Can navigate from inventory to detail view and back
-6. **Favorites filter** — Filter inventory to show only favorite items
+1. **Kleinanzeigen Chrome Extension** — Full Chrome Extension (MV3) for cross-listing items to Kleinanzeigen via form auto-fill
+2. **Backend JWT Auth** — Added `auth.py` with Supabase JWT verification for Chrome Extension API endpoints
+3. **New API endpoints** — `GET /api/items`, `GET /api/items/{item_id}`, `PATCH /api/items/{item_id}/mark-listed`
+4. **Database migration** — Added `listing_status`, `listed_at`, `listing_url` columns to items table
+5. **Favorites feature** — Added `favorite` column (BOOLEAN DEFAULT false) to items table
+6. **Copy description** — One-tap clipboard copy on ResultScreen and ItemDetailScreen
+7. **API schema fix** — Created `api.items` view because REST API only exposes `api` schema, not `public`
+8. **Item detail navigation** — Can navigate from inventory to detail view and back
 
 ---
 

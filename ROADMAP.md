@@ -41,23 +41,34 @@ A personal inventory app that lets you **scan items with your phone**, get **AI-
 
 ---
 
-## V2 — Marketplace Integration (Next)
+## V2 — Marketplace Integration (In Progress 🚧)
 
 **Goal:** Go from "inventory app" to "selling tool" — list items on Kleinanzeigen directly.
 
-| Feature | Priority | Effort | Description |
-|---------|----------|--------|-------------|
-| Kleinanzeigen Deep-Link | 🔴 High | Medium | Generate pre-filled Kleinanzeigen listing URL |
-| Export to CSV | 🟡 Medium | Low | Export inventory as spreadsheet |
-| Share Item Card | 🟡 Medium | Low | Generate shareable image/card for an item |
-| Bulk Actions | 🟡 Medium | Medium | Select multiple items → delete, favorite, export |
-| Price Suggestion | 🟢 Low | Medium | AI suggests optimal price based on similar items |
-| Item Status Flow | 🔴 High | Low | Draft → Listed → Sold status tracking |
+| Feature | Status | Description |
+|---------|--------|-------------|
+| Kleinanzeigen Chrome Extension | ✅ Done | Chrome Extension (MV3) that auto-fills Kleinanzeigen listing form with item data |
+| Backend Item API | ✅ Done | `GET /api/items`, `GET /api/items/{id}`, `PATCH /api/items/{id}/mark-listed` with JWT auth |
+| Listing Status Tracking | ✅ Done | `listing_status` column (draft/listed_kleinanzeigen/listed_ebay/sold), `listed_at`, `listing_url` |
+| JWT Auth Middleware | ✅ Done | `auth.py` verifies Supabase JWT tokens for Chrome Extension API access |
+| Image Upload to Kleinanzeigen | ✅ Done | DataTransfer API uploads images from Supabase Storage to Kleinanzeigen form |
+| Export to CSV | 🔲 Todo | Export inventory as spreadsheet |
+| Share Item Card | 🔲 Todo | Generate shareable image/card for an item |
+| Bulk Actions | 🔲 Todo | Select multiple items → delete, favorite, export |
+| Price Suggestion | 🔲 Todo | AI suggests optimal price based on similar items |
 
-### Kleinanzeigen Integration Options
-1. **Deep-linking (Recommended V2):** Generate a URL that pre-fills the Kleinanzeigen listing form
-2. **Clipboard Export (Fallback):** One-tap copy of formatted listing text
-3. **Headless Browser (V3):** Automated listing creation via Playwright
+### Kleinanzeigen Integration — Implemented Approach
+✅ **Chrome Extension (Implemented):** Content script injected into `kleinanzeigen.de/p-anzeige-aufgeben.html` fills title, German description, price, and uploads images with one click. Uses Supabase Auth for secure access to user's items.
+
+How it works:
+1. User logs into Chrome Extension with same credentials as mobile app
+2. Extension fetches user's items from FastAPI backend (JWT-secured)
+3. User selects an item and navigates to Kleinanzeigen listing page
+4. "⚡ Fill from My App" button auto-fills the form
+5. User manually selects category and clicks Publish
+6. Item can be marked as "listed" in the database
+
+This approach avoids bot-bans (it's just form-filling, not automation) and requires no API agreement with Kleinanzeigen.
 
 ---
 
