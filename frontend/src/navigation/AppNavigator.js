@@ -18,6 +18,11 @@ import { colors, typography, spacing, radius, shadows } from '../theme';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
+// DEV MODE: Set to true to auto-login with test account, false to show login screen
+const DEV_MODE = true;
+const DEV_EMAIL = 'Hameed@Hd.com';
+const DEV_PASSWORD = 'Hameed2024!';
+
 const AnimatedTabIcon = ({ name, focused, size }) => {
   const scale = useSharedValue(1);
 
@@ -68,12 +73,43 @@ function MainTabs() {
 
 export default function AppNavigator() {
   const [session, setSession] = useState(null);
-  const [isMockLogin, setIsMockLogin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
+    // Check for existing session first
+    supabase.auth.getSession().then(async ({ data: { session: existingSession } }) => {
+      if (existingSession) {
+        setSession(existingSession);
+        setLoading(false);
+        return;
+      }
+
+      // DEV MODE: Auto-login with test account
+      if (DEV_MODE) {
+        console.log('Dev mode: auto-signing in as', DEV_EMAIL);
+        try {
+          const { data, error } = await supabase.auth.signInWithPassword({
+            email: DEV_EMAIL,
+            password: DEV_PASSWORD,
+          });
+          if (error) {
+            // Try sign up if account doesn't exist
+            const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+              email: DEV_EMAIL,
+              password: DEV_PASSWORD,
+            });
+            if (signUpError) {
+              console.error('Dev auth failed:', signUpError.message);
+            } else if (signUpData.session) {
+              setSession(signUpData.session);
+            }
+          } else if (data.session) {
+            setSession(data.session);
+          }
+        } catch (err) {
+          console.error('Dev auth exception:', err);
+        }
+      }
       setLoading(false);
     });
 
@@ -91,57 +127,49 @@ export default function AppNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {session || isMockLogin ? (
+        {session ? (
           <>
             <Stack.Screen name="Main" component={MainTabs} />
             <Stack.Screen
               name="Result"
               component={ResultScreen}
-              options={{
-                cardStyle: { backgroundColor: colors.gray50 },
-              }}
+              options={{ cardStyle: { backgroundColor: colors.gray50 } }}
             />
             <Stack.Screen
               name="ItemDetail"
               component={ItemDetailScreen}
-              options={{
-                cardStyle: { backgroundColor: colors.gray50 },
-              }}
+              options={{ cardStyle: { backgroundColor: colors.gray50 } }}
             />
           </>
         ) : (
           <Stack.Screen name="Login">
-            {(props) => <LoginScreen {...props} onMockLogin={async () => {
-              const devEmail = 'Hameed@Hd.com';
-              const devPass = 'Hameed2024!';
-              console.log('Starting auth for', devEmail);
-              try {
-                // Try sign in first
-                let signInResult = await supabase.auth.signInWithPassword({ email: devEmail, password: devPass });
-                console.log('Sign in result:', signInResult.error ? `ERROR: ${signInResult.error.message}` : 'SUCCESS');
-                
-                if (signInResult.error) {
-                  // Try sign up (may succeed but require email confirmation)
-                  const signUpResult = await supabase.auth.signUp({ email: devEmail, password: devPass });
-                  console.log('Sign up result:', signUpResult.error ? `ERROR: ${signUpResult.error.message}` : 'SUCCESS');
-                  
-                  // Try sign in again after sign-up
-                  signInResult = await supabase.auth.signInWithPassword({ email: devEmail, password: devPass });
-                  console.log('Retry sign in:', signInResult.error ? `ERROR: ${signInResult.error.message}` : 'SUCCESS');
-                }
-                
-                if (signInResult.data?.session) {
-                  setSession(signInResult.data.session);
-                } else {
-                  // All auth methods failed — use mock mode as fallback
-                  console.log('Using mock login mode');
-                  setIsMockLogin(true);
-                }
-              } catch (err) {
-                console.error('Auth exception:', err);
-                setIsMockLogin(true); // fallback
-              }
-            }} />}
+            {(props) => (
+              <LoginScreen
+                {...props}
+                onLogin={async (email, password) => {
+                  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+                  if (error) throw error;
+                  if (data.session) setSession(data.session);
+                }}
+                onSignUp={async (email, password) => {
+                  const { data, error } = await supabase.auth.signUp({ email, password });
+                  if (error) throw error;
+                  if (data.session) setSession(data.session);
+                }}
+                onGoogleLogin={async () => {
+                  const { error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
+                  if (error) throw error;
+                }}
+                onDevSkip={async () => {
+                  const { data, error } = await supabase.auth.signInWithPassword({
+                    email: DEV_EMAIL,
+                    password: DEV_PASSWORD,
+                  });
+                  if (error) throw error;
+                  if (data.session) setSession(data.session);
+                }}
+              />
+            )}
           </Stack.Screen>
         )}
       </Stack.Navigator>

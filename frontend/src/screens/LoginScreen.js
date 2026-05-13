@@ -1,27 +1,60 @@
 import React, { useState } from 'react';
 import {
-  View, Text, StyleSheet, KeyboardAvoidingView, Platform, Dimensions, Alert
+  View, Text, StyleSheet, KeyboardAvoidingView, Platform, Dimensions, TextInput, TouchableOpacity, Alert
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
-import Button from '../components/Button';
 import { colors, typography, spacing, radius, shadows } from '../theme';
 
 const { width, height } = Dimensions.get('window');
 
-export default function LoginScreen({ onMockLogin }) {
+export default function LoginScreen({ onLogin, onSignUp, onGoogleLogin, onDevSkip }) {
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [email, setEmail] = useState('Hameed@Hd.com');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleLogin = async () => {
+  const handleSubmit = async () => {
+    if (!email.trim() || !password.trim()) {
+      setError('Please fill in all fields');
+      return;
+    }
+    setError('');
     setLoading(true);
     try {
-      if (onMockLogin) {
-        await onMockLogin();
+      if (isSignUp) {
+        await onSignUp?.(email.trim(), password);
+      } else {
+        await onLogin?.(email.trim(), password);
       }
     } catch (err) {
-      console.error('Login error:', err);
-      Alert.alert('Login Error', err.message || 'Unknown error occurred');
+      setError(err.message || (isSignUp ? 'Sign up failed' : 'Invalid email or password'));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogle = async () => {
+    setError('');
+    setLoading(true);
+    try {
+      await onGoogleLogin?.();
+    } catch (err) {
+      setError(err.message || 'Google sign-in failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDevSkip = async () => {
+    setError('');
+    setLoading(true);
+    try {
+      await onDevSkip?.();
+    } catch (err) {
+      setError(err.message || 'Dev login failed');
     } finally {
       setLoading(false);
     }
@@ -40,7 +73,6 @@ export default function LoginScreen({ onMockLogin }) {
         style={styles.hero}
       >
         <Animated.View entering={FadeInUp.duration(600).delay(100)} style={styles.heroContent}>
-          {/* Decorative circles */}
           <View style={styles.decorCircle1} />
           <View style={styles.decorCircle2} />
           
@@ -61,57 +93,90 @@ export default function LoginScreen({ onMockLogin }) {
       {/* Form Section */}
       <Animated.View entering={FadeInDown.duration(600).delay(300)} style={styles.formSection}>
         <View style={styles.welcomeContainer}>
-          <Text style={styles.welcomeTitle}>Welcome</Text>
+          <Text style={styles.welcomeTitle}>{isSignUp ? 'Create Account' : 'Welcome Back'}</Text>
           <Text style={styles.welcomeSubtitle}>
-            Get started in seconds — snap a photo and let AI create your listing.
+            {isSignUp 
+              ? 'Sign up to start scanning and selling your items.'
+              : 'Log in to access your items and listings.'}
           </Text>
         </View>
 
-        <View style={styles.features}>
-          <View style={styles.featureItem}>
-            <View style={styles.featureIcon}>
-              <Ionicons name="camera-outline" size={20} color={colors.primary} />
-            </View>
-            <View style={styles.featureText}>
-              <Text style={styles.featureTitle}>Smart Scan</Text>
-              <Text style={styles.featureDesc}>AI-powered item recognition</Text>
-            </View>
-          </View>
+        {/* Google Sign In */}
+        <TouchableOpacity style={styles.googleButton} onPress={handleGoogle} disabled={loading}>
+          <Ionicons name="logo-google" size={20} color={colors.textPrimary} />
+          <Text style={styles.googleButtonText}>Continue with Google</Text>
+        </TouchableOpacity>
 
-          <View style={styles.featureItem}>
-            <View style={styles.featureIcon}>
-              <Ionicons name="language-outline" size={20} color={colors.primary} />
-            </View>
-            <View style={styles.featureText}>
-              <Text style={styles.featureTitle}>Bilingual</Text>
-              <Text style={styles.featureDesc}>Auto-generate DE & EN listings</Text>
-            </View>
-          </View>
-
-          <View style={styles.featureItem}>
-            <View style={styles.featureIcon}>
-              <Ionicons name="pricetag-outline" size={20} color={colors.primary} />
-            </View>
-            <View style={styles.featureText}>
-              <Text style={styles.featureTitle}>Kleinanzeigen Ready</Text>
-              <Text style={styles.featureDesc}>List directly on marketplace</Text>
-            </View>
-          </View>
+        {/* Divider */}
+        <View style={styles.divider}>
+          <View style={styles.dividerLine} />
+          <Text style={styles.dividerText}>or</Text>
+          <View style={styles.dividerLine} />
         </View>
 
-        <Button
-          title="Get Started"
-          onPress={handleLogin}
-          loading={loading}
-          fullWidth
-          size="large"
-          icon="arrow-forward"
-          iconRight
-        />
+        {/* Email/Password Form */}
+        <View style={styles.formGroup}>
+          <Text style={styles.label}>Email</Text>
+          <TextInput
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+            placeholder="your@email.com"
+            placeholderTextColor={colors.textTertiary}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+        </View>
 
-        <Text style={styles.disclaimer}>
-          Full account setup coming soon
-        </Text>
+        <View style={styles.formGroup}>
+          <Text style={styles.label}>Password</Text>
+          <TextInput
+            style={styles.input}
+            value={password}
+            onChangeText={setPassword}
+            placeholder="Your password"
+            placeholderTextColor={colors.textTertiary}
+            secureTextEntry
+          />
+        </View>
+
+        {/* Error Message */}
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
+        {/* Submit Button */}
+        <TouchableOpacity
+          style={[styles.submitButton, loading && styles.submitButtonDisabled]}
+          onPress={handleSubmit}
+          disabled={loading}
+        >
+          <LinearGradient
+            colors={[colors.primary, colors.primaryDark]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.submitGradient}
+          >
+            <Text style={styles.submitButtonText}>
+              {loading ? 'Please wait...' : isSignUp ? 'Sign Up' : 'Log In'}
+            </Text>
+          </LinearGradient>
+        </TouchableOpacity>
+
+        {/* Sign Up / Login Toggle */}
+        <View style={styles.toggleContainer}>
+          <Text style={styles.toggleText}>
+            {isSignUp ? 'Already have an account?' : "Don't have an account?"}
+          </Text>
+          <TouchableOpacity onPress={() => { setIsSignUp(!isSignUp); setError(''); }}>
+            <Text style={styles.toggleLink}>{isSignUp ? 'Log In' : 'Sign Up'}</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Dev Skip Button */}
+        <TouchableOpacity style={styles.devButton} onPress={handleDevSkip} disabled={loading}>
+          <Ionicons name="flash" size={16} color={colors.textTertiary} />
+          <Text style={styles.devButtonText}>Quick Start (Dev Mode)</Text>
+        </TouchableOpacity>
       </Animated.View>
     </KeyboardAvoidingView>
   );
@@ -123,7 +188,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   hero: {
-    height: height * 0.42,
+    height: height * 0.35,
     borderBottomLeftRadius: 32,
     borderBottomRightRadius: 32,
     overflow: 'hidden',
@@ -153,19 +218,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.04)',
   },
   logoContainer: {
-    marginBottom: spacing.xl,
+    marginBottom: spacing.lg,
   },
   logoCircle: {
-    width: 96,
-    height: 96,
-    borderRadius: 48,
+    width: 88,
+    height: 88,
+    borderRadius: 44,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.15)',
   },
   appName: {
-    fontSize: 36,
+    fontSize: 34,
     fontWeight: '800',
     color: colors.white,
     letterSpacing: -0.5,
@@ -179,10 +244,10 @@ const styles = StyleSheet.create({
   formSection: {
     flex: 1,
     paddingHorizontal: spacing.xl,
-    paddingTop: spacing.xxl,
+    paddingTop: spacing.xl,
   },
   welcomeContainer: {
-    marginBottom: spacing.xl,
+    marginBottom: spacing.lg,
   },
   welcomeTitle: {
     ...typography.h1,
@@ -194,46 +259,110 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     lineHeight: 22,
   },
-  features: {
-    marginBottom: spacing.xxl,
-    gap: spacing.md,
-  },
-  featureItem: {
+  googleButton: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.sm,
     backgroundColor: colors.gray50,
+    borderWidth: 1,
+    borderColor: colors.gray200,
+    borderRadius: radius.lg,
+    paddingVertical: spacing.md + 2,
+  },
+  googleButtonText: {
+    ...typography.body,
+    fontWeight: '600',
+    color: colors.textPrimary,
+  },
+  divider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: spacing.lg,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: colors.gray200,
+  },
+  dividerText: {
+    ...typography.small,
+    color: colors.textTertiary,
+    paddingHorizontal: spacing.md,
+  },
+  formGroup: {
+    marginBottom: spacing.md,
+  },
+  label: {
+    ...typography.small,
+    fontWeight: '600',
+    color: colors.textSecondary,
+    marginBottom: spacing.xs,
+  },
+  input: {
+    backgroundColor: colors.gray50,
+    borderWidth: 1,
+    borderColor: colors.gray200,
+    borderRadius: radius.lg,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md + 2,
+    fontSize: 16,
+    color: colors.textPrimary,
+  },
+  errorText: {
+    ...typography.small,
+    color: colors.error || '#EF4444',
+    marginBottom: spacing.sm,
+    textAlign: 'center',
+  },
+  submitButton: {
+    borderRadius: radius.lg,
+    overflow: 'hidden',
+    marginTop: spacing.sm,
+  },
+  submitButtonDisabled: {
+    opacity: 0.6,
+  },
+  submitGradient: {
+    paddingVertical: spacing.md + 4,
+    alignItems: 'center',
+  },
+  submitButtonText: {
+    ...typography.body,
+    fontWeight: '700',
+    color: colors.white,
+    fontSize: 16,
+  },
+  toggleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: spacing.xs,
+    marginTop: spacing.lg,
+  },
+  toggleText: {
+    ...typography.small,
+    color: colors.textTertiary,
+  },
+  toggleLink: {
+    ...typography.small,
+    color: colors.primary,
+    fontWeight: '700',
+  },
+  devButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.xs,
+    marginTop: spacing.xl,
     paddingVertical: spacing.md,
-    paddingHorizontal: spacing.base,
     borderRadius: radius.md,
+    backgroundColor: colors.gray50,
     borderWidth: 1,
     borderColor: colors.gray100,
   },
-  featureIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: radius.md,
-    backgroundColor: colors.infoLight,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: spacing.md,
-  },
-  featureText: {
-    flex: 1,
-  },
-  featureTitle: {
-    ...typography.h4,
-    color: colors.textPrimary,
-    fontSize: 15,
-  },
-  featureDesc: {
+  devButtonText: {
     ...typography.small,
     color: colors.textTertiary,
-    marginTop: 1,
-  },
-  disclaimer: {
-    ...typography.small,
-    color: colors.textTertiary,
-    textAlign: 'center',
-    marginTop: spacing.lg,
+    fontWeight: '600',
   },
 });

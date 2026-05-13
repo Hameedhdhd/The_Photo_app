@@ -666,6 +666,11 @@ function formatStatus(status) {
 // Initialize
 // ============================================================
 
+// DEV MODE: Set to true to auto-login with test account
+const EXT_DEV_MODE = true;
+const EXT_DEV_EMAIL = 'Hameed@Hd.com';
+const EXT_DEV_PASSWORD = 'Hameed2024!';
+
 async function init() {
   auth = new SupabaseAuth(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
 
@@ -673,7 +678,7 @@ async function init() {
   detectApiUrl();
 
   // Check for existing session (with auto-refresh)
-  const session = await auth.getValidSession();
+  let session = await auth.getValidSession();
   
   if (session) {
     userEmailSpan.textContent = session.user?.email || 'User';
@@ -684,6 +689,23 @@ async function init() {
     if (stored.selected_item_id) selectedItemId = stored.selected_item_id;
     
     await loadItems();
+  } else if (EXT_DEV_MODE) {
+    // Auto-login with dev account
+    try {
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Auto-login...';
+      session = await auth.signIn(EXT_DEV_EMAIL, EXT_DEV_PASSWORD);
+      await auth.setSession(session);
+      userEmailSpan.textContent = session.user.email;
+      showScreen('items-screen');
+      await loadItems();
+    } catch (err) {
+      console.error('Dev auto-login failed:', err);
+      showScreen('login-screen');
+    } finally {
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Log In';
+    }
   } else {
     showScreen('login-screen');
   }
