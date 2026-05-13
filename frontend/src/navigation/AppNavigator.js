@@ -76,48 +76,79 @@ export default function AppNavigator() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for existing session first
-    supabase.auth.getSession().then(async ({ data: { session: existingSession } }) => {
-      if (existingSession) {
-        setSession(existingSession);
-        setLoading(false);
-        return;
-      }
+    let mounted = true;
+    let timeoutId;
 
-      // DEV MODE: Auto-login with test account
-      if (DEV_MODE) {
-        console.log('Dev mode: auto-signing in as', DEV_EMAIL);
-        try {
-          const { data, error } = await supabase.auth.signInWithPassword({
-            email: DEV_EMAIL,
-            password: DEV_PASSWORD,
-          });
-          if (error) {
-            // Try sign up if account doesn't exist
-            const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+    // Safety timeout: show login screen if auth takes too long
+    timeoutId = setTimeout(() => {
+      if (mounted && loading) {
+        console.log('Auth timeout - showing login screen');
+        setLoading(false);
+      }
+    }, 5000);
+
+    async function initAuth() {
+      try {
+        // Check for existing session first
+        const { data: { session: existingSession } } = await supabase.auth.getSession();
+        
+        if (!mounted) return;
+        
+        if (existingSession) {
+          setSession(existingSession);
+          clearTimeout(timeoutId);
+          setLoading(false);
+          return;
+        }
+
+        // DEV MODE: Auto-login with test account
+        if (DEV_MODE) {
+          console.log('Dev mode: auto-signing in as', DEV_EMAIL);
+          try {
+            const { data, error } = await supabase.auth.signInWithPassword({
               email: DEV_EMAIL,
               password: DEV_PASSWORD,
             });
-            if (signUpError) {
-              console.error('Dev auth failed:', signUpError.message);
-            } else if (signUpData.session) {
-              setSession(signUpData.session);
+            if (!mounted) return;
+            if (error) {
+              console.log('Sign in failed, trying sign up:', error.message);
+              const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+                email: DEV_EMAIL,
+                password: DEV_PASSWORD,
+              });
+              if (signUpError) {
+                console.error('Dev auth failed:', signUpError.message);
+              } else if (signUpData.session) {
+                setSession(signUpData.session);
+              }
+            } else if (data.session) {
+              setSession(data.session);
             }
-          } else if (data.session) {
-            setSession(data.session);
+          } catch (err) {
+            console.error('Dev auth exception:', err);
           }
-        } catch (err) {
-          console.error('Dev auth exception:', err);
         }
+      } catch (err) {
+        console.error('getSession error:', err);
       }
-      setLoading(false);
-    });
+      
+      if (mounted) {
+        clearTimeout(timeoutId);
+        setLoading(false);
+      }
+    }
+
+    initAuth();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
+      if (mounted) setSession(session);
     });
 
-    return () => subscription?.unsubscribe();
+    return () => {
+      mounted = false;
+      clearTimeout(timeoutId);
+      subscription?.unsubscribe();
+    };
   }, []);
 
   if (loading) {
