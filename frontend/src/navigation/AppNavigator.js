@@ -111,7 +111,15 @@ export default function AppNavigator() {
           </>
         ) : (
           <Stack.Screen name="Login">
-            {(props) => <LoginScreen {...props} onMockLogin={() => setIsMockLogin(true)} />}
+            {(props) => <LoginScreen {...props} onMockLogin={async () => {
+              // Create a real Supabase anonymous session so items can be saved/fetched
+              const { error } = await supabase.auth.signInAnonymously();
+              if (error) {
+                console.error('Anonymous sign-in error:', error);
+                setIsMockLogin(true); // fallback to mock
+              }
+              // onAuthStateChange will update session automatically
+            }} />}
           </Stack.Screen>
         )}
       </Stack.Navigator>
