@@ -27,12 +27,16 @@ const createDummyAnimation = () => {
   return obj;
 };
 
-export const FadeIn = createDummyAnimation;
-export const FadeInDown = createDummyAnimation;
-export const FadeInUp = createDummyAnimation;
-export const FadeOut = createDummyAnimation;
-export const FadeOutDown = createDummyAnimation;
-export const FadeOutUp = createDummyAnimation;
+// Provide both as function and as object with methods for maximum compatibility
+const animBase = createDummyAnimation();
+const mockAnim = Object.assign(createDummyAnimation, animBase);
+
+export const FadeIn = mockAnim;
+export const FadeInDown = mockAnim;
+export const FadeInUp = mockAnim;
+export const FadeOut = mockAnim;
+export const FadeOutDown = mockAnim;
+export const FadeOutUp = mockAnim;
 
 // Hooks (return standard values or no-ops)
 export const useSharedValue = (initialValue) => useRef(initialValue).current;
