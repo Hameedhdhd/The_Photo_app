@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Animated, { FadeIn } from 'react-native-reanimated';
+import {  } from '../utils/reanimated-compat';
+import { Animated } from '../utils/reanimated-compat';
 import { colors, typography, spacing, radius } from '../theme';
 
 export default function EmptyState({

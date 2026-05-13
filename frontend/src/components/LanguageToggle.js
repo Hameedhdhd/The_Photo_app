@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import {  } from '../utils/reanimated-compat';
+import { Animated } from '../utils/reanimated-compat';
 import { colors, typography, spacing, radius } from '../theme';
 
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);

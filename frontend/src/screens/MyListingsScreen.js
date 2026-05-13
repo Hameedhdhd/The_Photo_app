@@ -5,7 +5,8 @@ import {
 import { supabase } from '../../supabase';
 import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import Animated, { FadeInUp } from 'react-native-reanimated';
+import {  } from '../utils/reanimated-compat';
+import { Animated } from '../utils/reanimated-compat';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import CategoryScroll from '../components/CategoryScroll';

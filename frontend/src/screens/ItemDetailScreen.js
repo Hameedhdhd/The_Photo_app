@@ -4,7 +4,8 @@ import {
   KeyboardAvoidingView, Platform, Alert, TouchableOpacity
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
+import {  } from '../utils/reanimated-compat';
+import { Animated } from '../utils/reanimated-compat';
 import { supabase } from '../../supabase';
 import Header from '../components/Header';
 import Button from '../components/Button';
@@ -627,3 +628,4 @@ const styles = StyleSheet.create({
     height: spacing.md,
   },
 });
+

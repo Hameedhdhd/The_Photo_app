@@ -5,7 +5,8 @@ import {
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
-import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
+import {  } from '../utils/reanimated-compat';
+import { Animated } from '../utils/reanimated-compat';
 import { supabase } from '../../supabase';
 import ImageCropper from '../components/ImageCropper';
 import Header from '../components/Header';
@@ -684,3 +685,4 @@ const styles = StyleSheet.create({
     color: colors.accent,
   },
 });
+

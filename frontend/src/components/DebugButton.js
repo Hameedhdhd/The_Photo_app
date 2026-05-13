@@ -4,7 +4,8 @@ import {
   SafeAreaView, Share, Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
+import {  } from '../utils/reanimated-compat';
+import { Animated } from '../utils/reanimated-compat';
 import { DebugLogger } from '../utils/DebugLogger';
 import { colors, typography, spacing, radius, shadows } from '../theme';
 

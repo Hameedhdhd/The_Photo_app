@@ -2,7 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import {  } from '../utils/reanimated-compat';
+import { Animated } from '../utils/reanimated-compat';
 import { colors, typography, spacing, radius } from '../theme';
 
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
