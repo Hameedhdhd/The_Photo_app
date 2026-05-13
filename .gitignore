@@ -1,0 +1,26 @@
+# Environment variables (contains secrets)
+.env
+
+# Node modules
+node_modules/
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build output
+dist/
+build/
+
+# Tunnels
+tunnel_url.txt
+tunnel_out.txt

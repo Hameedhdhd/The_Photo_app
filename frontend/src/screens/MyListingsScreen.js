@@ -1,41 +1,65 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  StyleSheet, Text, View, FlatList, ActivityIndicator,
-  RefreshControl, Image, TouchableOpacity, Alert
+  StyleSheet, View, FlatList, ScrollView, RefreshControl, TouchableOpacity, Text
 } from 'react-native';
 import { supabase } from '../../supabase';
 import { useFocusEffect } from '@react-navigation/native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import Header from '../components/Header';
+import SearchBar from '../components/SearchBar';
+import CategoryScroll from '../components/CategoryScroll';
+import ListingCard from '../components/ListingCard';
+import EmptyState from '../components/EmptyState';
+import MenuDrawer from '../components/MenuDrawer';
+import { LoadingScreen } from '../components/LoadingSpinner';
+import { colors, typography, spacing, radius } from '../theme';
 
-export default function MyListingsScreen() {
+const FILTER_TABS = ['All', 'Favorites'];
+
+export default function MyListingsScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [listings, setListings] = useState([]);
+  const [filteredListings, setFilteredListings] = useState([]);
   const [userId, setUserId] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [categories, setCategories] = useState(['All']);
+  const [activeFilter, setActiveFilter] = useState('All');
+  const [menuVisible, setMenuVisible] = useState(false);
 
-  const getSessionUserId = async () => {
+  const getSessionUserId = useCallback(async () => {
     const { data: { session } } = await supabase.auth.getSession();
     return session?.user?.id;
-  };
+  }, []);
 
   const fetchListings = useCallback(async () => {
-    if (!userId) return;
     setLoading(true);
-    const { data, error } = await supabase
-      .from('items')
-      .select('*')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false });
+    try {
+      let query = supabase
+        .from('items')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-    if (error) {
-      console.error('Error fetching listings:', error);
-      Alert.alert('Error', 'Could not fetch your listings.');
+      if (userId) {
+        query = query.eq('user_id', userId);
+      }
+
+      const { data, error } = await query;
+
+      if (error) {
+        console.error('Error fetching listings:', error);
+        setListings([]);
+      } else {
+        setListings(data || []);
+      }
+    } catch (err) {
+      console.error('Fetch error:', err);
       setListings([]);
-    } else {
-      setListings(data);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, [userId]);
 
   useEffect(() => {
@@ -48,11 +72,47 @@ export default function MyListingsScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      if (userId) {
-        fetchListings();
-      }
-    }, [userId, fetchListings])
+      fetchListings();
+    }, [fetchListings])
   );
+
+  // Extract categories from listings
+  useEffect(() => {
+    const roomSet = new Set();
+    listings.forEach(item => {
+      if (item.room) roomSet.add(item.room);
+    });
+    setCategories(['All', ...Array.from(roomSet)]);
+  }, [listings]);
+
+  // Filter listings based on search, category, and favorites
+  useEffect(() => {
+    let result = listings;
+
+    // Favorites filter
+    if (activeFilter === 'Favorites') {
+      result = result.filter(item => item.favorite);
+    }
+
+    // Category filter
+    if (selectedCategory !== 'All') {
+      result = result.filter(item => item.room === selectedCategory);
+    }
+
+    // Search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(item =>
+        (item.title && item.title.toLowerCase().includes(query)) ||
+        (item.description_en && item.description_en.toLowerCase().includes(query)) ||
+        (item.description_de && item.description_de.toLowerCase().includes(query)) ||
+        (item.category && item.category.toLowerCase().includes(query)) ||
+        (item.room && item.room.toLowerCase().includes(query))
+      );
+    }
+
+    setFilteredListings(result);
+  }, [listings, searchQuery, selectedCategory, activeFilter]);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -60,61 +120,159 @@ export default function MyListingsScreen() {
     setRefreshing(false);
   }, [fetchListings]);
 
-  const renderListingItem = ({ item }) => (
-    <View style={styles.card}>
-      {item.image_url && (
-        <Image source={{ uri: item.image_url }} style={styles.listingImage} />
-      )}
-      <View style={styles.cardContent}>
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.price}>{item.price}</Text>
-        <View style={styles.detailsRow}>
-          <Text style={styles.category}>{item.category}</Text>
-          <Text style={styles.room}>• {item.room}</Text>
-        </View>
-        <Text style={styles.description} numberOfLines={2}>{item.description_en}</Text>
-        {/* Potentially add more details or actions here */}
-      </View>
-    </View>
+  const handleItemPress = useCallback((item) => {
+    navigation.navigate('ItemDetail', { item });
+  }, [navigation]);
+
+  const handleToggleFavorite = useCallback(async (item) => {
+    const newValue = !item.favorite;
+    // Optimistic update
+    setListings(prev =>
+      prev.map(li => li.id === item.id ? { ...li, favorite: newValue } : li)
+    );
+    try {
+      await supabase
+        .from('items')
+        .update({ favorite: newValue })
+        .eq('id', item.id);
+    } catch (err) {
+      console.error('Favorite toggle error:', err);
+      // Revert on error
+      setListings(prev =>
+        prev.map(li => li.id === item.id ? { ...li, favorite: !newValue } : li)
+      );
+    }
+  }, []);
+
+  const handleMenuNavigate = useCallback((route) => {
+    setMenuVisible(false);
+    if (route === 'Scan') {
+      navigation.navigate('Scan');
+    }
+  }, [navigation]);
+
+  const handleLogout = useCallback(async () => {
+    await supabase.auth.signOut();
+  }, []);
+
+  const renderListingItem = ({ item, index }) => (
+    <ListingCard
+      item={item}
+      index={index}
+      onPress={handleItemPress}
+      onToggleFavorite={handleToggleFavorite}
+    />
   );
 
   if (loading && !refreshing) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#FF6B6B" />
-        <Text style={styles.loadingText}>Loading your listings...</Text>
-      </View>
-    );
+    return <LoadingScreen message="Loading your items..." />;
   }
+
+  const hasFilters = searchQuery.trim() || selectedCategory !== 'All' || activeFilter === 'Favorites';
+  const favoriteCount = listings.filter(i => i.favorite).length;
 
   return (
     <View style={styles.container}>
-      <LinearGradient colors={['#4c669f', '#3b5998', '#192f6a']} style={styles.header}>
-        <Text style={styles.headerTitle}>My Listings</Text>
-      </LinearGradient>
+      <Header
+        title="My Items"
+        subtitle={`${listings.length} items • ${favoriteCount} favorites`}
+        showMenu
+        onMenuPress={() => setMenuVisible(true)}
+      />
 
-      {listings.length === 0 ? (
+      {/* Search Bar */}
+      <Animated.View entering={FadeInUp.duration(300)} style={styles.searchSection}>
+        <SearchBar
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          placeholder="Search items..."
+        />
+
+        {/* Filter Tabs: All / Favorites */}
+        <View style={styles.filterTabs}>
+          {FILTER_TABS.map(tab => (
+            <TouchableOpacity
+              key={tab}
+              style={[styles.filterTab, activeFilter === tab && styles.filterTabActive]}
+              onPress={() => setActiveFilter(tab)}
+              activeOpacity={0.7}
+            >
+              <Ionicons
+                name={tab === 'Favorites' ? 'heart' : 'list'}
+                size={14}
+                color={activeFilter === tab ? colors.white : colors.textTertiary}
+              />
+              <Text style={[styles.filterTabText, activeFilter === tab && styles.filterTabTextActive]}>
+                {tab}
+                {tab === 'Favorites' && ` (${favoriteCount})`}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        {/* Category Scroll */}
+        <CategoryScroll
+          categories={categories}
+          selectedCategory={selectedCategory}
+          onSelect={setSelectedCategory}
+        />
+      </Animated.View>
+
+      {/* Items Grid or Empty State */}
+      {filteredListings.length === 0 ? (
         <ScrollView
-          contentContainerStyle={styles.centered}
+          contentContainerStyle={styles.emptyContainer}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#FF6B6B']} />
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={[colors.primary]}
+              tintColor={colors.primary}
+            />
           }
         >
-          <Ionicons name="pricetags-outline" size={100} color="#cbd5e1" />
-          <Text style={styles.emptyStateText}>No listings yet!</Text>
-          <Text style={styles.emptyStateSubText}>Go to the Scan tab to create your first listing.</Text>
+          <EmptyState
+            icon={hasFilters ? 'search-outline' : 'pricetags-outline'}
+            title={hasFilters ? 'No matches found' : 'No items yet'}
+            subtitle={
+              activeFilter === 'Favorites'
+                ? 'Tap the heart icon on items to add favorites'
+                : hasFilters
+                  ? 'Try adjusting your search or filter'
+                  : 'Scan items to start building your inventory'
+            }
+            iconBgColor={activeFilter === 'Favorites' ? colors.favoriteLight : hasFilters ? colors.infoLight : colors.gray100}
+            iconColor={activeFilter === 'Favorites' ? colors.favorite : hasFilters ? colors.primary : colors.gray300}
+          />
         </ScrollView>
       ) : (
         <FlatList
-          data={listings}
+          data={filteredListings}
           renderItem={renderListingItem}
           keyExtractor={(item) => String(item.id || item.item_id)}
-          contentContainerStyle={styles.listContentContainer}
+          numColumns={2}
+          columnWrapperStyle={styles.row}
+          contentContainerStyle={styles.listContent}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#FF6B6B']} />
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={[colors.primary]}
+              tintColor={colors.primary}
+            />
           }
+          showsVerticalScrollIndicator={false}
         />
       )}
+
+      {/* Menu Drawer */}
+      <MenuDrawer
+        visible={menuVisible}
+        onClose={() => setMenuVisible(false)}
+        onNavigate={handleMenuNavigate}
+        currentRoute="My Items"
+        onLogout={handleLogout}
+      />
     </View>
   );
 }
@@ -122,100 +280,51 @@ export default function MyListingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: colors.gray50,
   },
-  header: {
-    paddingTop: 50,
-    paddingBottom: 20,
-    paddingHorizontal: 20,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-    elevation: 8,
-    zIndex: 10,
-    alignItems: 'center',
+  searchSection: {
+    paddingTop: spacing.md,
   },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: '#fff',
+  // Filter Tabs
+  filterTabs: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+    paddingHorizontal: spacing.page,
+    marginBottom: spacing.sm,
   },
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-  loadingText: {
-    marginTop: 10,
-    fontSize: 16,
-    color: '#64748b',
-    fontWeight: '600',
-  },
-  emptyStateText: {
-    marginTop: 20,
-    fontSize: 18,
-    color: '#94a3b8',
-    fontWeight: '600',
-  },
-  emptyStateSubText: {
-    marginTop: 5,
-    fontSize: 14,
-    color: '#94a3b8',
-    textAlign: 'center',
-  },
-  listContentContainer: {
-    padding: 20,
-  },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    marginBottom: 15,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    overflow: 'hidden', // Ensures image corners are rounded
-  },
-  listingImage: {
-    width: '100%',
-    height: 200, // Fixed height for consistency
-    resizeMode: 'cover',
-  },
-  cardContent: {
-    padding: 15,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#1e293b',
-    marginBottom: 5,
-  },
-  price: {
-    fontSize: 20,
-    fontWeight: '900',
-    color: '#FF6B6B',
-    marginBottom: 5,
-  },
-  detailsRow: {
+  filterTab: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    gap: spacing.xs,
+    paddingHorizontal: spacing.md + 2,
+    paddingVertical: spacing.sm,
+    borderRadius: radius.full,
+    backgroundColor: colors.gray100,
+    borderWidth: 1,
+    borderColor: colors.gray200,
   },
-  category: {
-    fontSize: 13,
-    color: '#4c669f',
+  filterTabActive: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+  },
+  filterTabText: {
+    ...typography.small,
+    color: colors.textTertiary,
     fontWeight: '600',
   },
-  room: {
-    fontSize: 13,
-    color: '#64748b',
-    fontWeight: '500',
-    marginLeft: 5,
+  filterTabTextActive: {
+    color: colors.white,
   },
-  description: {
-    fontSize: 14,
-    color: '#475569',
-    lineHeight: 20,
+  emptyContainer: {
+    flex: 1,
+  },
+  listContent: {
+    paddingHorizontal: spacing.page - 2,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.xxl,
+  },
+  row: {
+    justifyContent: 'space-between',
+    marginBottom: spacing.md,
   },
 });

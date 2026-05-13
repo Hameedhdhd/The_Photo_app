@@ -1,26 +1,23 @@
 import React, { useState } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, StyleSheet,
-  KeyboardAvoidingView, Platform, Alert, ActivityIndicator
+  View, Text, StyleSheet, KeyboardAvoidingView, Platform, Dimensions
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { supabase } from '../../supabase';
+import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
+import Button from '../components/Button';
+import { colors, typography, spacing, radius, shadows } from '../theme';
+
+const { width, height } = Dimensions.get('window');
 
 export default function LoginScreen({ onMockLogin }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [isRegister, setIsRegister] = useState(false);
 
-  const handleAuth = async () => {
+  const handleLogin = async () => {
     setLoading(true);
-    // Shortcut for testing: bypass all auth and log in immediately
     setTimeout(() => {
       setLoading(false);
-      if (onMockLogin) {
-        onMockLogin();
-      }
+      if (onMockLogin) onMockLogin();
     }, 500);
   };
 
@@ -29,74 +26,87 @@ export default function LoginScreen({ onMockLogin }) {
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <LinearGradient colors={['#4c669f', '#3b5998', '#192f6a']} style={styles.header}>
-        <Ionicons name="camera-outline" size={50} color="#fff" />
-        <Text style={styles.title}>List It Fast</Text>
-        <Text style={styles.subtitle}>AI-Powered Selling Assistant</Text>
+      {/* Hero Section */}
+      <LinearGradient
+        colors={[colors.primary, colors.primaryDark, '#3730A3']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.hero}
+      >
+        <Animated.View entering={FadeInUp.duration(600).delay(100)} style={styles.heroContent}>
+          {/* Decorative circles */}
+          <View style={styles.decorCircle1} />
+          <View style={styles.decorCircle2} />
+          
+          <View style={styles.logoContainer}>
+            <LinearGradient
+              colors={['rgba(255,255,255,0.2)', 'rgba(255,255,255,0.05)']}
+              style={styles.logoCircle}
+            >
+              <Ionicons name="scan" size={48} color={colors.white} />
+            </LinearGradient>
+          </View>
+          
+          <Text style={styles.appName}>List It Fast</Text>
+          <Text style={styles.tagline}>Scan • Organize • Sell</Text>
+        </Animated.View>
       </LinearGradient>
 
-      <View style={styles.formContainer}>
-        <Text style={styles.formTitle}>{isRegister ? 'Create Account' : 'Welcome Back'}</Text>
-        <Text style={styles.formSubtitle}>
-          {isRegister ? 'Sign up to start selling' : 'Login to continue'}
-        </Text>
-
-        <View style={styles.inputContainer}>
-          <Ionicons name="mail-outline" size={20} color="#94a3b8" style={styles.inputIcon} />
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            placeholderTextColor="#94a3b8"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoCorrect={false}
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Ionicons name="lock-closed-outline" size={20} color="#94a3b8" style={styles.inputIcon} />
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            placeholderTextColor="#94a3b8"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            autoCapitalize="none"
-          />
-        </View>
-
-        <TouchableOpacity
-          style={styles.primaryButton}
-          onPress={handleAuth}
-          disabled={loading}
-          activeOpacity={0.8}
-        >
-          <LinearGradient
-            colors={['#FF6B6B', '#FF8E53']}
-            style={styles.buttonGradient}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-          >
-            {loading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <>
-                <Ionicons name={isRegister ? 'person-add' : 'log-in'} size={20} color="#fff" style={styles.buttonIcon} />
-                <Text style={styles.buttonText}>{isRegister ? 'Sign Up' : 'Login'}</Text>
-              </>
-            )}
-          </LinearGradient>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => setIsRegister(!isRegister)} style={styles.switchButton}>
-          <Text style={styles.switchText}>
-            {isRegister ? 'Already have an account? Login' : "Don't have an account? Sign Up"}
+      {/* Form Section */}
+      <Animated.View entering={FadeInDown.duration(600).delay(300)} style={styles.formSection}>
+        <View style={styles.welcomeContainer}>
+          <Text style={styles.welcomeTitle}>Welcome</Text>
+          <Text style={styles.welcomeSubtitle}>
+            Get started in seconds — snap a photo and let AI create your listing.
           </Text>
-        </TouchableOpacity>
-      </View>
+        </View>
+
+        <View style={styles.features}>
+          <View style={styles.featureItem}>
+            <View style={styles.featureIcon}>
+              <Ionicons name="camera-outline" size={20} color={colors.primary} />
+            </View>
+            <View style={styles.featureText}>
+              <Text style={styles.featureTitle}>Smart Scan</Text>
+              <Text style={styles.featureDesc}>AI-powered item recognition</Text>
+            </View>
+          </View>
+
+          <View style={styles.featureItem}>
+            <View style={styles.featureIcon}>
+              <Ionicons name="language-outline" size={20} color={colors.primary} />
+            </View>
+            <View style={styles.featureText}>
+              <Text style={styles.featureTitle}>Bilingual</Text>
+              <Text style={styles.featureDesc}>Auto-generate DE & EN listings</Text>
+            </View>
+          </View>
+
+          <View style={styles.featureItem}>
+            <View style={styles.featureIcon}>
+              <Ionicons name="pricetag-outline" size={20} color={colors.primary} />
+            </View>
+            <View style={styles.featureText}>
+              <Text style={styles.featureTitle}>Kleinanzeigen Ready</Text>
+              <Text style={styles.featureDesc}>List directly on marketplace</Text>
+            </View>
+          </View>
+        </View>
+
+        <Button
+          title="Get Started"
+          onPress={handleLogin}
+          loading={loading}
+          fullWidth
+          size="large"
+          icon="arrow-forward"
+          iconRight
+        />
+
+        <Text style={styles.disclaimer}>
+          Full account setup coming soon
+        </Text>
+      </Animated.View>
     </KeyboardAvoidingView>
   );
 }
@@ -104,93 +114,120 @@ export default function LoginScreen({ onMockLogin }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: colors.white,
   },
-  header: {
-    paddingTop: 80,
-    paddingBottom: 40,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
+  hero: {
+    height: height * 0.42,
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
+    overflow: 'hidden',
   },
-  title: {
-    fontSize: 32,
-    fontWeight: '800',
-    color: '#fff',
-    marginTop: 10,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#e2e8f0',
-    marginTop: 5,
-  },
-  formContainer: {
+  heroContent: {
     flex: 1,
-    paddingHorizontal: 30,
-    paddingTop: 40,
-  },
-  formTitle: {
-    fontSize: 28,
-    fontWeight: '800',
-    color: '#1e293b',
-  },
-  formSubtitle: {
-    fontSize: 16,
-    color: '#64748b',
-    marginTop: 5,
-    marginBottom: 30,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    borderRadius: 14,
-    paddingHorizontal: 15,
-    marginBottom: 15,
-    borderWidth: 1,
-    borderColor: '#e2e8f0',
-    height: 55,
-  },
-  inputIcon: {
-    marginRight: 12,
-  },
-  input: {
-    flex: 1,
-    fontSize: 16,
-    color: '#1e293b',
-  },
-  primaryButton: {
-    width: '100%',
-    marginTop: 10,
-    shadowColor: '#FF6B6B',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 6,
-  },
-  buttonGradient: {
-    flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 16,
-    borderRadius: 14,
-  },
-  buttonIcon: {
-    marginRight: 8,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  switchButton: {
-    marginTop: 25,
     alignItems: 'center',
+    paddingHorizontal: spacing.xl,
   },
-  switchText: {
-    color: '#4c669f',
+  decorCircle1: {
+    position: 'absolute',
+    top: -40,
+    right: -40,
+    width: 160,
+    height: 160,
+    borderRadius: 80,
+    backgroundColor: 'rgba(255,255,255,0.06)',
+  },
+  decorCircle2: {
+    position: 'absolute',
+    bottom: -20,
+    left: -30,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: 'rgba(255,255,255,0.04)',
+  },
+  logoContainer: {
+    marginBottom: spacing.xl,
+  },
+  logoCircle: {
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.15)',
+  },
+  appName: {
+    fontSize: 36,
+    fontWeight: '800',
+    color: colors.white,
+    letterSpacing: -0.5,
+  },
+  tagline: {
+    ...typography.body,
+    color: 'rgba(255,255,255,0.7)',
+    marginTop: spacing.xs,
+    letterSpacing: 2,
+  },
+  formSection: {
+    flex: 1,
+    paddingHorizontal: spacing.xl,
+    paddingTop: spacing.xxl,
+  },
+  welcomeContainer: {
+    marginBottom: spacing.xl,
+  },
+  welcomeTitle: {
+    ...typography.h1,
+    color: colors.textPrimary,
+    marginBottom: spacing.xs,
+  },
+  welcomeSubtitle: {
+    ...typography.body,
+    color: colors.textSecondary,
+    lineHeight: 22,
+  },
+  features: {
+    marginBottom: spacing.xxl,
+    gap: spacing.md,
+  },
+  featureItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.gray50,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.base,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: colors.gray100,
+  },
+  featureIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: radius.md,
+    backgroundColor: colors.infoLight,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: spacing.md,
+  },
+  featureText: {
+    flex: 1,
+  },
+  featureTitle: {
+    ...typography.h4,
+    color: colors.textPrimary,
     fontSize: 15,
-    fontWeight: '600',
+  },
+  featureDesc: {
+    ...typography.small,
+    color: colors.textTertiary,
+    marginTop: 1,
+  },
+  disclaimer: {
+    ...typography.small,
+    color: colors.textTertiary,
+    textAlign: 'center',
+    marginTop: spacing.lg,
   },
 });

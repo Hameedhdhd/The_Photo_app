@@ -2,6 +2,7 @@ from fastapi import FastAPI, File, UploadFile, HTTPException, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
+import uuid
 import shutil
 from dotenv import load_dotenv
 
@@ -38,12 +39,18 @@ async def analyze_image(
     room: str = Form(None),
     user_id: str = Form(None)
 ):
+    print(f"Received upload: filename={file.filename}, content_type={file.content_type}, room={room}, user_id={user_id}")
+    
     if not file.filename:
-        raise HTTPException(status_code=400, detail="No file uploaded")
+        # Set a default filename if none provided (common on web uploads)
+        file.filename = "photo.jpg"
+        print("No filename provided, using default: photo.jpg")
 
+    # Security: Use UUID-based filename to prevent path traversal and race conditions
+    safe_filename = f"{uuid.uuid4().hex}_{os.path.basename(file.filename)}"
     temp_dir = "temp_uploads"
     os.makedirs(temp_dir, exist_ok=True)
-    file_path = os.path.join(temp_dir, file.filename)
+    file_path = os.path.join(temp_dir, safe_filename)
 
     try:
         with open(file_path, "wb") as buffer:
@@ -57,12 +64,15 @@ async def analyze_image(
                 price="45 EUR",
                 category="Electronics",
                 room=room,
-                item_id=f"ITEM-{file.filename[:8]}",
+                item_id=f"ITEM-{uuid.uuid4().hex[:8].upper()}",
                 image_url=None,
                 user_id=user_id
             )
         else:
-            from app.vision import vision_engine
+            from app.vision import get_vision_engine
+            vision_engine = get_vision_engine()
+            if not vision_engine:
+                raise HTTPException(status_code=500, detail="AI engine not initialized. Check GEMINI_API_KEY.")
             ai_result = vision_engine.analyze_image(file_path)
 
             response_data = ListingResponse(
@@ -72,14 +82,33 @@ async def analyze_image(
                 price=ai_result.get("price", "TBD"),
                 category=ai_result.get("category", "Uncategorized"),
                 room=room,
-                item_id=f"ITEM-{os.urandom(4).hex().upper()}",
+                item_id=f"ITEM-{uuid.uuid4().hex[:8].upper()}",
                 image_url=None,
                 user_id=user_id
             )
 
-        # Save to Supabase with user_id and room
+        # Upload image to Supabase Storage and save item to database
         from app.database import supabase
+        image_public_url = None
+        
         if supabase:
+            try:
+                # Upload image to Supabase Storage
+                storage_path = f"{response_data.item_id}.jpg"
+                with open(file_path, "rb") as img_file:
+                    supabase.storage.from_("item_images").upload(
+                        storage_path,
+                        img_file,
+                        {"content-type": "image/jpeg", "upsert": "true"}
+                    )
+                # Get public URL
+                image_public_url = supabase.storage.from_("item_images").get_public_url(storage_path)
+                print(f"Image uploaded: {image_public_url}")
+                # Update the response with the image URL
+                response_data.image_url = image_public_url
+            except Exception as storage_err:
+                print(f"Warning: Could not upload image to storage. Error: {storage_err}")
+            
             try:
                 db_data = {
                     "title": response_data.title,
@@ -90,6 +119,7 @@ async def analyze_image(
                     "room": response_data.room,
                     "item_id": response_data.item_id,
                     "status": "draft",
+                    "image_url": image_public_url,
                 }
                 if user_id:
                     db_data["user_id"] = user_id
@@ -101,11 +131,17 @@ async def analyze_image(
 
         return response_data
 
+    except HTTPException:
+        raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"Error during image analysis: {e}")
+        raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
     finally:
         if os.path.exists(file_path):
-            os.remove(file_path)
+            try:
+                os.remove(file_path)
+            except OSError:
+                pass
 
 if __name__ == "__main__":
     import uvicorn

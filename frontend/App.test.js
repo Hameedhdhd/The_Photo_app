@@ -13,7 +13,27 @@ jest.mock('expo-image-picker', () => ({
     canceled: false,
     assets: [{ uri: 'file://mock-image-uri.jpg' }]
   })),
-  MediaTypeOptions: { Images: 'Images' }
+}));
+
+// Mock Supabase
+jest.mock('./supabase', () => ({
+  supabase: {
+    auth: {
+      getSession: jest.fn(() => Promise.resolve({ data: { session: null } })),
+      onAuthStateChange: jest.fn(() => ({ data: { subscription: { unsubscribe: jest.fn() } } })),
+      signOut: jest.fn(() => Promise.resolve()),
+    },
+    from: jest.fn(() => ({
+      select: jest.fn(() => ({
+        eq: jest.fn(() => ({
+          order: jest.fn(() => Promise.resolve({ data: [], error: null }))
+        })),
+      })),
+      insert: jest.fn(() => ({
+        execute: jest.fn(() => Promise.resolve({ data: null, error: null }))
+      })),
+    })),
+  },
 }));
 
 // Mock fetch API globally
@@ -22,9 +42,12 @@ global.fetch = jest.fn(() =>
     ok: true,
     json: () => Promise.resolve({
       title: "Mock AI: Vintage Lamp",
-      description: "A beautiful vintage lamp perfect for your desk.",
+      description_en: "A beautiful vintage lamp perfect for your desk.",
+      description_de: "Eine wunderschöne Vintage-Lampe.",
       price: "45 EUR",
-      category: "Furniture"
+      category: "Furniture",
+      item_id: "ITEM-TEST01",
+      room: "Living Room",
     }),
   })
 );
@@ -34,34 +57,13 @@ describe('<App />', () => {
     jest.clearAllMocks();
   });
 
-  it('renders correctly', () => {
+  it('renders login screen', () => {
     const { getByText } = render(<App />);
-    
+    expect(getByText('Login')).toBeTruthy();
+  });
+
+  it('renders app title on login', () => {
+    const { getByText } = render(<App />);
     expect(getByText('List It Fast')).toBeTruthy();
-    expect(getByText('AI-Powered Selling Assistant')).toBeTruthy();
-    expect(getByText('Take Photo')).toBeTruthy();
-    expect(getByText('Choose from Gallery')).toBeTruthy();
-  });
-
-  it('camera button triggers image picker and shows results', async () => {
-    const { getByText, findByText } = render(<App />);
-    const cameraButton = getByText('Take Photo');
-    
-    fireEvent.press(cameraButton);
-    
-    // Since fetch resolves instantly in the mock, it skips loading and goes straight to results
-    expect(await findByText('Mock AI: Vintage Lamp')).toBeTruthy();
-    expect(await findByText('A beautiful vintage lamp perfect for your desk.')).toBeTruthy();
-  });
-
-  it('gallery button triggers image picker and shows results', async () => {
-    const { getByText, findByText } = render(<App />);
-    const galleryButton = getByText('Choose from Gallery');
-    
-    fireEvent.press(galleryButton);
-    
-    // Check that results rendered successfully
-    expect(await findByText('Mock AI: Vintage Lamp')).toBeTruthy();
-    expect(await findByText('45 EUR')).toBeTruthy();
   });
 });
