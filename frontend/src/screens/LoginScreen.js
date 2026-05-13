@@ -4,8 +4,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import {  } from '../utils/reanimated-compat';
-import { Animated } from '../utils/reanimated-compat';
+import { Animated, FadeInDown, FadeInUp, FadeIn, useAnimatedStyle, useSharedValue, withSpring, withTiming, withRepeat, runOnJS } from '../utils/reanimated-compat';
 import { colors, typography, spacing, radius, shadows } from '../theme';
 
 const { width, height } = Dimensions.get('window');

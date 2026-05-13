@@ -1,72 +1,34 @@
 /**
- * Reanimated compatibility shim
- * Replaces react-native-reanimated with RN Animated for Expo Go compatibility
+ * Reanimated compatibility shim - NO native module dependency
+ * Provides drop-in replacement that uses simple pass-through components
  */
-import React, { useEffect, useRef, useCallback } from 'react';
-import { Animated, View, ScrollView } from 'react-native';
+import React, { useRef } from 'react';
+import { View, ScrollView } from 'react-native';
 
-// Simple entering animation wrapper
-function withEnterAnimation(Component) {
-  return React.forwardRef(({ entering, ...props }, ref) => {
-    const opacity = useRef(new Animated.Value(0)).current;
-    const translateY = useRef(new Animated.Value(0)).current;
-
-    useEffect(() => {
-      if (entering) {
-        // Fade in + slide up
-        const type = entering._type || 'fade';
-        const duration = entering._duration || 400;
-        const delay = entering._delay || 0;
-        
-        const isDown = type === 'fadeDown';
-        const isUp = type === 'fadeUp';
-        
-        translateY.setValue(isDown ? 20 : isUp ? -20 : 0);
-        opacity.setValue(0);
-        
-        Animated.parallel([
-          Animated.timing(opacity, {
-            toValue: 1,
-            duration,
-            delay,
-            useNativeDriver: true,
-          }),
-          Animated.timing(translateY, {
-            toValue: 0,
-            duration,
-            delay,
-            useNativeDriver: true,
-          }),
-        ]).start();
-      }
-    }, []);
-
-    return (
-      <Animated.View style={{ opacity, transform: [{ translateY }] }}>
-        <Component ref={ref} {...props} />
-      </Animated.View>
-    );
-  });
+// Pass-through View that accepts but ignores `entering` prop
+function CompatView({ entering, ...props }) {
+  return <View {...props} />;
 }
 
-// Animated components
-const AnimatedView = withEnterAnimation(View);
-const AnimatedScrollView = withEnterAnimation(ScrollView);
+// Pass-through ScrollView that accepts but ignores `entering` prop
+const CompatScrollView = React.forwardRef(({ entering, ...props }, ref) => {
+  return <ScrollView ref={ref} {...props} />;
+});
 
 const CompatAnimated = {
-  View: AnimatedView,
-  ScrollView: AnimatedScrollView,
+  View: CompatView,
+  ScrollView: CompatScrollView,
 };
 
-// Entering animation factories
+// Entering animation factories - return config objects (ignored by components)
 function createEntering(type) {
-  return (durationOrConfig) => {
-    const duration = typeof durationOrConfig === 'number' ? durationOrConfig : 400;
-    const result = { _type: type, _duration: duration, _delay: 0 };
+  const fn = () => {
+    const result = { _type: type, _duration: 400, _delay: 0 };
     result.duration = (d) => { result._duration = d; return result; };
     result.delay = (d) => { result._delay = d; return result; };
     return result;
   };
+  return fn;
 }
 
 const FadeInDown = createEntering('fadeDown');
@@ -74,38 +36,20 @@ const FadeInUp = createEntering('fadeUp');
 const FadeIn = createEntering('fade');
 const FadeOut = createEntering('fade');
 
-// Hooks compatibility
+// Hooks - simplified no-ops
 function useSharedValue(initial) {
-  const ref = useRef(new Animated.Value(
-    typeof initial === 'number' ? initial : 0
-  ));
-  return ref.current;
+  return useRef(typeof initial === 'number' ? initial : 0).current;
 }
 
-function useAnimatedStyle(worklet) {
-  // Just return empty style - animations will be simplified
+function useAnimatedStyle() {
   return {};
 }
 
-function withSpring(toValue, config) {
-  return toValue;
-}
-
-function withTiming(toValue, config) {
-  return toValue;
-}
-
-function withRepeat(animation, numberOfReps, reverse) {
-  return animation;
-}
-
-function runOnJS(fn) {
-  return fn;
-}
-
-function withSequence(...animations) {
-  return animations[animations.length - 1];
-}
+function withSpring(toValue) { return toValue; }
+function withTiming(toValue) { return toValue; }
+function withRepeat(anim) { return anim; }
+function withSequence(...anim) { return anim[anim.length - 1]; }
+function runOnJS(fn) { return fn; }
 
 export {
   CompatAnimated as default,
@@ -114,11 +58,11 @@ export {
   FadeInUp,
   FadeIn,
   FadeOut,
-  useSharedValue,
   useAnimatedStyle,
+  useSharedValue,
   withSpring,
   withTiming,
   withRepeat,
-  runOnJS,
   withSequence,
+  runOnJS,
 };

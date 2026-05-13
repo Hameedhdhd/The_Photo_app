@@ -1,8 +1,7 @@
 import React, { useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import {  } from '../utils/reanimated-compat';
-import { Animated } from '../utils/reanimated-compat';
+import { Animated, FadeInDown, FadeInUp, FadeIn, useAnimatedStyle, useSharedValue, withSpring, withTiming, withRepeat, runOnJS } from '../utils/reanimated-compat';
 import { colors, typography, spacing, radius } from '../theme';
 
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
