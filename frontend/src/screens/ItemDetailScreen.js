@@ -71,6 +71,7 @@ export default function ItemDetailScreen({ route, navigation }) {
 
   const itemId = item?.item_id || item?.id;
   const imageUrl = item?.image_url;
+  const imageUrls = item?.image_urls || (imageUrl ? [imageUrl] : []);
   const category = item?.category;
 
   const currentDescription = lang === 'en' ? descriptionEn : descriptionDe;
@@ -176,7 +177,11 @@ export default function ItemDetailScreen({ route, navigation }) {
   const Container = Platform.OS === 'web' ? View : KeyboardAvoidingView;
   const containerProps = Platform.OS === 'web' 
     ? { style: styles.container }
-    : { style: styles.container, behavior: 'padding', keyboardVerticalOffset: 90 };
+    : { 
+        style: styles.container, 
+        behavior: Platform.OS === 'ios' ? 'padding' : 'height',
+        keyboardVerticalOffset: Platform.OS === 'ios' ? 64 : 0 
+      };
 
   return (
     <Container {...containerProps}>
@@ -197,11 +202,29 @@ export default function ItemDetailScreen({ route, navigation }) {
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
         nestedScrollEnabled={true}
+        enableOnAndroid={true}
+        extraScrollHeight={100}
       >
-        {/* Image */}
-        {imageUrl && (
+        {/* Image Gallery */}
+        {imageUrls.length > 0 && (
           <Animated.View entering={FadeInUp.duration(400)} style={styles.imageSection}>
-            <Image source={{ uri: imageUrl }} style={styles.mainImage} />
+            <ScrollView 
+              horizontal 
+              pagingEnabled 
+              showsHorizontalScrollIndicator={false}
+              style={styles.imageCarousel}
+            >
+              {imageUrls.map((url, index) => (
+                <Image key={index} source={{ uri: url }} style={styles.mainImage} />
+              ))}
+            </ScrollView>
+            
+            {imageUrls.length > 1 && (
+              <View style={styles.imageBadge}>
+                <Text style={styles.imageBadgeText}>1 / {imageUrls.length}</Text>
+              </View>
+            )}
+
             <TouchableOpacity
               style={styles.favBadge}
               onPress={toggleFavorite}
@@ -421,11 +444,30 @@ const styles = StyleSheet.create({
     position: 'relative',
     marginBottom: spacing.lg,
   },
+  imageCarousel: {
+    borderRadius: radius.xl,
+    overflow: 'hidden',
+  },
   mainImage: {
-    width: '100%',
-    height: 220,
+    width: SCREEN_WIDTH - spacing.page * 2,
+    height: 240,
     borderRadius: radius.xl,
     resizeMode: 'cover',
+  },
+  imageBadge: {
+    position: 'absolute',
+    bottom: spacing.sm,
+    left: '50%',
+    transform: [{ translateX: -30 }],
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 2,
+    borderRadius: radius.full,
+  },
+  imageBadgeText: {
+    color: colors.white,
+    fontSize: 10,
+    fontWeight: '700',
   },
   favBadge: {
     position: 'absolute',

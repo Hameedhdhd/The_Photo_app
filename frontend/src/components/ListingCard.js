@@ -30,6 +30,14 @@ export default function ListingCard({ item, index, onPress, onToggleFavorite }) 
               <Ionicons name="image-outline" size={32} color={colors.gray300} />
             </View>
           )}
+          {/* Multi-image Badge */}
+          {item.image_urls && item.image_urls.length > 1 && (
+            <View style={styles.imageCountBadge}>
+              <Ionicons name="copy-outline" size={10} color={colors.white} />
+              <Text style={styles.imageCountText}>{item.image_urls.length}</Text>
+            </View>
+          )}
+
           {/* Favorite Heart */}
           <TouchableOpacity
             style={styles.favoriteBtn}
@@ -140,5 +148,22 @@ const styles = StyleSheet.create({
   },
   tagCategoryText: {
     color: '#D97706',
+  },
+  imageCountBadge: {
+    position: 'absolute',
+    top: spacing.sm,
+    left: spacing.sm,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: radius.sm,
+    gap: 2,
+  },
+  imageCountText: {
+    color: colors.white,
+    fontSize: 10,
+    fontWeight: '700',
   },
 });

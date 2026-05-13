@@ -24,18 +24,35 @@ class VisionEngine:
             print(f"Failed to initialize Gemini client: {e}")
 
     def analyze_image(self, image_path):
-        """Identify product from image. Returns minimal JSON for DeepSeek to expand."""
+        """Backward compatibility for single image path."""
+        return self.analyze_images([image_path])
+
+    def analyze_images(self, image_paths: list[str]):
+        """Identify product from one or more images. Returns minimal JSON for DeepSeek to expand."""
         if not self.client:
             raise ValueError("Gemini client is not initialized. Please set GEMINI_API_KEY.")
 
         prompt = self._get_image_prompt()
+        
+        # Open all images
+        pil_images = []
+        for path in image_paths:
+            try:
+                pil_images.append(Image.open(path))
+            except Exception as e:
+                print(f"Error opening image {path}: {e}")
 
-        pil_image = Image.open(image_path)
+        if not pil_images:
+            raise ValueError("No valid images provided for analysis.")
+
         full_prompt = prompt + "\n\nReturn ONLY raw JSON. No markdown."
 
+        # Pass prompt and all images to Gemini
+        contents = [full_prompt] + pil_images
+        
         response = self.client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=[full_prompt, pil_image],
+            model="gemini-2.0-flash", # Use latest stable
+            contents=contents,
         )
 
         text = response.text.strip()
@@ -50,9 +67,9 @@ class VisionEngine:
         return json.loads(text.strip())
 
     def _get_image_prompt(self):
-        return """Identify this product. Return JSON:
+        return """Identify this product from the provided photo(s). Return JSON:
 {"name":"product name","brand":"brand or empty","model":"model or empty","visible_features":["feature1","feature2"],"category":"category","condition":"brief condition","estimated_price_eur":"number","room":"one of: Kitchen,Bathroom,Bedroom,Living Room,Garage,Office,Other"}
-Only include what you can actually see or confidently infer."""
+Only include what you can actually see or confidently infer. If multiple photos are provided, they are of the same item from different angles."""
 
 
 class DeepSeekEngine:
@@ -91,8 +108,8 @@ Return ONLY raw JSON, no markdown."""
 
 Generate a Kleinanzeigen listing. Return JSON:
 {{
-  "title": "Product title without repeating brand (e.g., 'Gorenje RealSlim Waschmaschine 7KG' not 'Gorenje Gorenje RealSlim')",
-  "specs": {{"Kapazität": "7 kg", "Tiefe": "46.5 cm", "Funktionen": "ConnectLife, SteamTech"}},
+  "title": "Product title without repeating brand (e.g., 'GORENJE REALSLIM WASCHMASCHINE 7KG')",
+  "specs": {{"Energieeffizienz": "A (-10%)", "Kapazität": "7 kg", "Schleuderdrehzahl": "1400 U/min", "Tiefe": "46.5 cm", "Funktionen": "ConnectLife, SteamTech"}},
   "programs_de": ["Extra Hygiene", "Baby-Programm", "Schnellwäsche 20'"],
   "programs_en": ["Extra Hygiene", "Baby Program", "Quick Wash 20'"],
   "features_de": ["Frontlader-Design", "Made in Europe"],
@@ -105,17 +122,18 @@ Generate a Kleinanzeigen listing. Return JSON:
 }}
 
 Rules:
-- specs: technical specs as German key:value pairs (Kategorie, Marke, Modell, Energieeffizienz, Kapazität, Schleuderdrehzahl, Tiefe, Funktionen, etc.) — be thorough, include everything visible/known
-- programs_de/en: operating programs/modes this device has (washing programs, cooking modes, etc.) — if not applicable, return empty array
-- features_de/en: additional notable features (design notes, quality labels, origin) — if none, return empty array
-- description: 2-3 compelling, honest selling paragraphs — mention benefits and ideal use cases
-- price: realistic used-market price in EUR (just the number, as string)
-- No condition field — condition is chosen by the user, not AI
-- If you can't determine a spec, omit it from specs dict"""
+- title: USE UPPERCASE FOR THE PRODUCT NAME (e.g. GORENJE REALSLIM WASCHMASCHINE 7KG).
+- specs: technical specs as German key:value pairs (Kategorie, Marke, Modell, Energieeffizienz, Kapazität, Schleuderdrehzahl, Tiefe, Funktionen, etc.) — be thorough.
+- programs_de/en: operating programs/modes this device has (washing programs, cooking modes, etc.)
+- features_de/en: additional notable features.
+- description: 2-3 compelling, honest selling paragraphs.
+- price: realistic used-market price in EUR (just the number, as string).
+- No condition field — condition is chosen by the user, not AI.
+"""
 
         try:
             response = self.client.chat.completions.create(
-                model="deepseek-v4-flash",
+                model="deepseek-chat",
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_prompt}
@@ -125,8 +143,6 @@ Rules:
             )
 
             text = response.choices[0].message.content.strip()
-            # With thinking enabled, reasoning may appear before the JSON
-            # Find the first { and last } to extract just the JSON
             start = text.find('{')
             end = text.rfind('}')
             if start != -1 and end != -1:
@@ -136,7 +152,6 @@ Rules:
         except Exception as e:
             import traceback
             print(f"DeepSeek error, falling back: {e}")
-            traceback.print_exc()
             return self._fallback(gemini_result)
 
     def _fallback(self, gemini_result: dict) -> dict:
@@ -146,19 +161,17 @@ Rules:
         model = gemini_result.get("model", "")
         features = gemini_result.get("visible_features", [])
 
-        # Avoid duplicate brand in title (e.g., "Gorenje Gorenje RealSlim")
+        # Avoid duplicate brand in title
         if brand and name.lower().startswith(brand.lower()):
-            title = name
+            title = name.upper()
         elif brand:
-            title = f"{brand} {name}".strip()
+            title = f"{brand} {name}".strip().upper()
         else:
-            title = name
+            title = name.upper()
 
-        # Build specs from Gemini data
         specs = {}
         if brand: specs["Marke"] = brand
         if model: specs["Modell"] = model
-        # Map visible features to specs where possible
         for feat in features:
             feat_lower = feat.lower()
             if "kg" in feat_lower or "kapazität" in feat_lower:
@@ -170,7 +183,6 @@ Rules:
             elif "energie" in feat_lower or "energy" in feat_lower:
                 specs["Energieeffizienz"] = feat
 
-        # Remaining features that weren't mapped to specs
         remaining_features = [f for f in features if f not in specs.values()]
 
         return {

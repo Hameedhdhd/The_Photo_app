@@ -1,16 +1,12 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import {
   View, Text, TouchableOpacity, StyleSheet, Dimensions,
-  ActivityIndicator, SafeAreaView, Platform
+  ActivityIndicator, SafeAreaView, Platform, Animated, PanResponder, Image
 } from 'react-native';
-import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
-import Animated, { FadeIn, FadeInDown, FadeInUp, FadeOut, useAnimatedStyle, useSharedValue, withSpring, withTiming, withRepeat, runOnJS } from '../utils/reanimated-compat';
-import { Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import * as ImageManipulator from 'expo-image-manipulator';
 import Button from './Button';
-import { colors, typography, spacing, radius, shadows } from '../theme';
+import { colors, typography, spacing, radius } from '../theme';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const CROP_SIZE = SCREEN_WIDTH - 48;
@@ -21,69 +17,75 @@ export default function ImageCropper({ imageUri, onCrop, onRetake }) {
   const [processing, setProcessing] = useState(false);
   const [zoomLabel, setZoomLabel] = useState('1.0x');
 
-  const scale = useSharedValue(1);
-  const savedScale = useSharedValue(1);
-  const translateX = useSharedValue(0);
-  const translateY = useSharedValue(0);
-  const savedTranslateX = useSharedValue(0);
-  const savedTranslateY = useSharedValue(0);
+  // Animated values for pan and scale
+  const scale = useRef(new Animated.Value(1)).current;
+  const pan = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
+  
+  // Track current values for calculations
+  const currentScale = useRef(1);
+  const currentPan = useRef({ x: 0, y: 0 });
 
-  const updateZoomLabel = useCallback((val) => {
-    setZoomLabel(`${val.toFixed(1)}x`);
+  // Listeners to keep track of values without Reanimated hooks
+  React.useEffect(() => {
+    const scaleId = scale.addListener(({ value }) => {
+      currentScale.current = value;
+      setZoomLabel(`${value.toFixed(1)}x`);
+    });
+    const panId = pan.addListener((value) => {
+      currentPan.current = value;
+    });
+    return () => {
+      scale.removeListener(scaleId);
+      pan.removeListener(panId);
+    };
   }, []);
 
-  const pinchGesture = Gesture.Pinch()
-    .onUpdate((e) => {
-      scale.value = Math.max(1, Math.min(savedScale.value * e.scale, 5));
-      runOnJS(updateZoomLabel)(scale.value);
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        pan.setOffset({
+          x: currentPan.current.x,
+          y: currentPan.current.y
+        });
+        pan.setValue({ x: 0, y: 0 });
+      },
+      onPanResponderMove: Animated.event(
+        [null, { dx: pan.x, dy: pan.y }],
+        { useNativeDriver: false }
+      ),
+      onPanResponderRelease: () => {
+        pan.flattenOffset();
+      },
     })
-    .onEnd(() => {
-      savedScale.value = scale.value;
-    });
-
-  const panGesture = Gesture.Pan()
-    .onUpdate((e) => {
-      translateX.value = savedTranslateX.value + e.translationX;
-      translateY.value = savedTranslateY.value + e.translationY;
-    })
-    .onEnd(() => {
-      savedTranslateX.value = translateX.value;
-      savedTranslateY.value = translateY.value;
-    });
-
-  const composedGesture = Gesture.Simultaneous(pinchGesture, panGesture);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [
-      { translateX: translateX.value },
-      { translateY: translateY.value },
-      { scale: scale.value },
-    ],
-  }));
+  ).current;
 
   const resetTransform = useCallback(() => {
-    'worklet';
-    scale.value = withSpring(1);
-    savedScale.value = 1;
-    translateX.value = withSpring(0);
-    translateY.value = withSpring(0);
-    savedTranslateX.value = 0;
-    savedTranslateY.value = 0;
-    runOnJS(setZoomLabel)('1.0x');
+    Animated.parallel([
+      Animated.spring(scale, { toValue: 1, useNativeDriver: true }),
+      Animated.spring(pan, { toValue: { x: 0, y: 0 }, useNativeDriver: true }),
+    ]).start();
   }, []);
 
   const handleCrop = async () => {
     setProcessing(true);
     try {
+      // Calculate crop based on current transform
+      // OriginX/Y in the original image coordinate system
+      // This is an approximation since we don't have the original image dimensions here,
+      // but ImageManipulator works with pixel coordinates.
+      // We'll use the relative offset.
+      
       const manipResult = await ImageManipulator.manipulateAsync(
         imageUri,
         [
           {
             crop: {
-              originX: Math.max(0, -translateX.value / scale.value),
-              originY: Math.max(0, (-translateY.value + (CROP_Y - 80)) / scale.value),
-              width: CROP_SIZE / scale.value,
-              height: CROP_SIZE / scale.value,
+              originX: Math.max(0, -currentPan.current.x / currentScale.current),
+              originY: Math.max(0, (-currentPan.current.y + (CROP_Y - 80)) / currentScale.current),
+              width: CROP_SIZE / currentScale.current,
+              height: CROP_SIZE / currentScale.current,
             },
           },
           { resize: { width: 800 } },
@@ -103,8 +105,18 @@ export default function ImageCropper({ imageUri, onCrop, onRetake }) {
     onCrop(imageUri);
   };
 
+  const handleZoomIn = () => {
+    const nextScale = Math.min(currentScale.current + 0.5, 5);
+    Animated.spring(scale, { toValue: nextScale, useNativeDriver: true }).start();
+  };
+
+  const handleZoomOut = () => {
+    const nextScale = Math.max(currentScale.current - 0.5, 1);
+    Animated.spring(scale, { toValue: nextScale, useNativeDriver: true }).start();
+  };
+
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <View style={styles.container}>
       {/* Header */}
       <SafeAreaView style={styles.header}>
         <TouchableOpacity onPress={onRetake} style={styles.backButton} activeOpacity={0.7}>
@@ -118,20 +130,34 @@ export default function ImageCropper({ imageUri, onCrop, onRetake }) {
       {/* Instruction Bar */}
       <View style={styles.instructionBar}>
         <Ionicons name="hand-left-outline" size={14} color={colors.primary} />
-        <Text style={styles.instructionText}>Pinch to zoom • Drag to position</Text>
+        <Text style={styles.instructionText}>Drag to position • Use buttons to zoom</Text>
       </View>
 
       {/* Crop Area */}
       <View style={styles.cropContainer}>
-        <GestureDetector gesture={composedGesture}>
-          <Animated.View style={[styles.imageWrapper, animatedStyle]}>
+        <View 
+          style={styles.gestureCapture} 
+          {...panResponder.panHandlers}
+        >
+          <Animated.View 
+            style={[
+              styles.imageWrapper, 
+              {
+                transform: [
+                  { translateX: pan.x },
+                  { translateY: pan.y },
+                  { scale: scale }
+                ]
+              }
+            ]}
+          >
             <Image
               source={{ uri: imageUri }}
               style={styles.image}
               resizeMode="contain"
             />
           </Animated.View>
-        </GestureDetector>
+        </View>
 
         {/* Crop Overlay */}
         <View style={styles.cropOverlay} pointerEvents="none">
@@ -154,12 +180,17 @@ export default function ImageCropper({ imageUri, onCrop, onRetake }) {
         </View>
       </View>
 
-      {/* Zoom Indicator */}
-      <View style={styles.zoomIndicator}>
+      {/* Zoom Controls */}
+      <View style={styles.zoomControls}>
+        <TouchableOpacity style={styles.zoomBtn} onPress={handleZoomOut}>
+          <Ionicons name="remove-circle-outline" size={32} color={colors.white} />
+        </TouchableOpacity>
         <View style={styles.zoomBadge}>
-          <Ionicons name="scan-outline" size={14} color={colors.textTertiary} />
           <Text style={styles.zoomText}>{zoomLabel}</Text>
         </View>
+        <TouchableOpacity style={styles.zoomBtn} onPress={handleZoomIn}>
+          <Ionicons name="add-circle-outline" size={32} color={colors.white} />
+        </TouchableOpacity>
       </View>
 
       {/* Action Buttons */}
@@ -182,7 +213,7 @@ export default function ImageCropper({ imageUri, onCrop, onRetake }) {
           <Text style={styles.useFullText}>Use Full</Text>
         </TouchableOpacity>
       </View>
-    </GestureHandlerRootView>
+    </View>
   );
 }
 
@@ -241,6 +272,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     overflow: 'hidden',
   },
+  gestureCapture: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   imageWrapper: {
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT * 0.42,
@@ -291,23 +327,28 @@ const styles = StyleSheet.create({
     width: 0.5,
     backgroundColor: 'rgba(255,255,255,0.25)',
   },
-  zoomIndicator: {
-    alignItems: 'center',
-    paddingVertical: spacing.md,
-  },
-  zoomBadge: {
+  zoomControls: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.lg,
+    paddingVertical: spacing.md,
+  },
+  zoomBtn: {
+    padding: spacing.xs,
+  },
+  zoomBadge: {
     backgroundColor: 'rgba(255,255,255,0.1)',
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs + 2,
-    borderRadius: radius.full,
+    paddingVertical: spacing.xs,
+    borderRadius: radius.md,
+    minWidth: 60,
+    alignItems: 'center',
   },
   zoomText: {
-    ...typography.small,
-    color: colors.textTertiary,
-    fontWeight: '600',
-    marginLeft: spacing.xs,
+    ...typography.body,
+    color: colors.white,
+    fontWeight: '700',
   },
   actions: {
     flexDirection: 'row',

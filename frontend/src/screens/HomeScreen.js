@@ -104,21 +104,36 @@ export default function HomeScreen({ navigation }) {
     setImageUris(prev => prev.filter((_, i) => i !== index));
   }, []);
 
-  const analyzeSingleImage = useCallback(async (imageUri, uid) => {
+  const uploadAndAnalyze = useCallback(async (uris, uid) => {
     const formData = new FormData();
-    if (imageUri.startsWith('blob:') || imageUri.startsWith('data:')) {
-      const blobResp = await fetch(imageUri);
-      const blob = await blobResp.blob();
-      const file = new File([blob], 'photo.jpg', { type: 'image/jpeg' });
-      formData.append('file', file);
-    } else {
-      formData.append('file', { uri: imageUri, name: 'photo.jpg', type: 'image/jpeg' });
+    
+    for (let i = 0; i < uris.length; i++) {
+      const uri = uris[i];
+      if (uri.startsWith('blob:') || uri.startsWith('data:')) {
+        const blobResp = await fetch(uri);
+        const blob = await blobResp.blob();
+        const file = new File([blob], `photo_${i}.jpg`, { type: 'image/jpeg' });
+        formData.append('files', file);
+      } else {
+        formData.append('files', { uri, name: `photo_${i}.jpg`, type: 'image/jpeg' } as any);
+      }
     }
+    
     formData.append('room', selectedRoom);
     if (uid) formData.append('user_id', uid);
 
-    const response = await fetch(API_URL, { method: 'POST', body: formData });
-    if (!response.ok) throw new Error(`Server error: ${response.status}`);
+    const response = await fetch(API_URL, { 
+      method: 'POST', 
+      body: formData,
+      headers: {
+        'Accept': 'application/json',
+      }
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.detail || `Server error: ${response.status}`);
+    }
     return await response.json();
   }, [selectedRoom]);
 
@@ -133,7 +148,7 @@ export default function HomeScreen({ navigation }) {
     setResult(null);
     try {
       const uid = await getSessionUserId();
-      const data = await analyzeSingleImage(imageUris[0], uid);
+      const data = await uploadAndAnalyze(imageUris, uid);
       setResult(data);
     } catch (error) {
       console.error('Analysis error:', error);
@@ -141,7 +156,7 @@ export default function HomeScreen({ navigation }) {
     } finally {
       setLoading(false);
     }
-  }, [imageUris, analyzeSingleImage, getSessionUserId]);
+  }, [imageUris, uploadAndAnalyze, getSessionUserId]);
 
   // Analyze each photo as a SEPARATE item
   const analyzeAsSeparateItems = useCallback(async () => {
@@ -157,7 +172,7 @@ export default function HomeScreen({ navigation }) {
       const results = [];
       for (let i = 0; i < imageUris.length; i++) {
         try {
-          const data = await analyzeSingleImage(imageUris[i], uid);
+          const data = await uploadAndAnalyze([imageUris[i]], uid);
           results.push(data);
         } catch (err) {
           console.error(`Failed to analyze photo ${i + 1}:`, err);
