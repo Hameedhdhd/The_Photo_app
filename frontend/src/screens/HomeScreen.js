@@ -115,7 +115,7 @@ export default function HomeScreen({ navigation }) {
         const file = new File([blob], `photo_${i}.jpg`, { type: 'image/jpeg' });
         formData.append('files', file);
       } else {
-        formData.append('files', { uri, name: `photo_${i}.jpg`, type: 'image/jpeg' } as any);
+        formData.append('files', { uri, name: `photo_${i}.jpg`, type: 'image/jpeg' });
       }
     }
     
