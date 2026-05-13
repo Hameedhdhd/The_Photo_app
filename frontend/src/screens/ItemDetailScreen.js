@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef } from 'react';
 import {
   StyleSheet, Text, View, ScrollView, Image, TextInput,
-  KeyboardAvoidingView, Platform, Alert, TouchableOpacity
+  KeyboardAvoidingView, Platform, Alert, TouchableOpacity, Dimensions
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeIn, FadeInDown, FadeInUp, FadeOut, useAnimatedStyle, useSharedValue, withSpring, withTiming, withRepeat, runOnJS } from '../utils/reanimated-compat';
@@ -12,6 +12,8 @@ import Card from '../components/Card';
 import LanguageToggle from '../components/LanguageToggle';
 import CategoryScroll from '../components/CategoryScroll';
 import { colors, typography, spacing, radius } from '../theme';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const ROOMS = [
   'Kitchen', 'Bathroom', 'Bedroom', 'Living Room', 'Garage', 'Office', 'Other'
