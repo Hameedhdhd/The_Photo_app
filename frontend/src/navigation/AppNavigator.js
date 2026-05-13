@@ -112,13 +112,20 @@ export default function AppNavigator() {
         ) : (
           <Stack.Screen name="Login">
             {(props) => <LoginScreen {...props} onMockLogin={async () => {
-              // Create a real Supabase anonymous session so items can be saved/fetched
-              const { error } = await supabase.auth.signInAnonymously();
+              // Sign in with a dev account so items can be saved/fetched
+              const devEmail = 'dev@listitfast.app';
+              const devPass = 'DevAccount2024!';
+              // Try sign in first (account may already exist)
+              let { error } = await supabase.auth.signInWithPassword({ email: devEmail, password: devPass });
               if (error) {
-                console.error('Anonymous sign-in error:', error);
-                setIsMockLogin(true); // fallback to mock
+                // If account doesn't exist, create it
+                const { error: signUpError } = await supabase.auth.signUp({ email: devEmail, password: devPass });
+                if (signUpError) {
+                  console.error('Dev auth error:', signUpError);
+                  setIsMockLogin(true); // fallback
+                }
+                // signUp triggers onAuthStateChange automatically
               }
-              // onAuthStateChange will update session automatically
             }} />}
           </Stack.Screen>
         )}
