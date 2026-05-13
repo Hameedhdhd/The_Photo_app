@@ -34,7 +34,7 @@ class SupabaseAuth {
       access_token: data.access_token,
       refresh_token: data.refresh_token,
       user: data.user,
-      expires_at: data.expires_at,
+      expires_at: data.expires_at || Math.floor(Date.now() / 1000) + 3600,
     };
   }
 
@@ -93,6 +93,44 @@ class SupabaseAuth {
     // Add 5 minute buffer
     return Date.now() / 1000 > (session.expires_at - 300);
   }
+
+  async refreshSession(session) {
+    if (!session?.refresh_token) return null;
+    try {
+      const response = await fetch(`${this.url}/auth/v1/token?grant_type=refresh_token`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': this.anonKey,
+        },
+        body: JSON.stringify({ refresh_token: session.refresh_token }),
+      });
+
+      if (!response.ok) return null;
+
+      const data = await response.json();
+      const newSession = {
+        access_token: data.access_token,
+        refresh_token: data.refresh_token,
+        user: data.user || session.user,
+        expires_at: data.expires_at || Math.floor(Date.now() / 1000) + 3600,
+      };
+      await this.setSession(newSession);
+      return newSession;
+    } catch (e) {
+      console.error('Token refresh failed:', e);
+      return null;
+    }
+  }
+
+  async getValidSession() {
+    const session = await this.getSession();
+    if (!session) return null;
+    if (!this.isSessionExpired(session)) return session;
+    // Try refresh
+    const refreshed = await this.refreshSession(session);
+    return refreshed;
+  }
 }
 
 // ============================================================
@@ -102,6 +140,8 @@ class SupabaseAuth {
 let auth;
 let currentItems = [];
 let selectedItemId = null;
+let selectedBatchItems = new Set(); // Set of item IDs selected for batch
+let isBatchRunning = false;
 
 // ============================================================
 // DOM Elements
@@ -151,23 +191,61 @@ function setStatus(text, type = 'success') {
 }
 
 // ============================================================
-// API Calls
+// API URL Detection & API Calls
 // ============================================================
 
-async function apiCall(endpoint, options = {}) {
-  const session = await auth.getSession();
-  if (!session) throw new Error('Not authenticated');
+let detectedApiUrl = null;
 
-  const url = `${CONFIG.API_URL}${endpoint}`;
+async function detectApiUrl() {
+  if (detectedApiUrl) return detectedApiUrl;
+  const urls = [CONFIG.API_URL, CONFIG.API_URL_FALLBACK].filter(Boolean);
+  for (const url of urls) {
+    try {
+      const response = await fetch(`${url}/`, { method: 'GET', signal: AbortSignal.timeout(3000) });
+      if (response.ok) {
+        detectedApiUrl = url;
+        console.log(`[Sync] API detected at: ${url}`);
+        return url;
+      }
+    } catch (e) {
+      console.log(`[Sync] API not reachable at: ${url}`);
+    }
+  }
+  detectedApiUrl = CONFIG.API_URL;
+  return detectedApiUrl;
+}
+
+async function apiCall(endpoint, options = {}) {
+  const session = await auth.getValidSession();
+  if (!session) throw new Error('Not authenticated. Please log in again.');
+
+  const baseUrl = await detectApiUrl();
+  const url = `${baseUrl}${endpoint}`;
   const headers = {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${session.access_token}`,
   };
 
-  const response = await fetch(url, {
+  let response = await fetch(url, {
     ...options,
     headers: { ...headers, ...options.headers },
   });
+
+  // If 401, try refreshing token once
+  if (response.status === 401) {
+    const refreshed = await auth.refreshSession(session);
+    if (refreshed) {
+      const retryHeaders = { ...headers, 'Authorization': `Bearer ${refreshed.access_token}` };
+      response = await fetch(url, {
+        ...options,
+        headers: { ...retryHeaders, ...options.headers },
+      });
+    }
+    if (!response.ok) {
+      await auth.clearSession();
+      throw new Error('Session expired. Please log in again.');
+    }
+  }
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ detail: 'Request failed' }));
@@ -215,11 +293,13 @@ function renderItems(items) {
     const card = document.createElement('div');
     card.className = 'item-card';
     if (item.item_id === selectedItemId) card.classList.add('selected');
+    if (selectedBatchItems.has(item.item_id)) card.classList.add('batch-selected');
 
     const statusClass = item.listing_status ? `status-${item.listing_status}` : 'status-draft';
     const statusLabel = formatStatus(item.listing_status || 'draft');
 
     card.innerHTML = `
+      <input type="checkbox" class="item-checkbox" data-item-id="${item.item_id}" ${selectedBatchItems.has(item.item_id) ? 'checked' : ''}>
       ${item.image_url
         ? `<img class="item-card-image" src="${item.image_url}" alt="${item.title}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
            <div class="item-card-image-placeholder" style="display:none">📦</div>`
@@ -233,18 +313,160 @@ function renderItems(items) {
       <span class="item-card-price">${escapeHtml(item.price || '')}</span>
     `;
 
-    card.addEventListener('click', () => selectItem(item));
+    // Checkbox click: toggle batch selection (stop propagation to prevent card click)
+    const checkbox = card.querySelector('.item-checkbox');
+    checkbox.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (e.target.checked) {
+        selectedBatchItems.add(item.item_id);
+        card.classList.add('batch-selected');
+      } else {
+        selectedBatchItems.delete(item.item_id);
+        card.classList.remove('batch-selected');
+      }
+      updateBatchBar();
+    });
+
+    // Card click: show detail (only if not clicking checkbox)
+    card.addEventListener('click', function(e) {
+      if (e.target.classList.contains('item-checkbox')) return;
+      selectItem(item, this);
+    });
+    
     itemsList.appendChild(card);
   });
+
+  updateBatchBar();
 }
 
-function selectItem(item) {
+function updateBatchBar() {
+  const batchBar = document.getElementById('batch-bar');
+  const batchCount = document.getElementById('batch-count');
+  const count = selectedBatchItems.size;
+  
+  if (count > 0) {
+    batchBar.classList.remove('hidden');
+    batchCount.textContent = `${count} selected`;
+  } else {
+    batchBar.classList.add('hidden');
+  }
+  
+  // Update select-all checkbox
+  const selectAll = document.getElementById('select-all-checkbox');
+  if (selectAll) {
+    selectAll.checked = currentItems.length > 0 && selectedBatchItems.size === currentItems.length;
+  }
+}
+
+// Select All checkbox
+document.getElementById('select-all-checkbox').addEventListener('change', (e) => {
+  if (e.target.checked) {
+    currentItems.forEach(item => selectedBatchItems.add(item.item_id));
+  } else {
+    selectedBatchItems.clear();
+  }
+  renderItems(currentItems);
+});
+
+// Stop Batch button
+document.getElementById('batch-stop-btn').addEventListener('click', () => {
+  if (!isBatchRunning) return;
+  chrome.runtime.sendMessage({ action: 'STOP_BATCH' });
+  document.getElementById('progress-text').textContent = '⏹ Stopping...';
+});
+
+// Batch List button
+document.getElementById('batch-list-btn').addEventListener('click', async () => {
+  if (isBatchRunning || selectedBatchItems.size === 0) return;
+  
+  isBatchRunning = true;
+  const batchBar = document.getElementById('batch-bar');
+  const batchProgress = document.getElementById('batch-progress');
+  const progressText = document.getElementById('progress-text');
+  const progressFill = document.getElementById('progress-fill');
+  
+  // Get full item data for selected items
+  const items = currentItems.filter(item => selectedBatchItems.has(item.item_id));
+  const totalItems = items.length;
+  
+  // Show progress
+  batchBar.classList.add('hidden');
+  batchProgress.classList.remove('hidden');
+  progressText.textContent = `Starting batch list for ${totalItems} items...`;
+  progressFill.style.width = '0%';
+  
+  try {
+    // Get auth session
+    const session = await auth.getValidSession();
+    if (!session) throw new Error('Not authenticated');
+    
+    // Send batch request to background script
+    chrome.runtime.sendMessage({
+      action: 'START_BATCH',
+      items: items,
+      token: session.access_token,
+      apiUrl: detectedApiUrl || CONFIG.API_URL,
+    });
+    
+    setStatus(`Batch listing ${totalItems} items...`, 'loading');
+  } catch (err) {
+    progressText.textContent = `❌ Error: ${err.message}`;
+    isBatchRunning = false;
+    batchProgress.classList.add('hidden');
+    batchBar.classList.remove('hidden');
+  }
+});
+
+// Listen for batch progress updates from background
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === 'BATCH_PROGRESS') {
+    const progressText = document.getElementById('progress-text');
+    const progressFill = document.getElementById('progress-fill');
+    const batchProgress = document.getElementById('batch-progress');
+    
+    batchProgress.classList.remove('hidden');
+    progressText.textContent = message.text;
+    
+    if (message.current && message.total) {
+      const pct = Math.round((message.current / message.total) * 100);
+      progressFill.style.width = `${pct}%`;
+    }
+    
+    sendResponse({ ok: true });
+  }
+  
+  if (message.action === 'BATCH_COMPLETE') {
+    const progressText = document.getElementById('progress-text');
+    const progressFill = document.getElementById('progress-fill');
+    const batchProgress = document.getElementById('batch-progress');
+    
+    progressFill.style.width = '100%';
+    progressText.textContent = `✅ Batch complete! ${message.success} succeeded, ${message.failed} failed.`;
+    
+    isBatchRunning = false;
+    selectedBatchItems.clear();
+    setStatus(`Batch done: ${message.success} listed`, 'success');
+    
+    // Hide progress after a few seconds
+    setTimeout(() => {
+      batchProgress.classList.add('hidden');
+      updateBatchBar();
+      loadItems(); // Refresh items
+    }, 5000);
+    
+    sendResponse({ ok: true });
+  }
+  
+  return true;
+});
+
+function selectItem(item, cardElement) {
   selectedItemId = item.item_id;
   chrome.storage.local.set({ selected_item_id: item.item_id });
 
   // Update selection visual
   document.querySelectorAll('.item-card').forEach(c => c.classList.remove('selected'));
-  event.currentTarget.classList.add('selected');
+  if (cardElement) cardElement.classList.add('selected');
 
   // Show detail screen
   showItemDetail(item);
@@ -447,10 +669,13 @@ function formatStatus(status) {
 async function init() {
   auth = new SupabaseAuth(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
 
-  // Check for existing session
-  const session = await auth.getSession();
+  // Detect API URL in background
+  detectApiUrl();
+
+  // Check for existing session (with auto-refresh)
+  const session = await auth.getValidSession();
   
-  if (session && !auth.isSessionExpired(session)) {
+  if (session) {
     userEmailSpan.textContent = session.user?.email || 'User';
     showScreen('items-screen');
     
@@ -460,9 +685,6 @@ async function init() {
     
     await loadItems();
   } else {
-    if (session) {
-      await auth.clearSession();
-    }
     showScreen('login-screen');
   }
 }

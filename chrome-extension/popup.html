@@ -50,19 +50,36 @@
       <p>📌 <strong>How to use:</strong></p>
       <ol>
         <li>Select an item below</li>
-        <li>Go to <a href="https://www.kleinanzeigen.de/p-anzeige-aufgeben.html" target="_blank">Kleinanzeigen listing page</a></li>
+        <li>Go to <a href="https://www.kleinanzeigen.de/p-anzeige-aufgeben-schritt2.html" target="_blank">Kleinanzeigen listing page</a></li>
         <li>Click the <strong>⚡ Fill from My App</strong> button</li>
       </ol>
     </div>
 
     <div class="items-header">
       <h2>Your Items</h2>
-      <button id="refresh-btn" class="btn btn-small btn-outline" title="Refresh items">🔄</button>
+      <div class="items-header-actions">
+        <label class="select-all-label">
+          <input type="checkbox" id="select-all-checkbox"> All
+        </label>
+        <button id="refresh-btn" class="btn btn-small btn-outline" title="Refresh items">🔄</button>
+      </div>
+    </div>
+    <div id="batch-bar" class="batch-bar hidden">
+      <span id="batch-count">0 selected</span>
+      <button id="batch-list-btn" class="btn btn-primary btn-small">⚡ Batch List</button>
+    </div>
+    <div id="batch-progress" class="batch-progress hidden">
+      <div class="progress-header">
+        <div class="progress-text" id="progress-text">Preparing...</div>
+        <button id="batch-stop-btn" class="btn btn-stop btn-small">⏹ Stop</button>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
     </div>
     <div id="items-loading" class="loading hidden">Loading items...</div>
     <div id="items-list" class="items-list"></div>
     <div id="items-empty" class="empty-state hidden">
-      <p>No items found. Add items in your Photo App first!</p>
+      <p>No items found for this account.</p>
+      <p class="empty-hint">Items are linked to your account. Add items in the Photo App, or make sure you're logged in with the right email.</p>
     </div>
   </div>
 

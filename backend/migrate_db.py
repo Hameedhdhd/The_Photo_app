@@ -1,11 +1,12 @@
 """
 Run database migrations directly on Supabase PostgreSQL.
 """
+import os
 import psycopg2
 from psycopg2 import sql
 
 # Database connection
-DATABASE_URL = "postgresql://postgres:Hameed777456644$@db.awwahpecfvdljgupnzft.supabase.co:5432/postgres"
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 # Migration SQL statements
 migrations = [

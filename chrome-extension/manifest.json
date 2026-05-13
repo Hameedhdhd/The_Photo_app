@@ -3,12 +3,14 @@
   "name": "My App: Kleinanzeigen Sync",
   "version": "1.0.0",
   "description": "Sync items from The Photo App to Kleinanzeigen listing form",
-  "permissions": ["storage", "activeTab"],
+  "permissions": ["storage", "activeTab", "tabs"],
   "host_permissions": [
     "https://www.kleinanzeigen.de/*",
     "http://localhost:8000/*",
+    "http://127.0.0.1:8000/*",
     "http://192.168.178.61:8000/*",
-    "https://awwahpecfvdljgupnzft.supabase.co/*"
+    "https://awwahpecfvdljgupnzft.supabase.co/*",
+    "https://awwahpecfvdljgupnzft.supabase.in/*"
   ],
   "action": {
     "default_popup": "popup.html",
@@ -23,7 +25,10 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://www.kleinanzeigen.de/p-anzeige-aufgeben.html*"],
+      "matches": [
+        "https://www.kleinanzeigen.de/p-anzeige-aufgeben*",
+        "https://www.kleinanzeigen.de/p-anzeige-aufgeben-schritt2*"
+      ],
       "js": ["config.js", "content.js"],
       "run_at": "document_idle"
     }

@@ -2,7 +2,9 @@ from fastapi import FastAPI, File, UploadFile, HTTPException, Form, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional
+import json
 import os
+import re
 import uuid
 import shutil
 from dotenv import load_dotenv
@@ -11,6 +13,125 @@ from app.auth import get_current_user, get_optional_user
 load_dotenv()
 
 app = FastAPI(title="The Photo App API", version="1.0.0")
+
+# ============================================================
+# Description Formatting - Single source of truth
+# Used by API responses, Chrome extension, and frontend preview
+# ============================================================
+
+def dedup_brand_in_title(title: str) -> str:
+    """Remove duplicate brand at start of title (e.g., 'Gorenje Gorenje X' → 'Gorenje X')."""
+    if not title:
+        return title
+    parts = title.split(None, 1)  # Split on first whitespace
+    if len(parts) >= 2:
+        first_word = parts[0]
+        rest = parts[1]
+        if rest.lower().startswith(first_word.lower()):
+            return rest
+    return title
+
+def detect_brand(title: str) -> str:
+    brands = r'\b(Philips|Bosch|Siemens|Samsung|LG|Sony|Panasonic|JBL|Bose|Apple|Dyson|Nespresso|De\'Longhi|Melitta|Krups|AEG|Miele|Liebherr|Grundig|Technics|Pioneer|Yamaha|Harman|Kardon|Beats|Sennheiser|AKG|Shure|Lenovo|Dell|HP|Asus|Acer|Microsoft|Google|Nokia|Motorola|OnePlus|Xiaomi|Huawei|Gorenje|Bauknecht|Haier|Beko|Candy|Indesit|Whirlpool|Zanussi|Tefal|Rowenta|Braun|Jura|Severin|Clatronic|Kärcher|Metabo|Bosch|Makita|Hilti|Worx|Ryobi)\b'
+    m = re.match(brands, title or '', re.IGNORECASE)
+    if m:
+        return m.group(1).capitalize()
+    return ''
+
+def detect_model(title: str) -> str:
+    model_regex = r'\b([A-Z]{1,4}[-]?\d{3,}[A-Z0-9/\-]*)\b'
+    for m in re.finditer(model_regex, title or ''):
+        candidate = m.group(1)
+        if len(candidate) >= 4 and re.search(r'\d', candidate):
+            return candidate
+    return ''
+
+def format_description(title: str, description_de: str, description_en: str,
+                       specs: dict = None, programs_de: list = None, programs_en: list = None,
+                       features_de: list = None, features_en: list = None,
+                       condition: str = None, category: str = None) -> str:
+    """Build the professional bilingual Kleinanzeigen description."""
+    title_upper = (title or 'UNTITLED').upper()
+    desc_de = (description_de or '').strip()
+    desc_en = (description_en or '').strip()
+    brand = detect_brand(title or '')
+    model = detect_model(title or '')
+    specs = specs or {}
+    programs_de = programs_de or []
+    programs_en = programs_en or []
+    features_de = features_de or []
+    features_en = features_en or []
+
+    # German spec lines
+    de_specs = []
+    if category: de_specs.append(f'▸ Kategorie: {category}')
+    if brand: de_specs.append(f'▸ Marke: {brand}')
+    if model: de_specs.append(f'▸ Modell: {model}')
+    for k, v in specs.items():
+        # Skip Marke/Modell if already shown above
+        if k in ('Marke', 'Modell') and (brand or model):
+            continue
+        de_specs.append(f'▸ {k}: {v}')
+
+    # English spec lines
+    en_specs = []
+    if category: en_specs.append(f'▸ Category: {category}')
+    if brand: en_specs.append(f'▸ Brand: {brand}')
+    if model: en_specs.append(f'▸ Model: {model}')
+    for k, v in specs.items():
+        # Skip Marke/Modell if already shown above
+        if k in ('Marke', 'Modell') and (brand or model):
+            continue
+        en_key = {'Kapazität': 'Capacity', 'Tiefe': 'Depth', 'Schleuderdrehzahl': 'Spin Speed',
+                  'Energieeffizienz': 'Energy Efficiency', 'Leistung': 'Power', 'Gewicht': 'Weight',
+                  'Größe': 'Size', 'Farbe': 'Color', 'Material': 'Material',
+                  'Funktionen': 'Features', 'Zustand': 'Condition'}.get(k, k)
+        en_specs.append(f'▸ {en_key}: {v}')
+
+    # Assemble German section
+    result = f'✦ {title_upper} ✦\n\n'
+    if de_specs: result += '\n'.join(de_specs) + '\n\n'
+    if desc_de: result += desc_de + '\n\n'
+    if programs_de:
+        result += 'Programme & Funktionen:\n'
+        for p in programs_de:
+            result += f'• {p}\n'
+        result += '\n'
+    if features_de:
+        result += 'Weitere Merkmale:\n'
+        for f in features_de:
+            result += f'• {f}\n'
+        result += '\n'
+    if condition:
+        # Translate condition for German section
+        de_condition = {'Neuwertig': 'Neuwertig', 'Sehr Gut': 'Sehr Gut', 'Gut': 'Gut', 'Fair': 'Akzeptabel', 'Defekt': 'Defekt'}.get(condition, condition)
+        result += f'Zustand: {de_condition}\n\n'
+    result += 'Privatverkauf: Keine Garantie, Gewährleistung oder Rücknahme.'
+
+    # Separator
+    result += '\n\n─────────────────────────────────\n\n'
+
+    # Assemble English section
+    result += f'✦ {title_upper} ✦\n\n'
+    if en_specs: result += '\n'.join(en_specs) + '\n\n'
+    if desc_en: result += desc_en + '\n\n'
+    if programs_en:
+        result += 'Programs & Functions:\n'
+        for p in programs_en:
+            result += f'• {p}\n'
+        result += '\n'
+    if features_en:
+        result += 'Additional Features:\n'
+        for f in features_en:
+            result += f'• {f}\n'
+        result += '\n'
+    if condition:
+        en_condition = {'Neuwertig': 'Like New', 'Sehr Gut': 'Very Good', 'Gut': 'Good', 'Fair': 'Fair', 'Defekt': 'For Part'}.get(condition, condition)
+        result += f'Condition: {en_condition}\n\n'
+    result += 'Private sale: No warranty, guarantee, or returns.'
+
+    return result.strip()
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -26,6 +147,7 @@ class ListingResponse(BaseModel):
     title: str
     description_en: str
     description_de: str
+    formatted_description: str
     price: str
     category: str
     room: str | None = None
@@ -40,6 +162,7 @@ class ItemResponse(BaseModel):
     title: Optional[str] = None
     description_en: Optional[str] = None
     description_de: Optional[str] = None
+    formatted_description: Optional[str] = None
     price: Optional[str] = None
     category: Optional[str] = None
     room: Optional[str] = None
@@ -58,10 +181,38 @@ class ItemListResponse(BaseModel):
     items: list[ItemResponse]
     total: int
 
+class FormatDescriptionRequest(BaseModel):
+    """Request body for formatting a description."""
+    title: str
+    description_de: str
+    description_en: str
+    specs: Optional[dict] = None
+    programs_de: Optional[list] = None
+    programs_en: Optional[list] = None
+    features_de: Optional[list] = None
+    features_en: Optional[list] = None
+    condition: Optional[str] = None
+    category: Optional[str] = None
+
+class FormatDescriptionResponse(BaseModel):
+    formatted_description: str
+
 class MarkListedRequest(BaseModel):
     """Request body for marking an item as listed."""
     platform: str = "kleinanzeigen"
     listing_url: Optional[str] = None
+
+@app.post("/api/format-description", response_model=FormatDescriptionResponse)
+async def format_description_endpoint(request: FormatDescriptionRequest):
+    """Format a description for Kleinanzeigen. Single source of truth for formatting."""
+    return FormatDescriptionResponse(
+        formatted_description=format_description(
+            request.title, request.description_de, request.description_en,
+            specs=request.specs, programs_de=request.programs_de, programs_en=request.programs_en,
+            features_de=request.features_de, features_en=request.features_en,
+            condition=request.condition, category=request.category
+        )
+    )
 
 @app.get("/")
 def read_root():
@@ -91,10 +242,14 @@ async def analyze_image(
             shutil.copyfileobj(file.file, buffer)
 
         if not os.environ.get("GEMINI_API_KEY"):
+            _title = f"Mock AI: {file.filename}"
+            _desc_en = "Please set GEMINI_API_KEY to see real AI results. This is mock data."
+            _desc_de = "Bitte GEMINI_API_KEY setzen, um echte KI-Ergebnisse zu sehen. Dies sind Testdaten."
             response_data = ListingResponse(
-                title=f"Mock AI: {file.filename}",
-                description_en="Please set GEMINI_API_KEY to see real AI results. This is mock data.",
-                description_de="Bitte GEMINI_API_KEY setzen, um echte KI-Ergebnisse zu sehen. Dies sind Testdaten.",
+                title=_title,
+                description_en=_desc_en,
+                description_de=_desc_de,
+                formatted_description=format_description(_title, _desc_de, _desc_en),
                 price="45 EUR",
                 category="Electronics",
                 room=room,
@@ -103,24 +258,48 @@ async def analyze_image(
                 user_id=user_id
             )
         else:
-            from app.vision import get_vision_engine
+            from app.vision import get_vision_engine, get_deepseek_engine
             vision_engine = get_vision_engine()
             if not vision_engine:
                 raise HTTPException(status_code=500, detail="AI engine not initialized. Check GEMINI_API_KEY.")
-            ai_result = vision_engine.analyze_image(file_path)
+
+            # Step 1: Gemini identifies the product from image
+            gemini_result = vision_engine.analyze_image(file_path)
+            print(f"Gemini identification: {json.dumps(gemini_result, ensure_ascii=False)[:200]}")
+
+            # Step 2: DeepSeek generates rich listing text
+            deepseek_engine = get_deepseek_engine()
+            ai_result = deepseek_engine.generate_listing(gemini_result)
+            print(f"DeepSeek listing generated: {ai_result.get('title', 'no title')}")
 
             # Use AI-suggested room if user didn't pick one or picked "Other"
-            ai_room = ai_result.get("room", "Other")
+            ai_room = ai_result.get("room", gemini_result.get("room", "Other"))
             if ai_room not in VALID_ROOMS:
                 ai_room = "Other"
             final_room = room if room and room != "Other" else ai_room
 
+            _title = dedup_brand_in_title(ai_result.get("title", gemini_result.get("name", f"Analyzed: {file.filename}")))
+            _desc_en = ai_result.get("description_en", "No description generated.")
+            _desc_de = ai_result.get("description_de", "Keine Beschreibung erstellt.")
+            _category = ai_result.get("category", gemini_result.get("category", "Uncategorized"))
+            _specs = ai_result.get("specs", {})
+            _programs_de = ai_result.get("programs_de", [])
+            _programs_en = ai_result.get("programs_en", [])
+            _features_de = ai_result.get("features_de", [])
+            _features_en = ai_result.get("features_en", [])
+            # Ensure price is always a string
+            _price = str(ai_result.get("price") or gemini_result.get("estimated_price_eur") or "TBD")
             response_data = ListingResponse(
-                title=ai_result.get("title", f"Analyzed: {file.filename}"),
-                description_en=ai_result.get("description_en", "No description generated."),
-                description_de=ai_result.get("description_de", "Keine Beschreibung erstellt."),
-                price=ai_result.get("price", "TBD"),
-                category=ai_result.get("category", "Uncategorized"),
+                title=_title,
+                description_en=_desc_en,
+                description_de=_desc_de,
+                formatted_description=format_description(
+                    _title, _desc_de, _desc_en,
+                    specs=_specs, programs_de=_programs_de, programs_en=_programs_en,
+                    features_de=_features_de, features_en=_features_en, category=_category
+                ),
+                price=_price,
+                category=_category,
                 room=final_room,
                 item_id=f"ITEM-{uuid.uuid4().hex[:8].upper()}",
                 image_url=None,
@@ -161,10 +340,27 @@ async def analyze_image(
                     "status": "draft",
                     "image_url": image_public_url,
                 }
+                # Add extra_data if column exists
+                extra_data = {
+                    "specs": _specs if os.environ.get("GEMINI_API_KEY") else {},
+                    "programs_de": _programs_de if os.environ.get("GEMINI_API_KEY") else [],
+                    "programs_en": _programs_en if os.environ.get("GEMINI_API_KEY") else [],
+                    "features_de": _features_de if os.environ.get("GEMINI_API_KEY") else [],
+                    "features_en": _features_en if os.environ.get("GEMINI_API_KEY") else [],
+                }
                 if user_id:
                     db_data["user_id"] = user_id
 
-                supabase.table("items").insert(db_data).execute()
+                try:
+                    db_data["extra_data"] = extra_data
+                    supabase.table("items").insert(db_data).execute()
+                except Exception as col_err:
+                    # extra_data column may not exist yet — retry without it
+                    if 'extra_data' in str(col_err):
+                        db_data.pop("extra_data", None)
+                        supabase.table("items").insert(db_data).execute()
+                    else:
+                        raise
                 print(f"Successfully saved item for user {user_id or 'anonymous'} in room {room or 'none'}!")
             except Exception as db_err:
                 print(f"Warning: Could not save to database. Error: {db_err}")
@@ -221,6 +417,16 @@ async def list_items(
         result = query.execute()
         items = result.data or []
         
+        # Add formatted_description to each item
+        for item in items:
+            extra = item.pop('extra_data', None) or {}
+            item['formatted_description'] = format_description(
+                item.get('title', ''), item.get('description_de', ''), item.get('description_en', ''),
+                specs=extra.get('specs'), programs_de=extra.get('programs_de'),
+                programs_en=extra.get('programs_en'), features_de=extra.get('features_de'),
+                features_en=extra.get('features_en'), category=item.get('category')
+            )
+        
         # Get total count
         count_query = supabase.table("items").select("item_id", count="exact").eq("user_id", user_id)
         if status:
@@ -261,6 +467,13 @@ async def get_item(
             raise HTTPException(status_code=404, detail=f"Item {item_id} not found")
         
         item = result.data[0]
+        extra = item.pop('extra_data', None) or {}
+        item['formatted_description'] = format_description(
+            item.get('title', ''), item.get('description_de', ''), item.get('description_en', ''),
+            specs=extra.get('specs'), programs_de=extra.get('programs_de'),
+            programs_en=extra.get('programs_en'), features_de=extra.get('features_de'),
+            features_en=extra.get('features_en'), category=item.get('category')
+        )
         return ItemResponse(**item)
         
     except HTTPException:
@@ -314,7 +527,13 @@ async def mark_item_listed(
         # Fetch the updated item to return
         updated = supabase.table("items").select("*").eq("item_id", item_id).execute()
         item = updated.data[0] if updated.data else result.data[0]
-        
+        extra = item.pop('extra_data', None) or {}
+        item['formatted_description'] = format_description(
+            item.get('title', ''), item.get('description_de', ''), item.get('description_en', ''),
+            specs=extra.get('specs'), programs_de=extra.get('programs_de'),
+            programs_en=extra.get('programs_en'), features_de=extra.get('features_de'),
+            features_en=extra.get('features_en'), category=item.get('category')
+        )
         return ItemResponse(**item)
         
     except HTTPException:

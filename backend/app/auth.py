@@ -109,6 +109,7 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Security(
                 signing_key,
                 algorithms=["ES256"],
                 options={"verify_aud": False},
+                leeway=60,  # Allow 60s clock skew
             )
             return payload
         except jwt.ExpiredSignatureError:
@@ -125,6 +126,7 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Security(
                 SUPABASE_JWT_SECRET,
                 algorithms=["HS256"],
                 audience="authenticated",
+                leeway=60,  # Allow 60s clock skew
             )
             return payload
         except jwt.ExpiredSignatureError:
@@ -136,6 +138,7 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Security(
                     SUPABASE_JWT_SECRET,
                     algorithms=["HS256"],
                     options={"verify_aud": False},
+                    leeway=60,  # Allow 60s clock skew
                 )
                 return payload
             except Exception:

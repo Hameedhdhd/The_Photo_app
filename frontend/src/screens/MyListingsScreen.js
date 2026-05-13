@@ -283,6 +283,7 @@ export default function MyListingsScreen({ navigation }) {
           numColumns={2}
           columnWrapperStyle={styles.row}
           contentContainerStyle={styles.listContent}
+          style={styles.list}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
@@ -292,6 +293,8 @@ export default function MyListingsScreen({ navigation }) {
             />
           }
           showsVerticalScrollIndicator={false}
+          nestedScrollEnabled={true}
+          keyboardShouldPersistTaps="handled"
         />
       )}
 
@@ -314,6 +317,7 @@ const styles = StyleSheet.create({
   },
   searchSection: {
     paddingTop: spacing.md,
+    flexShrink: 0,
   },
   // Filter Tabs
   filterTabs: {
@@ -360,6 +364,9 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   emptyContainer: {
+    flex: 1,
+  },
+  list: {
     flex: 1,
   },
   listContent: {

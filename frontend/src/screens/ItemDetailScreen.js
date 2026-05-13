@@ -17,6 +17,29 @@ const ROOMS = [
   'Kitchen', 'Bathroom', 'Bedroom', 'Living Room', 'Garage', 'Office', 'Other'
 ];
 
+const API_BASE = (process.env.EXPO_PUBLIC_API_URL || 'http://192.168.178.61:8000/api/analyze-image').replace('/api/analyze-image', '');
+
+// Fetch formatted description from backend (single source of truth)
+async function fetchFormattedDescription(title, descDe, descEn, extraData = {}, category = '', condition = '') {
+  try {
+    const res = await fetch(`${API_BASE}/api/format-description`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title, description_de: descDe, description_en: descEn,
+        specs: extraData.specs, programs_de: extraData.programs_de,
+        programs_en: extraData.programs_en, features_de: extraData.features_de,
+        features_en: extraData.features_en, condition, category,
+      }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      return data.formatted_description;
+    }
+  } catch (e) { console.error('Format description error:', e); }
+  return null;
+}
+
 export default function ItemDetailScreen({ route, navigation }) {
   const { item } = route.params;
 
@@ -29,6 +52,18 @@ export default function ItemDetailScreen({ route, navigation }) {
   const [saving, setSaving] = useState(false);
   const [isFavorite, setIsFavorite] = useState(item?.favorite || false);
   const [roomValue, setRoomValue] = useState(item?.room || 'Other');
+  const [formattedDesc, setFormattedDesc] = useState(item?.formatted_description || '');
+  const [condition, setCondition] = useState(item?.condition || '');
+  const extraData = item?.extra_data || {};
+
+  const CONDITIONS = [
+    { value: '', label: 'Not specified', color: colors.gray300 },
+    { value: 'Neuwertig', label: '🟢 Neuwertig / Like New', color: '#22c55e' },
+    { value: 'Sehr Gut', label: '🟢 Sehr Gut / Very Good', color: '#15803d' },
+    { value: 'Gut', label: '🔵 Gut / Good', color: '#3b82f6' },
+    { value: 'Fair', label: '🟡 Akzeptabel / Fair', color: '#eab308' },
+    { value: 'Defekt', label: '🔴 Defekt / For Part', color: '#ef4444' },
+  ];
 
   const titleRef = useRef(null);
   const descRef = useRef(null);
@@ -113,12 +148,38 @@ export default function ItemDetailScreen({ route, navigation }) {
     setEditingField(null);
   }, []);
 
+  // Fetch formatted description from backend whenever fields change
+  React.useEffect(() => {
+    const timer = setTimeout(async () => {
+      const formatted = await fetchFormattedDescription(title, descriptionDe, descriptionEn, extraData, category, condition);
+      if (formatted) setFormattedDesc(formatted);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [title, descriptionDe, descriptionEn, condition]);
+
+  const copyPreview = useCallback(async () => {
+    const text = formattedDesc;
+    if (!text) return;
+    try {
+      if (Platform.OS === 'web') {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const Clipboard = require('expo-clipboard').default;
+        await Clipboard.setStringAsync(text);
+      }
+      Alert.alert('Copied!', 'Kleinanzeigen description copied to clipboard.');
+    } catch (err) {
+      console.error('Clipboard error:', err);
+    }
+  }, [formattedDesc]);
+
+  const Container = Platform.OS === 'web' ? View : KeyboardAvoidingView;
+  const containerProps = Platform.OS === 'web' 
+    ? { style: styles.container }
+    : { style: styles.container, behavior: 'padding', keyboardVerticalOffset: 90 };
+
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
-    >
+    <Container {...containerProps}>
       <Header
         title="Item Details"
         subtitle={item?.title || 'View & edit'}
@@ -135,6 +196,7 @@ export default function ItemDetailScreen({ route, navigation }) {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
+        nestedScrollEnabled={true}
       >
         {/* Image */}
         {imageUrl && (
@@ -246,18 +308,44 @@ export default function ItemDetailScreen({ route, navigation }) {
           </Card>
         </Animated.View>
 
-        {/* Editable Description with Copy */}
+        {/* Condition Picker */}
+        <Animated.View entering={FadeInDown.duration(300).delay(275)}>
+          <Card shadow="sm" style={styles.fieldCard}>
+            <View style={styles.fieldHeader}>
+              <View style={styles.fieldHeaderLeft}>
+                <Ionicons name="shield-checkmark-outline" size={16} color={colors.primary} />
+                <Text style={[styles.fieldLabel, { color: colors.primary }]}>Condition</Text>
+              </View>
+            </View>
+            <View style={styles.conditionGrid}>
+              {CONDITIONS.filter(c => c.value).map(c => (
+                <TouchableOpacity
+                  key={c.value}
+                  style={[styles.conditionChip, condition === c.value && { backgroundColor: c.color, borderColor: c.color }]}
+                  onPress={() => setCondition(condition === c.value ? '' : c.value)}
+                  activeOpacity={0.7}
+                >
+                  <Text style={[styles.conditionChipText, condition === c.value && styles.conditionChipTextActive]}>
+                    {c.label}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </Card>
+        </Animated.View>
+
+        {/* Description (Kleinanzeigen formatted) */}
         <Animated.View entering={FadeInDown.duration(300).delay(300)}>
           <Card shadow="sm" style={[styles.fieldCard, editingField === 'description' && styles.fieldCardActive]}>
             <View style={styles.fieldHeader}>
               <View style={styles.fieldHeaderLeft}>
                 <Ionicons name="document-text-outline" size={16} color={editingField === 'description' ? colors.primary : colors.textTertiary} />
                 <Text style={[styles.fieldLabel, editingField === 'description' && styles.fieldLabelActive]}>
-                  Description ({lang.toUpperCase()})
+                  Description
                 </Text>
               </View>
               <View style={styles.fieldHeaderRight}>
-                <TouchableOpacity onPress={copyToClipboard} style={styles.copyBtn} activeOpacity={0.7}>
+                <TouchableOpacity onPress={copyPreview} style={styles.copyBtn} activeOpacity={0.7}>
                   <Ionicons name="copy-outline" size={16} color={colors.textTertiary} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => focusField('description')} activeOpacity={0.7}>
@@ -265,18 +353,26 @@ export default function ItemDetailScreen({ route, navigation }) {
                 </TouchableOpacity>
               </View>
             </View>
-            <TextInput
-              ref={descRef}
-              style={styles.descriptionInput}
-              value={currentDescription}
-              onChangeText={setCurrentDescription}
-              onFocus={() => setEditingField('description')}
-              onBlur={blurField}
-              placeholder={`Enter ${lang === 'en' ? 'English' : 'German'} description...`}
-              placeholderTextColor={colors.textTertiary}
-              multiline
-              textAlignVertical="top"
-            />
+            <Text style={styles.formattedDescription}>{formattedDesc || 'Loading...'}</Text>
+            {/* Hidden editable fields */}
+            {editingField === 'description' && (
+              <View style={styles.editOverlay}>
+                <TextInput
+                  ref={descRef}
+                  style={styles.descriptionInput}
+                  value={currentDescription}
+                  onChangeText={setCurrentDescription}
+                  onFocus={() => setEditingField('description')}
+                  onBlur={blurField}
+                  placeholder={`Enter ${lang === 'en' ? 'English' : 'German'} description...`}
+                  placeholderTextColor={colors.textTertiary}
+                  multiline
+                  textAlignVertical="top"
+                  autoFocus
+                />
+                <Text style={styles.editHint}>Editing {lang.toUpperCase()} description — changes auto-format</Text>
+              </View>
+            )}
           </Card>
         </Animated.View>
 
@@ -291,9 +387,18 @@ export default function ItemDetailScreen({ route, navigation }) {
             fullWidth
             size="large"
           />
+          <View style={styles.buttonGap} />
+          <Button
+            title="Done — View My Items"
+            onPress={() => navigation.navigate('Main', { screen: 'My Items' })}
+            variant="dark"
+            icon="checkmark-done"
+            fullWidth
+            size="large"
+          />
         </Animated.View>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </Container>
   );
 }
 
@@ -309,6 +414,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.page,
     paddingTop: spacing.lg,
     paddingBottom: spacing.xxxl + 20,
+    flexGrow: 1,
   },
   // Image
   imageSection: {
@@ -410,6 +516,30 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.xs,
     paddingHorizontal: 0,
   },
+  // Formatted Description Display
+  formattedDescription: {
+    ...typography.body,
+    color: colors.textSecondary,
+    lineHeight: 20,
+    whiteSpace: 'pre-wrap',
+    backgroundColor: '#fafafa',
+    padding: spacing.md,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+  },
+  editOverlay: {
+    marginTop: spacing.sm,
+    borderTopWidth: 1,
+    borderTopColor: '#e5e7eb',
+    paddingTop: spacing.sm,
+  },
+  editHint: {
+    ...typography.small,
+    color: colors.primary,
+    fontStyle: 'italic',
+    marginTop: spacing.xs,
+  },
   // Description Input
   descriptionInput: {
     ...typography.body,
@@ -420,8 +550,80 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     textAlignVertical: 'top',
   },
+  previewBox: {
+    backgroundColor: '#fafafa',
+    borderRadius: radius.md,
+    padding: spacing.md,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+  },
+  previewText: {
+    ...typography.body,
+    color: colors.textSecondary,
+    lineHeight: 20,
+    whiteSpace: 'pre-wrap',
+  },
+  previewTitle: {
+    ...typography.h3,
+    color: colors.textPrimary,
+    fontWeight: '800',
+    letterSpacing: 0.5,
+    marginBottom: spacing.xs,
+  },
+  previewMeta: {
+    fontSize: 12,
+    color: colors.textSecondary,
+    lineHeight: 20,
+  },
+  previewDesc: {
+    ...typography.body,
+    color: colors.textSecondary,
+    lineHeight: 20,
+    marginTop: spacing.xs,
+  },
+  previewDisclaimer: {
+    fontSize: 11,
+    color: '#9ca3af',
+    fontStyle: 'italic',
+    marginTop: spacing.xs,
+  },
+  previewDivider: {
+    height: 1,
+    backgroundColor: '#d1d5db',
+    marginVertical: spacing.md,
+  },
+  // Condition Picker
+  conditionGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.xs,
+  },
+  conditionChip: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm - 2,
+    borderRadius: radius.full,
+    backgroundColor: colors.gray100,
+    borderWidth: 1,
+    borderColor: colors.gray200,
+  },
+  conditionChipActive: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+  },
+  conditionChipText: {
+    ...typography.small,
+    color: colors.textSecondary,
+    fontWeight: '500',
+  },
+  conditionChipTextActive: {
+    color: colors.white,
+    fontWeight: '700',
+  },
   // Actions
   actions: {
     marginTop: spacing.xl,
+  },
+  buttonGap: {
+    height: spacing.md,
   },
 });

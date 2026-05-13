@@ -8,8 +8,9 @@
  */
 
 const CONFIG = {
-  // Backend API URL (change to your production URL when deployed)
-  API_URL: 'http://192.168.178.61:8000',
+  // Backend API URL - tries localhost first, falls back to LAN IP
+  API_URL: 'http://localhost:8000',
+  API_URL_FALLBACK: 'http://192.168.178.61:8000',
   
   // Supabase configuration (same as your mobile app)
   SUPABASE_URL: 'https://awwahpecfvdljgupnzft.supabase.co',
