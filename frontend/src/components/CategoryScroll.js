@@ -1,37 +1,28 @@
 import React, { useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Animated, { FadeIn, FadeInDown, FadeInUp, FadeOut, useAnimatedStyle, useSharedValue, withSpring, withTiming, withRepeat, runOnJS } from '../utils/reanimated-compat';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from '../utils/reanimated-compat';
 import { colors, typography, spacing, radius } from '../theme';
 
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
-const CATEGORY_ICONS = {
-  'Kitchen': 'restaurant-outline',
-  'Bathroom': 'water-outline',
-  'Bedroom': 'bed-outline',
-  'Living Room': 'tv-outline',
-  'Garage': 'car-outline',
-  'Electrical': 'flash-outline',
-  'Other': 'apps-outline',
-  'All': 'grid-outline',
-};
+// Calculate item width to fit ~6 items on screen
+// (Screen - PagePadding*2 - Gap*(Items-1)) / Items
+const ITEM_WIDTH = Math.floor((SCREEN_WIDTH - spacing.page * 2 - spacing.xs * 5) / 6.2);
 
 export default function CategoryScroll({
   categories,
   selectedCategory,
   onSelect,
   showAllOption = true,
+  icons = {}, // Optional map of label -> iconName
 }) {
   const scrollViewRef = useRef(null);
 
   const displayCategories = showAllOption && !categories.includes('All')
     ? ['All', ...categories]
     : categories;
-
-  const getCategoryIcon = (category) => {
-    return CATEGORY_ICONS[category] || 'pricetag-outline';
-  };
 
   return (
     <View style={styles.container}>
@@ -41,11 +32,13 @@ export default function CategoryScroll({
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
         decelerationRate="fast"
-        snapToInterval={72}
+        snapToInterval={ITEM_WIDTH + spacing.xs}
       >
         {displayCategories.map((category) => {
           const isSelected = selectedCategory === category;
-          const icon = getCategoryIcon(category);
+          // Use provided icon, fallback to common ones, or default
+          const icon = icons[category] || 
+                      (category === 'All' ? 'grid-outline' : 'pricetag-outline');
 
           return (
             <CategoryItem
@@ -70,11 +63,11 @@ function CategoryItem({ category, icon, isSelected, onPress }) {
   }));
 
   const handlePressIn = () => {
-    scale.value = withSpring(0.95, { damping: 15, stiffness: 300 });
+    scale.value = withSpring(0.92);
   };
 
   const handlePressOut = () => {
-    scale.value = withSpring(1, { damping: 15, stiffness: 300 });
+    scale.value = withSpring(1);
   };
 
   return (
@@ -88,7 +81,7 @@ function CategoryItem({ category, icon, isSelected, onPress }) {
       <View style={[styles.iconContainer, isSelected && styles.iconContainerActive]}>
         <Ionicons
           name={icon}
-          size={20}
+          size={16}
           color={isSelected ? colors.white : colors.textSecondary}
         />
       </View>
@@ -104,43 +97,44 @@ function CategoryItem({ category, icon, isSelected, onPress }) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: spacing.sm,
+    paddingVertical: spacing.xs,
   },
   scrollContent: {
-    paddingHorizontal: spacing.page - spacing.sm,
-    gap: spacing.sm,
+    paddingHorizontal: spacing.page,
+    gap: spacing.xs,
   },
   item: {
     alignItems: 'center',
-    minWidth: 64,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.sm + 2,
-    borderRadius: radius.lg,
+    width: ITEM_WIDTH,
+    paddingVertical: spacing.sm,
+    borderRadius: radius.md,
     backgroundColor: colors.white,
-    borderWidth: 1.5,
-    borderColor: colors.gray200,
-    marginRight: spacing.sm,
+    borderWidth: 1,
+    borderColor: colors.gray100,
   },
   itemActive: {
     backgroundColor: colors.primary,
     borderColor: colors.primary,
   },
   iconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: radius.md,
-    backgroundColor: colors.gray100,
+    width: 32,
+    height: 32,
+    borderRadius: radius.sm,
+    backgroundColor: colors.gray50,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: spacing.xs,
+    marginBottom: 4,
   },
   iconContainerActive: {
     backgroundColor: 'rgba(255,255,255,0.2)',
   },
   label: {
-    ...typography.small,
-    color: colors.textSecondary,
-    fontSize: 11,
+    fontSize: 9,
+    fontWeight: '600',
+    color: colors.textTertiary,
+    textAlign: 'center',
+    width: '100%',
+    paddingHorizontal: 2,
   },
   labelActive: {
     color: colors.white,

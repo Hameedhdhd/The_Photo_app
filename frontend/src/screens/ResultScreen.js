@@ -12,10 +12,10 @@ import Card from '../components/Card';
 import LanguageToggle from '../components/LanguageToggle';
 import CategoryScroll from '../components/CategoryScroll';
 import { colors, typography, spacing, radius, shadows } from '../theme';
+import { ROOMS } from '../constants';
 
-const ROOMS = [
-  'Kitchen', 'Bathroom', 'Bedroom', 'Living Room', 'Garage', 'Office', 'Other'
-];
+const ROOM_LABELS = ROOMS.map(r => r.label);
+const ROOM_ICONS = ROOMS.reduce((acc, r) => ({ ...acc, [r.label]: r.icon }), {});
 
 const API_BASE = (process.env.EXPO_PUBLIC_API_URL || 'http://192.168.178.61:8000/api/analyze-image').replace('/api/analyze-image', '');
 
@@ -339,10 +339,11 @@ export default function ResultScreen({ route, navigation }) {
               </View>
             </View>
             <CategoryScroll
-              categories={ROOMS}
+              categories={ROOM_LABELS}
               selectedCategory={roomValue}
               onSelect={setRoomValue}
               showAllOption={false}
+              icons={ROOM_ICONS}
             />
           </Card>
         </Animated.View>

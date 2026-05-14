@@ -1,35 +1,27 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import {
   StyleSheet, Text, View, Image, TouchableOpacity,
-  ScrollView, Alert, Modal, StatusBar, Dimensions
+  ScrollView, Alert, Modal, StatusBar, Dimensions, RefreshControl
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
-import Animated, { FadeIn, FadeInDown, FadeInUp, FadeOut, useAnimatedStyle, useSharedValue, withSpring, withTiming, withRepeat, runOnJS } from '../utils/reanimated-compat';
+import { LinearGradient } from 'expo-linear-gradient';
+import Animated, { FadeIn, FadeInDown, FadeInUp } from '../utils/reanimated-compat';
+
 import { supabase } from '../../supabase';
+import { ROOMS, VALID_ROOM_LABELS } from '../constants';
 import ImageCropper from '../components/ImageCropper';
 import Header from '../components/Header';
 import Button from '../components/Button';
 import CategoryScroll from '../components/CategoryScroll';
-import EmptyState from '../components/EmptyState';
+import SearchBar from '../components/SearchBar';
+import ListingCard from '../components/ListingCard';
 import MenuDrawer from '../components/MenuDrawer';
 import { LoadingOverlay } from '../components/LoadingSpinner';
-import { colors, typography, spacing, radius, shadows } from '../theme';
+import { colors, typography, spacing, radius, shadows, layout } from '../theme';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL || 'http://192.168.178.61:8000/api/analyze-image';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
-
-const ROOMS = [
-  { label: 'Kitchen', icon: 'restaurant-outline' },
-  { label: 'Bathroom', icon: 'water-outline' },
-  { label: 'Bedroom', icon: 'bed-outline' },
-  { label: 'Living Room', icon: 'tv-outline' },
-  { label: 'Garage', icon: 'car-outline' },
-  { label: 'Electrical', icon: 'flash-outline' },
-  { label: 'Other', icon: 'apps-outline' },
-];
-
-const THUMB_SIZE = (SCREEN_WIDTH - spacing.page * 2 - spacing.md * 2) / 3;
 
 export default function HomeScreen({ navigation }) {
   const [imageUris, setImageUris] = useState([]);
@@ -37,8 +29,17 @@ export default function HomeScreen({ navigation }) {
   const [showCropper, setShowCropper] = useState(false);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
-  const [selectedRoom, setSelectedRoom] = useState('Other');
+  const [selectedRoom, setSelectedRoom] = useState('All');
   const [menuVisible, setMenuVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  // Dashboard data
+  const [recentItems, setRecentItems] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    fetchRecentItems();
+  }, []);
 
   // Handle reset param from ResultScreen
   useEffect(() => {
@@ -49,10 +50,37 @@ export default function HomeScreen({ navigation }) {
         setResult(null);
         setLoading(false);
         navigation.setParams({ reset: undefined });
+        fetchRecentItems();
       }
     });
     return unsubscribe;
   }, [navigation]);
+
+  const fetchRecentItems = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user?.id) return;
+
+      const { data, error } = await supabase
+        .from('items')
+        .select('*')
+        .eq('user_id', session.user.id)
+        .order('created_at', { ascending: false })
+        .limit(6);
+
+      if (error) throw error;
+      setRecentItems(data || []);
+    } catch (err) {
+      console.error('Fetch items error:', err);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchRecentItems();
+  }, []);
 
   const getSessionUserId = useCallback(async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -106,7 +134,6 @@ export default function HomeScreen({ navigation }) {
 
   const uploadAndAnalyze = useCallback(async (uris, uid) => {
     const formData = new FormData();
-    
     for (let i = 0; i < uris.length; i++) {
       const uri = uris[i];
       if (uri.startsWith('blob:') || uri.startsWith('data:')) {
@@ -118,16 +145,13 @@ export default function HomeScreen({ navigation }) {
         formData.append('files', { uri, name: `photo_${i}.jpg`, type: 'image/jpeg' });
       }
     }
-    
-    formData.append('room', selectedRoom);
+    formData.append('room', selectedRoom === 'All' ? 'Other' : selectedRoom);
     if (uid) formData.append('user_id', uid);
 
     const response = await fetch(API_URL, { 
       method: 'POST', 
       body: formData,
-      headers: {
-        'Accept': 'application/json',
-      }
+      headers: { 'Accept': 'application/json' }
     });
     
     if (!response.ok) {
@@ -137,13 +161,8 @@ export default function HomeScreen({ navigation }) {
     return await response.json();
   }, [selectedRoom]);
 
-  // Analyze all photos as ONE item
   const analyzeAsOneItem = useCallback(async () => {
-    if (imageUris.length === 0) {
-      Alert.alert('No Photos', 'Please add at least one photo first.');
-      return;
-    }
-
+    if (imageUris.length === 0) return;
     setLoading(true);
     setResult(null);
     try {
@@ -151,351 +170,176 @@ export default function HomeScreen({ navigation }) {
       const data = await uploadAndAnalyze(imageUris, uid);
       setResult(data);
     } catch (error) {
-      console.error('Analysis error:', error);
-      Alert.alert('Analysis Failed', error.message || 'Could not connect to backend.');
+      Alert.alert('Analysis Failed', error.message);
     } finally {
       setLoading(false);
     }
   }, [imageUris, uploadAndAnalyze, getSessionUserId]);
-
-  // Analyze each photo as a SEPARATE item
-  const analyzeAsSeparateItems = useCallback(async () => {
-    if (imageUris.length === 0) {
-      Alert.alert('No Photos', 'Please add at least one photo first.');
-      return;
-    }
-
-    setLoading(true);
-    setResult(null);
-    try {
-      const uid = await getSessionUserId();
-      const results = [];
-      for (let i = 0; i < imageUris.length; i++) {
-        try {
-          const data = await uploadAndAnalyze([imageUris[i]], uid);
-          results.push(data);
-        } catch (err) {
-          console.error(`Failed to analyze photo ${i + 1}:`, err);
-        }
-      }
-      if (results.length === 0) {
-        Alert.alert('Analysis Failed', 'Could not analyze any photos.');
-      } else {
-        setResult({ type: 'multiple', items: results });
-      }
-    } catch (error) {
-      console.error('Analysis error:', error);
-      Alert.alert('Analysis Failed', error.message || 'Could not connect to backend.');
-    } finally {
-      setLoading(false);
-    }
-  }, [imageUris, uploadAndAnalyze, getSessionUserId]);
-
-  const handleLogout = useCallback(async () => {
-    await supabase.auth.signOut();
-  }, []);
-
-  const handleMenuNavigate = useCallback((route) => {
-    setMenuVisible(false);
-    if (route === 'My Items') {
-      navigation.navigate('My Items');
-    }
-  }, [navigation]);
 
   const handleReset = useCallback(() => {
     setImageUris([]);
     setResult(null);
   }, []);
 
-  const roomCategories = ROOMS.map(r => r.label);
+  const roomLabels = ROOMS.map(r => r.label);
+  const roomIcons = ROOMS.reduce((acc, r) => ({ ...acc, [r.label]: r.icon }), {});
 
   return (
     <View style={styles.container}>
       <Header
-        title="List It Fast"
-        subtitle="Scan & sell in seconds"
+        title="Dashboard"
+        subtitle="Your smart inventory"
         showMenu
         onMenuPress={() => setMenuVisible(true)}
       />
 
-      <View style={styles.content}>
-        {/* Empty State - No Images */}
-        {imageUris.length === 0 && !loading && !result && (
-          <Animated.ScrollView
-            entering={FadeInUp.duration(400)}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.scrollContent}
+      {/* Main Dashboard Scroll */}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
+        {/* 1. Search Bar */}
+        <Animated.View entering={FadeInUp.duration(400).delay(100)} style={styles.searchSection}>
+          <SearchBar
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            placeholder="Search your items..."
+            showFilter={false}
+          />
+        </Animated.View>
+
+        {/* 2. Room Categories */}
+        <Animated.View entering={FadeInUp.duration(400).delay(200)} style={styles.categorySection}>
+          <Text style={styles.sectionTitle}>Rooms & Sections</Text>
+          <CategoryScroll
+            categories={roomLabels}
+            selectedCategory={selectedRoom}
+            onSelect={setSelectedRoom}
+            icons={roomIcons}
+          />
+        </Animated.View>
+
+        {/* 3. Quick Scan Banner */}
+        <Animated.View entering={FadeInUp.duration(500).delay(300)}>
+          <LinearGradient
+            colors={[colors.primary, '#4F46E5']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.scanBanner}
           >
-            {/* Room Selection */}
-            <View style={styles.section}>
-              <Text style={styles.sectionLabel}>Select Room / Section</Text>
-              <CategoryScroll
-                categories={roomCategories}
-                selectedCategory={selectedRoom}
-                onSelect={setSelectedRoom}
-                showAllOption={false}
-              />
-            </View>
-
-            {/* Empty State Illustration */}
-            <EmptyState
-              icon="scan-outline"
-              title="Ready to sell?"
-              subtitle="Take photos or pick from gallery to generate a listing with AI"
-              iconBgColor={colors.infoLight}
-              iconColor={colors.primary}
-            />
-
-            {/* Action Buttons */}
-            <View style={styles.actions}>
-              <Button
-                title="Take Photo"
-                onPress={takePhoto}
-                variant="primary"
-                icon="camera"
-                fullWidth
-                size="large"
-              />
-              <View style={styles.buttonDivider}>
-                <View style={styles.dividerLine} />
-                <Text style={styles.dividerText}>or</Text>
-                <View style={styles.dividerLine} />
+            <View style={styles.scanContent}>
+              <View style={styles.scanTextWrapper}>
+                <Text style={styles.scanTitle}>Scan New Item</Text>
+                <Text style={styles.scanSubtitle}>AI will generate everything</Text>
               </View>
-              <Button
-                title="Choose from Gallery"
-                onPress={pickImage}
-                variant="secondary"
-                icon="images"
-                fullWidth
-                size="large"
-              />
+              <TouchableOpacity style={styles.scanFab} onPress={takePhoto}>
+                <Ionicons name="camera" size={28} color={colors.primary} />
+              </TouchableOpacity>
             </View>
-          </Animated.ScrollView>
-        )}
+            <View style={styles.scanActions}>
+              <TouchableOpacity style={styles.scanActionBtn} onPress={pickImage}>
+                <Ionicons name="images-outline" size={18} color={colors.white} />
+                <Text style={styles.scanActionText}>Gallery</Text>
+              </TouchableOpacity>
+            </View>
+          </LinearGradient>
+        </Animated.View>
 
-        {/* Photo Gallery + Analyze */}
+        {/* 4. Active Analysis / Photo Gallery (only if photos selected) */}
         {imageUris.length > 0 && !result && (
-          <Animated.ScrollView
-            entering={FadeInUp.duration(400)}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.scrollContent}
-          >
-            {/* Room Selection */}
-            <View style={styles.section}>
-              <Text style={styles.sectionLabel}>Room / Section</Text>
-              <CategoryScroll
-                categories={roomCategories}
-                selectedCategory={selectedRoom}
-                onSelect={setSelectedRoom}
-                showAllOption={false}
-              />
-            </View>
-
-            {/* Photo Gallery Header */}
+          <Animated.View entering={FadeInDown.duration(400)} style={styles.activeAnalysis}>
             <View style={styles.galleryHeader}>
-              <Text style={styles.galleryTitle}>
-                Photos ({imageUris.length})
-              </Text>
-              <View style={styles.galleryActions}>
-                <TouchableOpacity style={styles.addPhotoBtn} onPress={takePhoto} activeOpacity={0.7}>
-                  <Ionicons name="camera-outline" size={18} color={colors.primary} />
-                  <Text style={styles.addPhotoText}>Camera</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.addPhotoBtn} onPress={pickImage} activeOpacity={0.7}>
-                  <Ionicons name="add-circle-outline" size={18} color={colors.primary} />
-                  <Text style={styles.addPhotoText}>Add</Text>
-                </TouchableOpacity>
-              </View>
+              <Text style={styles.sectionTitle}>Selected Photos ({imageUris.length})</Text>
+              <TouchableOpacity onPress={handleReset}>
+                <Text style={styles.clearText}>Clear All</Text>
+              </TouchableOpacity>
             </View>
-
-            {/* Photo Grid */}
-            <View style={styles.photoGrid}>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.photoList}>
               {imageUris.map((uri, index) => (
-                <View key={index} style={styles.photoThumbContainer}>
+                <View key={index} style={styles.photoWrapper}>
                   <Image source={{ uri }} style={styles.photoThumb} />
-                  {index === 0 && (
-                    <View style={styles.primaryBadge}>
-                      <Text style={styles.primaryBadgeText}>Main</Text>
-                    </View>
-                  )}
-                  <TouchableOpacity
-                    style={styles.removeBtn}
-                    onPress={() => removeImage(index)}
-                    activeOpacity={0.7}
-                  >
-                    <Ionicons name="close-circle" size={22} color={colors.error} />
+                  <TouchableOpacity style={styles.removePhoto} onPress={() => removeImage(index)}>
+                    <Ionicons name="close-circle" size={20} color={colors.error} />
                   </TouchableOpacity>
                 </View>
               ))}
-              {/* Add More Placeholder */}
-              <TouchableOpacity
-                style={styles.addMoreThumb}
-                onPress={takePhoto}
-                activeOpacity={0.7}
-              >
-                <Ionicons name="add" size={32} color={colors.textTertiary} />
-                <Text style={styles.addMoreText}>Add</Text>
+              <TouchableOpacity style={styles.addMoreBtn} onPress={takePhoto}>
+                <Ionicons name="add" size={24} color={colors.textTertiary} />
               </TouchableOpacity>
-            </View>
-
-            {/* Loading Overlay */}
-            {loading && (
-              <View style={styles.analyzingContainer}>
-                <LoadingOverlay message="AI is analyzing..." />
-              </View>
-            )}
-
-            {/* Action Buttons */}
-            {!loading && (
-              <View style={styles.analyzeActions}>
-                {imageUris.length === 1 ? (
-                  <Button
-                    title="Analyze Photo"
-                    onPress={analyzeAsOneItem}
-                    variant="primary"
-                    icon="sparkles"
-                    fullWidth
-                    size="large"
-                  />
-                ) : (
-                  <>
-                    <Button
-                      title="Same Item — Multi-Angle"
-                      onPress={analyzeAsOneItem}
-                      variant="primary"
-                      icon="sparkles"
-                      fullWidth
-                      size="large"
-                    />
-                    <View style={styles.buttonGap} />
-                    <Button
-                      title="Different Items — Analyze Separately"
-                      onPress={analyzeAsSeparateItems}
-                      variant="dark"
-                      icon="copy-outline"
-                      fullWidth
-                      size="large"
-                    />
-                  </>
-                )}
-                <View style={styles.buttonGap} />
-                <Button
-                  title="Clear All & Start Over"
-                  onPress={handleReset}
-                  variant="secondary"
-                  icon="trash"
-                  fullWidth
-                  size="medium"
-                />
-              </View>
-            )}
-          </Animated.ScrollView>
-        )}
-
-        {/* Analysis Results - Single Item */}
-        {result && !loading && result.type !== 'multiple' && (
-          <Animated.View
-            entering={FadeInDown.duration(500)}
-            style={styles.resultPreview}
-          >
-            <View style={styles.successCard}>
-              <View style={styles.successIcon}>
-                <Ionicons name="checkmark-circle" size={48} color={colors.success} />
-              </View>
-              <Text style={styles.successTitle}>{result.title}</Text>
-              <Text style={styles.successPrice}>{result.price}</Text>
-              <Text style={styles.successSubtitle}>
-                {imageUris.length} photo{imageUris.length > 1 ? 's' : ''} • AI analysis complete
-              </Text>
-            </View>
-            <Button
-              title="View & Edit Details"
-              onPress={() => navigation.navigate('Result', {
-                result,
-                imageUris,
-                room: selectedRoom,
-              })}
-              variant="primary"
-              icon="document-text"
-              fullWidth
-              size="large"
-            />
-            <View style={styles.buttonGap} />
-            <Button
-              title="Scan Another Item"
-              onPress={handleReset}
-              variant="secondary"
-              icon="camera"
-              fullWidth
-              size="large"
-            />
-          </Animated.View>
-        )}
-
-        {/* Analysis Results - Multiple Items */}
-        {result && !loading && result.type === 'multiple' && (
-          <Animated.View
-            entering={FadeInDown.duration(500)}
-            style={styles.resultPreview}
-          >
-            <View style={styles.successCard}>
-              <View style={styles.successIcon}>
-                <Ionicons name="checkmark-done-circle" size={48} color={colors.success} />
-              </View>
-              <Text style={styles.successTitle}>{result.items.length} Items Analyzed</Text>
-              <Text style={styles.successSubtitle}>
-                Each photo was analyzed as a separate item
-              </Text>
-            </View>
-            <ScrollView style={styles.multiResultList} showsVerticalScrollIndicator={false}>
-              {result.items.map((item, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={styles.multiResultCard}
-                  onPress={() => navigation.navigate('ItemDetail', { item })}
-                  activeOpacity={0.7}
-                >
-                  <View style={styles.multiResultInfo}>
-                    <Text style={styles.multiResultTitle}>{item.title}</Text>
-                    <Text style={styles.multiResultPrice}>{item.price}</Text>
-                  </View>
-                  <Ionicons name="chevron-forward" size={20} color={colors.textTertiary} />
-                </TouchableOpacity>
-              ))}
             </ScrollView>
-            <View style={styles.buttonGap} />
             <Button
-              title="Scan Another Item"
-              onPress={handleReset}
-              variant="secondary"
-              icon="camera"
-              fullWidth
-              size="large"
+              title="Analyze with AI"
+              onPress={analyzeAsOneItem}
+              variant="primary"
+              icon="sparkles"
+              loading={loading}
+              style={styles.analyzeBtn}
             />
           </Animated.View>
         )}
-      </View>
 
-      {/* Image Cropper Modal */}
-      <Modal visible={showCropper} animationType="slide" presentationStyle="fullScreen">
-        {pendingUri && (
-          <ImageCropper
-            imageUri={pendingUri}
-            onCrop={handleCropComplete}
-            onRetake={handleCropRetake}
-          />
+        {/* 5. Analysis Result Preview */}
+        {result && !loading && (
+          <Animated.View entering={FadeInUp} style={styles.resultCard}>
+            <View style={styles.resultInfo}>
+              <Ionicons name="checkmark-circle" size={24} color={colors.success} />
+              <View>
+                <Text style={styles.resultTitle}>{result.title}</Text>
+                <Text style={styles.resultPrice}>{result.price}</Text>
+              </View>
+            </View>
+            <Button
+              title="Review Details"
+              onPress={() => navigation.navigate('Result', { result, imageUris })}
+              variant="secondary"
+              size="small"
+            />
+          </Animated.View>
         )}
-      </Modal>
+
+        {/* 6. Recent Items Feed */}
+        <View style={styles.recentSection}>
+          <View style={styles.recentHeader}>
+            <Text style={styles.sectionTitle}>Recent Items</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('My Items')}>
+              <Text style={styles.seeAllText}>See All</Text>
+            </TouchableOpacity>
+          </View>
+          
+          <View style={styles.recentGrid}>
+            {recentItems.length > 0 ? (
+              recentItems.map((item, index) => (
+                <ListingCard
+                  key={item.id}
+                  item={item}
+                  index={index}
+                  onPress={(i) => navigation.navigate('ItemDetail', { item: i })}
+                />
+              ))
+            ) : (
+              <View style={styles.emptyRecent}>
+                <Ionicons name="cube-outline" size={40} color={colors.gray200} />
+                <Text style={styles.emptyRecentText}>No items yet</Text>
+              </View>
+            )}
+          </View>
+        </View>
+      </ScrollView>
 
       {/* Menu Drawer */}
       <MenuDrawer
         visible={menuVisible}
         onClose={() => setMenuVisible(false)}
-        onNavigate={handleMenuNavigate}
+        onNavigate={(route) => {
+          setMenuVisible(false);
+          navigation.navigate(route);
+        }}
         currentRoute="Scan"
-        onLogout={handleLogout}
+        onLogout={() => supabase.auth.signOut()}
       />
-
+      
+      {loading && <LoadingOverlay message="AI is analyzing..." />}
       <StatusBar style="light" />
     </View>
   );
@@ -506,197 +350,182 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.gray50,
   },
-  content: {
-    flex: 1,
-  },
   scrollContent: {
-    paddingHorizontal: spacing.page,
-    paddingTop: spacing.lg,
     paddingBottom: spacing.xxxl,
   },
-  section: {
+  searchSection: {
+    marginTop: spacing.md,
+    marginBottom: spacing.sm,
+  },
+  categorySection: {
+    marginBottom: spacing.md,
+  },
+  sectionTitle: {
+    ...typography.h4,
+    color: colors.textPrimary,
+    marginLeft: spacing.page,
+    marginBottom: spacing.xs,
+  },
+  scanBanner: {
+    marginHorizontal: spacing.page,
+    borderRadius: radius.xl,
+    padding: spacing.xl,
+    ...shadows.primary,
     marginBottom: spacing.lg,
   },
-  sectionLabel: {
-    ...typography.caption,
-    color: colors.textTertiary,
-    marginBottom: spacing.sm,
-    marginLeft: spacing.sm,
+  scanContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  actions: {
-    paddingBottom: spacing.xl,
+  scanTitle: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: colors.white,
   },
-  buttonDivider: {
+  scanSubtitle: {
+    fontSize: 13,
+    color: 'rgba(255,255,255,0.8)',
+    marginTop: 2,
+  },
+  scanFab: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: colors.white,
+    justifyContent: 'center',
+    alignItems: 'center',
+    ...shadows.md,
+  },
+  scanActions: {
+    flexDirection: 'row',
+    marginTop: spacing.lg,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255,255,255,0.1)',
+    paddingTop: spacing.md,
+  },
+  scanActionBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: spacing.md,
-    gap: spacing.md,
+    gap: 6,
   },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: colors.gray200,
+  scanActionText: {
+    color: colors.white,
+    fontWeight: '600',
+    fontSize: 14,
   },
-  dividerText: {
-    ...typography.small,
-    color: colors.textTertiary,
+  // Active Analysis
+  activeAnalysis: {
+    backgroundColor: colors.white,
+    paddingVertical: spacing.lg,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: colors.gray100,
+    marginBottom: spacing.lg,
   },
-  // Gallery
   galleryHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: spacing.md,
+    paddingRight: spacing.page,
   },
-  galleryTitle: {
-    ...typography.h4,
-    color: colors.textPrimary,
+  clearText: {
+    color: colors.error,
+    fontWeight: '600',
+    fontSize: 13,
   },
-  galleryActions: {
-    flexDirection: 'row',
+  photoList: {
+    paddingHorizontal: spacing.page,
+    paddingVertical: spacing.md,
     gap: spacing.md,
   },
-  addPhotoBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.xs,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs + 2,
-    borderRadius: radius.full,
-    backgroundColor: colors.infoLight,
-  },
-  addPhotoText: {
-    ...typography.small,
-    color: colors.primary,
-    fontWeight: '600',
-  },
-  // Photo Grid
-  photoGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm,
-    marginBottom: spacing.xl,
-  },
-  photoThumbContainer: {
+  photoWrapper: {
     position: 'relative',
-    width: THUMB_SIZE,
-    height: THUMB_SIZE,
   },
   photoThumb: {
-    width: '100%',
-    height: '100%',
+    width: 80,
+    height: 80,
     borderRadius: radius.md,
-    resizeMode: 'cover',
   },
-  primaryBadge: {
+  removePhoto: {
     position: 'absolute',
-    bottom: 4,
-    left: 4,
-    backgroundColor: colors.primary,
-    paddingHorizontal: spacing.xs + 2,
-    paddingVertical: 2,
-    borderRadius: radius.xs,
-  },
-  primaryBadgeText: {
-    fontSize: 9,
-    fontWeight: '700',
-    color: colors.white,
-  },
-  removeBtn: {
-    position: 'absolute',
-    top: -6,
-    right: -6,
+    top: -8,
+    right: -8,
     backgroundColor: colors.white,
-    borderRadius: 11,
+    borderRadius: 10,
   },
-  addMoreThumb: {
-    width: THUMB_SIZE,
-    height: THUMB_SIZE,
+  addMoreBtn: {
+    width: 80,
+    height: 80,
     borderRadius: radius.md,
     borderWidth: 2,
-    borderColor: colors.gray200,
+    borderColor: colors.gray100,
     borderStyle: 'dashed',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.gray50,
   },
-  addMoreText: {
-    ...typography.overline,
-    color: colors.textTertiary,
-    marginTop: 2,
+  analyzeBtn: {
+    marginHorizontal: spacing.page,
+    marginTop: spacing.sm,
   },
-  // Analyzing
-  analyzingContainer: {
-    marginBottom: spacing.xl,
-  },
-  // Analyze Actions
-  analyzeActions: {
-    paddingBottom: spacing.xl,
-  },
-  // Result Preview Section
-  resultPreview: {
-    flex: 1,
-    paddingHorizontal: spacing.page,
-    paddingTop: spacing.lg,
-    justifyContent: 'center',
-  },
-  successCard: {
+  // Result Card
+  resultCard: {
+    marginHorizontal: spacing.page,
+    backgroundColor: colors.successLight,
+    padding: spacing.md,
+    borderRadius: radius.lg,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: spacing.xxl,
-    marginBottom: spacing.xl,
-  },
-  successIcon: {
     marginBottom: spacing.lg,
   },
-  successTitle: {
-    ...typography.h3,
-    color: colors.textPrimary,
-    textAlign: 'center',
-    marginBottom: spacing.xs,
-  },
-  successPrice: {
-    fontSize: 28,
-    fontWeight: '900',
-    color: colors.accent,
-    marginBottom: spacing.xs,
-  },
-  successSubtitle: {
-    ...typography.small,
-    color: colors.textTertiary,
-  },
-  buttonGap: {
-    height: spacing.md,
-  },
-  // Multi-Result List
-  multiResultList: {
-    maxHeight: 300,
-    marginBottom: spacing.md,
-  },
-  multiResultCard: {
+  resultInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: colors.white,
-    paddingHorizontal: spacing.md + 2,
-    paddingVertical: spacing.md,
-    borderRadius: radius.md,
-    marginBottom: spacing.sm,
-    borderWidth: 1,
-    borderColor: colors.gray100,
-  },
-  multiResultInfo: {
+    gap: spacing.sm,
     flex: 1,
   },
-  multiResultTitle: {
-    ...typography.body,
+  resultTitle: {
     fontWeight: '700',
-    color: colors.textPrimary,
-    marginBottom: 2,
+    color: colors.success,
+    fontSize: 14,
   },
-  multiResultPrice: {
-    ...typography.small,
-    fontWeight: '800',
-    color: colors.accent,
+  resultPrice: {
+    fontSize: 12,
+    color: colors.success,
+    opacity: 0.8,
+  },
+  // Recent Feed
+  recentSection: {
+    marginTop: spacing.sm,
+  },
+  recentHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingRight: spacing.page,
+    marginBottom: spacing.sm,
+  },
+  seeAllText: {
+    color: colors.primary,
+    fontWeight: '700',
+    fontSize: 13,
+  },
+  recentGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingHorizontal: spacing.page,
+    gap: spacing.md,
+    justifyContent: 'space-between',
+  },
+  emptyRecent: {
+    width: '100%',
+    padding: spacing.xxl,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyRecentText: {
+    color: colors.textTertiary,
+    marginTop: spacing.sm,
+    fontWeight: '600',
   },
 });
-

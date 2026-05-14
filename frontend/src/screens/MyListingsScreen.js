@@ -5,7 +5,7 @@ import {
 import { supabase } from '../../supabase';
 import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import Animated, { FadeIn, FadeInDown, FadeInUp, FadeOut, useAnimatedStyle, useSharedValue, withSpring, withTiming, withRepeat, runOnJS } from '../utils/reanimated-compat';
+import Animated, { FadeIn, FadeInDown, FadeInUp } from '../utils/reanimated-compat';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import CategoryScroll from '../components/CategoryScroll';
@@ -14,12 +14,12 @@ import EmptyState from '../components/EmptyState';
 import MenuDrawer from '../components/MenuDrawer';
 import { LoadingScreen } from '../components/LoadingSpinner';
 import { colors, typography, spacing, radius } from '../theme';
+import { ROOMS, CATEGORIES } from '../constants';
 
 const FILTER_TABS = ['All', 'Favorites'];
-
-const ROOMS = [
-  'Kitchen', 'Bathroom', 'Bedroom', 'Living Room', 'Garage', 'Office', 'Other'
-];
+const ROOM_LABELS = ROOMS.map(r => r.label);
+const ROOM_ICONS = ROOMS.reduce((acc, r) => ({ ...acc, [r.label]: r.icon }), {});
+const CATEGORY_ICONS = CATEGORIES.reduce((acc, c) => ({ ...acc, [c.label]: c.icon }), {});
 
 export default function MyListingsScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
@@ -30,7 +30,7 @@ export default function MyListingsScreen({ navigation }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRoom, setSelectedRoom] = useState('All');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [categories, setCategories] = useState(['All']);
+  const [dynamicCategories, setDynamicCategories] = useState(['All']);
   const [activeFilter, setActiveFilter] = useState('All');
   const [menuVisible, setMenuVisible] = useState(false);
 
@@ -87,7 +87,7 @@ export default function MyListingsScreen({ navigation }) {
     listings.forEach(item => {
       if (item.category) categorySet.add(item.category);
     });
-    setCategories(['All', ...Array.from(categorySet)]);
+    setDynamicCategories(['All', ...Array.from(categorySet)]);
   }, [listings]);
 
   // Filter listings based on search, category, and favorites
@@ -227,22 +227,24 @@ export default function MyListingsScreen({ navigation }) {
           <Text style={styles.filterLabelText}>Room</Text>
         </View>
         <CategoryScroll
-          categories={['All', ...ROOMS]}
+          categories={ROOM_LABELS}
           selectedCategory={selectedRoom}
           onSelect={setSelectedRoom}
+          icons={ROOM_ICONS}
         />
 
         {/* Category Filter */}
-        {categories.length > 1 && (
+        {dynamicCategories.length > 1 && (
           <>
             <View style={styles.filterLabel}>
               <Ionicons name="pricetag-outline" size={12} color={colors.textTertiary} />
               <Text style={styles.filterLabelText}>Category</Text>
             </View>
             <CategoryScroll
-              categories={categories}
+              categories={dynamicCategories}
               selectedCategory={selectedCategory}
               onSelect={setSelectedCategory}
+              icons={CATEGORY_ICONS}
             />
           </>
         )}
