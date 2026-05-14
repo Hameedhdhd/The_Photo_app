@@ -1,5 +1,12 @@
 # Environment variables (contains secrets)
 .env
+**/.env
+**/.env.*
+!**/.env.example
+
+# AI agents ignore files
+.aiignore
+**/.aiignore
 
 # Node modules
 node_modules/

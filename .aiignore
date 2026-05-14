@@ -5,7 +5,23 @@
       "action": "ignore"
     },
     {
+      "pattern": "**/.env.*",
+      "action": "ignore"
+    },
+    {
       "pattern": "**/secrets.json",
+      "action": "ignore"
+    },
+    {
+      "pattern": "**/service-account.json",
+      "action": "ignore"
+    },
+    {
+      "pattern": "**/*.pem",
+      "action": "ignore"
+    },
+    {
+      "pattern": "**/*.key",
       "action": "ignore"
     }
   ]
