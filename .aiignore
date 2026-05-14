@@ -1,0 +1,12 @@
+{
+  "rules": [
+    {
+      "pattern": "**/.env",
+      "action": "ignore"
+    },
+    {
+      "pattern": "**/secrets.json",
+      "action": "ignore"
+    }
+  ]
+}
