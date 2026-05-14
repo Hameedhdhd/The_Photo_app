@@ -132,8 +132,8 @@ async def analyze_image(
                 if user_id:
                     db_data["user_id"] = user_id
 
-                supabase.table("items").insert(db_data).execute()
-                print(f"Successfully saved item for user {user_id or 'anonymous'} in room {room or 'none'}!")
+                supabase.table("APP_Table").insert(db_data).execute()
+                print(f"Successfully saved item to APP_Table for user {user_id or 'anonymous'} in room {room or 'none'}!")
             except Exception as db_err:
                 print(f"Warning: Could not save to database. Error: {db_err}")
 

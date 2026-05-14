@@ -56,7 +56,7 @@ export default function ResultScreen({ route, navigation }) {
 
       if (itemId) {
         const { error } = await supabase
-          .from('items')
+          .from('APP_Table')
           .update(updateData)
           .eq('item_id', itemId);
 
@@ -78,7 +78,7 @@ export default function ResultScreen({ route, navigation }) {
     try {
       if (itemId) {
         await supabase
-          .from('items')
+          .from('APP_Table')
           .update({ favorite: newValue })
           .eq('item_id', itemId);
       }

@@ -43,7 +43,7 @@ export default function MyListingsScreen({ navigation }) {
     setLoading(true);
     try {
       let query = supabase
-        .from('items')
+        .from('APP_Table')
         .select('*')
         .order('created_at', { ascending: false });
 
@@ -143,7 +143,7 @@ export default function MyListingsScreen({ navigation }) {
     );
     try {
       await supabase
-        .from('items')
+        .from('APP_Table')
         .update({ favorite: newValue })
         .eq('item_id', itemId);
     } catch (err) {

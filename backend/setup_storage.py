@@ -3,7 +3,7 @@ Create the item_images storage bucket and set policies.
 """
 import psycopg2
 
-DATABASE_URL = "postgresql://postgres:Hameed777456644$@db.awwahpecfvdljgupnzft.supabase.co:5432/postgres"
+DATABASE_URL = "postgresql://postgres:Hameed777456644$@db.mtnovthhwsdmlsbuinld.supabase.co:5432/postgres"
 
 migrations = [
     # Create the storage bucket if it doesn't exist
