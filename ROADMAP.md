@@ -22,7 +22,7 @@ A personal inventory app that lets you **scan items with your phone**, get **AI-
 | Photo Capture | ✅ Done | Camera + gallery picker, image cropping |
 | Room Selection | ✅ Done | 7 room categories (Kitchen, Bathroom, Bedroom, etc.) |
 | AI Analysis | ✅ Done | Gemini 2.5 Flash generates title, price, category, bilingual descriptions |
-| Multi-Photo | ✅ Done | Add multiple photos per scan; "Same Item" or "Separate Items" modes |
+| Multi-Photo | ✅ Done | Add multiple photos per scan; syncs all photos to Kleinanzeigen via extension |
 | Edit Results | ✅ Done | Edit title, price, description before saving |
 | Language Toggle | ✅ Done | Switch between German (DE) and English (EN) descriptions |
 | Copy Description | ✅ Done | One-tap copy to clipboard for marketplace listing |
@@ -51,7 +51,7 @@ A personal inventory app that lets you **scan items with your phone**, get **AI-
 | Backend Item API | ✅ Done | `GET /api/items`, `GET /api/items/{id}`, `PATCH /api/items/{id}/mark-listed` with JWT auth |
 | Listing Status Tracking | ✅ Done | `listing_status` column (draft/listed_kleinanzeigen/listed_ebay/sold), `listed_at`, `listing_url` |
 | JWT Auth Middleware | ✅ Done | `auth.py` verifies Supabase JWT tokens for Chrome Extension API access |
-| Image Upload to Kleinanzeigen | ✅ Done | DataTransfer API uploads images from Supabase Storage to Kleinanzeigen form |
+| Image Upload to Kleinanzeigen | ✅ Done | Robust 4-strategy upload system for bypassing React protections; multi-image support |
 | Export to CSV | 🔲 Todo | Export inventory as spreadsheet |
 | Share Item Card | 🔲 Todo | Generate shareable image/card for an item |
 | Bulk Actions | 🔲 Todo | Select multiple items → delete, favorite, export |
@@ -94,7 +94,7 @@ This approach avoids bot-bans (it's just form-filling, not automation) and requi
 | Issue | Severity | Description |
 |-------|----------|-------------|
 | No offline support | Medium | App requires internet for AI analysis and DB |
-| Single primary image | Low | Only first photo is sent to AI; multi-angle not used |
+| Single primary image | Low | Only first photo is sent to AI for analysis, but all photos are saved and listed |
 | No real auth flow | Medium | Mock login bypasses real authentication |
 | API on local network | High | Backend runs locally; needs cloud deployment for production |
 | No error recovery | Medium | If AI analysis fails midway, no retry mechanism |

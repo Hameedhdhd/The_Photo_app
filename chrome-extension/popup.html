@@ -3,104 +3,237 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=400, initial-scale=1.0">
-  <title>Kleinanzeigen Sync</title>
-  <link rel="stylesheet" href="popup.css">
+  <title>Photo App Sync</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      width: 380px;
+      min-height: 500px;
+      max-height: 600px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f0f2f5;
+      color: #1a1a2e;
+      overflow: hidden;
+    }
+
+    /* ===== LOGIN ===== */
+    .login-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 500px;
+      padding: 32px 24px;
+      background: linear-gradient(135deg, #86B817 0%, #5a8a00 100%);
+    }
+    .login-logo { font-size: 48px; margin-bottom: 8px; }
+    .login-title { font-size: 22px; font-weight: 800; color: white; margin-bottom: 4px; }
+    .login-sub { font-size: 13px; color: rgba(255,255,255,0.8); margin-bottom: 24px; }
+    .login-box {
+      background: white; border-radius: 16px; padding: 24px; width: 100%;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    }
+    .login-box form { display: flex; flex-direction: column; gap: 12px; }
+    .login-box input {
+      padding: 12px 14px; border: 2px solid #e2e8f0; border-radius: 10px;
+      font-size: 14px; outline: none; transition: border-color 0.2s;
+    }
+    .login-box input:focus { border-color: #86B817; }
+    .login-btn {
+      padding: 12px; background: #86B817; color: white; border: none;
+      border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .login-btn:hover { background: #7aa314; }
+    .login-error { color: #ef4444; font-size: 12px; text-align: center; margin-top: 8px; display: none; }
+
+    /* ===== MAIN ===== */
+    .main-screen { display: flex; flex-direction: column; height: 600px; }
+
+    .top-bar {
+      background: linear-gradient(135deg, #86B817 0%, #5a8a00 100%);
+      padding: 14px 16px; color: white;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .top-bar h1 { font-size: 17px; font-weight: 800; }
+    .top-bar-right { display: flex; align-items: center; gap: 8px; }
+    .top-bar-email { font-size: 10px; opacity: 0.85; max-width: 100px; overflow: hidden; text-overflow: ellipsis; }
+    .btn-logout {
+      background: rgba(255,255,255,0.2); border: none; border-radius: 6px;
+      color: white; cursor: pointer; font-size: 11px; padding: 4px 10px; font-weight: 600;
+    }
+    .btn-logout:hover { background: rgba(255,255,255,0.35); }
+
+    /* Tabs */
+    .tab-bar { display: flex; background: white; border-bottom: 2px solid #e2e8f0; }
+    .tab-btn {
+      flex: 1; padding: 10px 0; border: none; background: none;
+      font-weight: 700; font-size: 12px; cursor: pointer; color: #94a3b8;
+      border-bottom: 3px solid transparent; transition: all 0.2s;
+    }
+    .tab-btn.active { color: #1a1a2e; border-bottom-color: #86B817; }
+
+    /* Toolbar */
+    .toolbar { display: flex; gap: 8px; padding: 10px 12px; background: white; }
+    .btn-save {
+      flex: 1; padding: 9px; background: #6366f1; color: white; border: none;
+      border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer;
+    }
+    .btn-save:hover { background: #4f46e5; }
+    .btn-refresh {
+      padding: 9px 12px; background: #f1f5f9; border: 1px solid #e2e8f0;
+      border-radius: 8px; cursor: pointer; font-size: 14px;
+    }
+    .btn-refresh:hover { background: #e2e8f0; }
+
+    /* Batch */
+    .batch-bar { padding: 0 12px 8px; }
+    .btn-batch {
+      width: 100%; padding: 9px; background: #86B817; color: white; border: none;
+      border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer;
+    }
+    .btn-batch:hover { background: #7aa314; }
+
+    /* Item List */
+    .item-list { flex: 1; overflow-y: auto; padding: 8px 12px; }
+
+    .item-card {
+      background: white; border-radius: 10px; padding: 10px 12px;
+      margin-bottom: 6px; border: 1px solid #e2e8f0;
+      display: flex; align-items: center; gap: 10px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .item-card:hover { border-color: #86B817; box-shadow: 0 2px 8px rgba(134,184,23,0.15); }
+
+    .item-check { width: 18px; height: 18px; cursor: pointer; accent-color: #86B817; }
+    
+    .item-thumb {
+      width: 44px; height: 44px; background: #f1f5f9; border-radius: 8px;
+      overflow: hidden; flex-shrink: 0; display: flex; align-items: center;
+      justify-content: center; font-size: 20px;
+    }
+    .item-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    .item-info { flex: 1; overflow: hidden; }
+    .item-title {
+      font-weight: 700; font-size: 13px; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis; color: #1a1a2e;
+    }
+    .item-price { font-size: 11px; color: #86B817; font-weight: 600; margin-top: 2px; }
+
+    .btn-fill {
+      background: #86B817; color: white; border: none; padding: 6px 14px;
+      border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;
+      flex-shrink: 0; transition: background 0.2s;
+    }
+    .btn-fill:hover { background: #7aa314; }
+
+    .empty-state {
+      text-align: center; padding: 40px 20px; color: #94a3b8;
+    }
+    .empty-state .empty-icon { font-size: 40px; margin-bottom: 8px; }
+    .empty-state .empty-text { font-size: 13px; }
+
+    /* Status */
+    .status-bar {
+      padding: 8px 12px; text-align: center; font-size: 12px;
+      font-weight: 600; display: none;
+    }
+    .status-bar.loading { display: block; background: #fef3c7; color: #92400e; }
+    .status-bar.success { display: block; background: #d1fae5; color: #065f46; }
+    .status-bar.error { display: block; background: #fee2e2; color: #991b1b; }
+
+    /* Delete button for drafts */
+    .btn-delete {
+      background: #fee2e2; color: #ef4444; border: none; padding: 4px 8px;
+      border-radius: 4px; font-size: 10px; cursor: pointer; flex-shrink: 0;
+    }
+    .btn-delete:hover { background: #fecaca; }
+    
+    .btn-logs {
+      background: rgba(0,0,0,0.2); border: none; border-radius: 6px;
+      color: white; cursor: pointer; font-size: 11px; padding: 4px 10px; font-weight: 600;
+    }
+    .btn-logs:hover { background: rgba(0,0,0,0.35); }
+    
+    .log-overlay {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(30, 41, 59, 0.95); z-index: 1000;
+      display: flex; flex-direction: column;
+    }
+    .log-header {
+      padding: 12px; display: flex; justify-content: space-between;
+      align-items: center; border-bottom: 1px solid #334155; color: white;
+    }
+    .btn-close-logs {
+      background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 16px;
+    }
+    .btn-close-logs:hover { color: white; }
+    .log-content {
+      flex: 1; padding: 12px; overflow-y: auto; font-family: monospace;
+      font-size: 11px; color: #10b981; line-height: 1.4;
+    }
+    .log-entry { margin-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 4px; }
+    .log-entry.error { color: #ef4444; }
+    .log-entry.warn { color: #f59e0b; }
+    .log-time { color: #64748b; margin-right: 8px; }
+  </style>
 </head>
 <body>
   <!-- Login Screen -->
-  <div id="login-screen" class="screen">
-    <div class="header">
-      <h1>⚡ Kleinanzeigen Sync</h1>
-      <p class="subtitle">Connect your Photo App account</p>
-    </div>
-    <form id="login-form">
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" placeholder="your@email.com" value="Hameed@Hd.com" required>
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Your password" value="Hameed2024!" required>
-      </div>
-      <div id="login-error" class="error-message hidden"></div>
-      <button type="submit" id="login-btn" class="btn btn-primary">Log In</button>
-      <div class="signup-toggle">
-        <span id="signup-text">Don't have an account?</span>
-        <a href="#" id="signup-toggle-link">Sign Up</a>
-      </div>
-    </form>
-  </div>
-
-  <!-- Items Screen (shown after login) -->
-  <div id="items-screen" class="screen hidden">
-    <div class="header">
-      <h1>⚡ Kleinanzeigen Sync</h1>
-      <div class="user-info">
-        <span id="user-email"></span>
-        <button id="logout-btn" class="btn btn-small btn-outline">Logout</button>
-      </div>
-    </div>
-
-    <div id="status-bar" class="status-bar">
-      <span id="status-text">Ready to sync</span>
-      <span id="status-icon">✅</span>
-    </div>
-
-    <div class="instructions">
-      <p>📌 <strong>How to use:</strong></p>
-      <ol>
-        <li>Select an item below</li>
-        <li>Go to <a href="https://www.kleinanzeigen.de/p-anzeige-aufgeben-schritt2.html" target="_blank">Kleinanzeigen listing page</a></li>
-        <li>Click the <strong>⚡ Fill from My App</strong> button</li>
-      </ol>
-    </div>
-
-    <div class="items-header">
-      <h2>Your Items</h2>
-      <div class="items-header-actions">
-        <label class="select-all-label">
-          <input type="checkbox" id="select-all-checkbox"> All
-        </label>
-        <button id="refresh-btn" class="btn btn-small btn-outline" title="Refresh items">🔄</button>
-      </div>
-    </div>
-    <div id="batch-bar" class="batch-bar hidden">
-      <span id="batch-count">0 selected</span>
-      <button id="batch-list-btn" class="btn btn-primary btn-small">⚡ Batch List</button>
-    </div>
-    <div id="batch-progress" class="batch-progress hidden">
-      <div class="progress-header">
-        <div class="progress-text" id="progress-text">Preparing...</div>
-        <button id="batch-stop-btn" class="btn btn-stop btn-small">⏹ Stop</button>
-      </div>
-      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
-    </div>
-    <div id="items-loading" class="loading hidden">Loading items...</div>
-    <div id="items-list" class="items-list"></div>
-    <div id="items-empty" class="empty-state hidden">
-      <p>No items found for this account.</p>
-      <p class="empty-hint">Items are linked to your account. Add items in the Photo App, or make sure you're logged in with the right email.</p>
+  <div id="login-screen" class="login-screen">
+    <div class="login-logo">⚡</div>
+    <div class="login-title">Sync Pro</div>
+    <div class="login-sub">Sync your items to Kleinanzeigen</div>
+    <div class="login-box">
+      <form id="login-form">
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit" class="login-btn">Sign In</button>
+      </form>
+      <div id="login-error" class="login-error"></div>
     </div>
   </div>
 
-  <!-- Item Detail Screen (shown when item selected) -->
-  <div id="detail-screen" class="screen hidden">
-    <div class="header">
-      <button id="back-btn" class="btn btn-small btn-outline">← Back</button>
-      <h1>Item Details</h1>
+  <!-- Main Screen -->
+  <div id="main-screen" class="main-screen" style="display:none;">
+    <div id="log-overlay" class="log-overlay" style="display:none;">
+      <div class="log-header">
+        <h3>Terminal Logs</h3>
+        <button id="close-logs-btn" class="btn-close-logs">✖</button>
+      </div>
+      <div id="log-content" class="log-content"></div>
     </div>
-    <div id="item-detail" class="item-detail"></div>
-    <div class="detail-actions">
-      <button id="fill-form-btn" class="btn btn-primary btn-large">
-        ⚡ Fill Kleinanzeigen Form
-      </button>
-      <button id="mark-listed-btn" class="btn btn-secondary">
-        ✅ Mark as Listed on Kleinanzeigen
-      </button>
+    
+    <div class="top-bar">
+      <h1>⚡ Sync Pro</h1>
+      <div class="top-bar-right">
+        <span id="user-email" class="top-bar-email"></span>
+        <button id="show-logs-btn" class="btn-logs">Logs</button>
+        <button id="logout-btn" class="btn-logout">Logout</button>
+      </div>
     </div>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="app">📦 My App</button>
+      <button class="tab-btn" data-tab="drafts">💾 Local Drafts</button>
+    </div>
+
+    <div class="toolbar">
+      <button id="save-local-btn" class="btn-save">📸 save localy</button>
+      <button id="refresh-btn" class="btn-refresh" title="Refresh">🔄</button>
+    </div>
+
+    <div id="batch-bar" class="batch-bar" style="display:none;">
+      <button id="batch-post-btn" class="btn-batch">🚀 Post Selected (<span id="batch-count">0</span>)</button>
+    </div>
+
+    <div id="item-list" class="item-list"></div>
+
+    <div id="status-bar" class="status-bar"></div>
   </div>
 
-  <script src="config.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>

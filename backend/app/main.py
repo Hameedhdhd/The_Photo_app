@@ -205,6 +205,13 @@ class MarkListedRequest(BaseModel):
     platform: str = "kleinanzeigen"
     listing_url: Optional[str] = None
 
+class SyncCapturedRequest(BaseModel):
+    title: str
+    description: str
+    price: str
+    image_urls: List[str] = []
+    item_id: Optional[str] = None
+
 @app.post("/api/format-description", response_model=FormatDescriptionResponse)
 async def format_description_endpoint(request: FormatDescriptionRequest):
     return FormatDescriptionResponse(
@@ -432,6 +439,33 @@ async def mark_item_listed(item_id: str, request: MarkListedRequest, user: dict 
         result = supabase.table("items").update(update_data).eq("item_id", item_id).eq("user_id", user_id).execute()
         return await get_item(item_id, user)
     except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/items/sync-captured", response_model=ItemResponse)
+async def sync_captured_item(request: SyncCapturedRequest, user: dict = Depends(get_current_user)):
+    """Save a draft captured from the extension back to the main app database."""
+    from app.database import supabase
+    user_id = user.get("sub")
+    item_id = request.item_id or f"CAPTURED-{uuid.uuid4().hex[:8].upper()}"
+    
+    try:
+        db_data = {
+            "title": request.title,
+            "description_de": request.description,
+            "price": request.price,
+            "image_url": request.image_urls[0] if request.image_urls else None,
+            "image_urls": request.image_urls,
+            "item_id": item_id,
+            "user_id": user_id,
+            "status": "draft",
+            "category": "Other", # Default
+            "room": "Other"
+        }
+        result = supabase.table("items").insert(db_data).execute()
+        if not result.data: raise HTTPException(status_code=500, detail="Failed to save captured item")
+        return await get_item(item_id, user)
+    except Exception as e:
+        print(f"Sync error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":

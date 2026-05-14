@@ -41,6 +41,15 @@
 - Updated manifest.json: added 127.0.0.1, Supabase storage CDN (*.supabase.in) permissions
 - Removed leftover code in content.js after API URL fallback refactor
 
+## 2026-05-14: Chrome Extension - Items Not Showing & Filling/Photo Fixes
+- Fixed critical bug: `popup.html` was missing `<span id="user-email">` element, causing a crash on login.
+- **Improved Photo Upload**: Added 4 strategies in `inject.js` to bypass React's file input protections.
+- **Robust Filling**: Expanded selectors for title, description, and price; enhanced `setVal` with extra events for React detection.
+- **Process Reordering**: Changed `fillForm` to fill text fields *first*, then upload photos, providing better UX.
+- **Multi-Image Support**: Optimized image gathering in `popup.js` and `background.js` to fetch all unique URLs.
+- **UX Update**: Prevented automatic tab closing in `background.js` after filling/batch listing.
+- Updated all changes to GitHub.
+
 ## 2026-05-13: Local Dev Environment Setup
 - Recreated broken Python venv (`backend/venv` was incomplete - missing pip, activate scripts)
 - Installed all dependencies: fastapi, uvicorn, python-dotenv, PyJWT, requests, supabase, Pillow, google-genai, python-multipart

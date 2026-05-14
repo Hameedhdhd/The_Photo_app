@@ -311,7 +311,7 @@ export default function HomeScreen({ navigation }) {
             {recentItems.length > 0 ? (
               recentItems.map((item, index) => (
                 <ListingCard
-                  key={item.id}
+                  key={item.item_id || item.id || index.toString()}
                   item={item}
                   index={index}
                   onPress={(i) => navigation.navigate('ItemDetail', { item: i })}
@@ -514,8 +514,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     paddingHorizontal: spacing.page,
-    gap: spacing.md,
     justifyContent: 'space-between',
+    gap: 0, // Gap can interfere with space-between on wrap
   },
   emptyRecent: {
     width: '100%',

@@ -80,12 +80,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           return;
         }
         const blob = await response.blob();
-        // Convert blob to base64 data URL (FileReader not available in service workers)
         const arrayBuffer = await blob.arrayBuffer();
         const bytes = new Uint8Array(arrayBuffer);
+        
+        // Fast chunked conversion to base64
         let binary = '';
-        for (let i = 0; i < bytes.length; i++) {
-          binary += String.fromCharCode(bytes[i]);
+        const chunkSize = 8192;
+        for (let i = 0; i < bytes.length; i += chunkSize) {
+          binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
         }
         const base64 = btoa(binary);
         const dataUrl = `data:${blob.type || 'image/jpeg'};base64,${base64}`;
@@ -105,8 +107,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
     console.log('Kleinanzeigen Sync extension installed');
-    // Clear any stale data
-    chrome.storage.local.clear();
+    // Only clear auth, keep drafts
+    chrome.storage.local.remove(['auth_session']);
   } else if (details.reason === 'update') {
     console.log('Kleinanzeigen Sync extension updated to version', chrome.runtime.getManifest().version);
   }
@@ -148,6 +150,31 @@ async function processBatchQueue(token, apiUrl) {
         batchResults.failed++;
         continue;
       }
+
+      // 1b. Fetch images as base64
+      let urls = [];
+      if (fullItem.image_urls && Array.isArray(fullItem.image_urls)) urls.push(...fullItem.image_urls);
+      if (fullItem.image_url) urls.push(fullItem.image_url);
+      const uniqueUrls = [...new Set(urls)].filter(u => u && u.length > 0);
+      
+      const imageBlobs = [];
+      for (const url of uniqueUrls) {
+        try {
+          const imgResp = await fetch(url);
+          if (imgResp.ok) {
+            const blob = await imgResp.blob();
+            const ab = await blob.arrayBuffer();
+            const bytes = new Uint8Array(ab);
+            let binary = '';
+            for (let i = 0; i < bytes.length; i += 8192) {
+              binary += String.fromCharCode.apply(null, bytes.subarray(i, i + 8192));
+            }
+            imageBlobs.push(`data:${blob.type || 'image/jpeg'};base64,${btoa(binary)}`);
+          }
+        } catch (ie) { console.warn('[Batch] Image fetch failed:', ie); }
+      }
+      fullItem.imageBlobs = imageBlobs;
+      fullItem.description = fullItem.formatted_description || fullItem.description_de || fullItem.description || '';
 
       // 2. Create a new tab with Kleinanzeigen listing page
       const tab = await chrome.tabs.create({
@@ -202,9 +229,8 @@ async function processBatchQueue(token, apiUrl) {
       // 7. Wait for save to complete
       await randomDelay(1500, 2500);
 
-      // 8. Close the tab
-      await chrome.tabs.remove(tab.id).catch(() => {});
-      console.log(`[Batch] Completed and closed tab for ${itemTitle}`);
+      // 8. Keep the tab open as requested by user
+      console.log(`[Batch] Completed for ${itemTitle} (tab kept open)`);
 
       batchResults.success++;
 

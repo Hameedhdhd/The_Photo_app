@@ -1,714 +1,483 @@
 /**
- * Popup script for Kleinanzeigen Sync Extension
- * Handles: Login via Supabase Auth, Item listing, Item selection
+ * Popup Script - Full UI inside extension popup
+ * Handles: Auth, item listing, fill commands, draft management
  */
 
+const SUPABASE_URL = 'https://awwahpecfvdljgupnzft.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_JbvTrXHKwtnZTcMGte00Ng_6uhuWG3s';
+const API_URL = 'http://localhost:8000';
+
+let currentTab = 'app';
+let appItems = [];
+let localDrafts = [];
+let selectedItemIds = new Set();
+
 // ============================================================
-// Supabase Auth Client (minimal, no SDK dependency)
-// Uses Supabase REST API directly for auth
+// Supabase Auth
 // ============================================================
 
-class SupabaseAuth {
-  constructor(url, anonKey) {
-    this.url = url;
-    this.anonKey = anonKey;
+async function signIn(email, password) {
+  const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY },
+    body: JSON.stringify({ email, password }),
+  });
+  if (!response.ok) throw new Error('Login failed');
+  const data = await response.json();
+  return {
+    access_token: data.access_token,
+    refresh_token: data.refresh_token,
+    user: data.user,
+    expires_at: data.expires_at || Math.floor(Date.now() / 1000) + 3600,
+  };
+}
+
+async function getSession() {
+  return new Promise(resolve => chrome.storage.local.get(['auth_session'], r => resolve(r.auth_session)));
+}
+
+async function setSession(session) {
+  return new Promise(resolve => chrome.storage.local.set({ auth_session: session }, resolve));
+}
+
+async function clearSession() {
+  return new Promise(resolve => chrome.storage.local.remove(['auth_session', 'selected_item_id'], resolve));
+}
+
+async function getValidSession() {
+  const session = await getSession();
+  if (!session) return null;
+  const isExpired = Date.now() / 1000 > (session.expires_at - 300);
+  return isExpired ? null : session;
+}
+
+// ============================================================
+// Init
+// ============================================================
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const session = await getValidSession();
+  if (session) {
+    showMainScreen(session);
+  } else {
+    showLoginScreen();
   }
+});
 
-  async signIn(email, password) {
-    const response = await fetch(`${this.url}/auth/v1/token?grant_type=password`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': this.anonKey,
-      },
-      body: JSON.stringify({ email, password }),
-    });
+// ============================================================
+// Login Screen
+// ============================================================
 
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error_description || error.msg || 'Login failed');
-    }
+function showLoginScreen() {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('main-screen').style.display = 'none';
 
-    const data = await response.json();
-    return {
-      access_token: data.access_token,
-      refresh_token: data.refresh_token,
-      user: data.user,
-      expires_at: data.expires_at || Math.floor(Date.now() / 1000) + 3600,
-    };
-  }
-
-  async signUp(email, password) {
-    const response = await fetch(`${this.url}/auth/v1/signup`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': this.anonKey,
-      },
-      body: JSON.stringify({ email, password }),
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error_description || error.msg || 'Sign up failed');
-    }
-
-    const data = await response.json();
-    
-    // If email confirmation is required, we won't get a session
-    if (!data.access_token) {
-      return { needsConfirmation: true, user: data.user || data };
-    }
-
-    return {
-      access_token: data.access_token,
-      refresh_token: data.refresh_token,
-      user: data.user,
-      expires_at: data.expires_at,
-    };
-  }
-
-  async getSession() {
-    return new Promise((resolve) => {
-      chrome.storage.local.get(['auth_session'], (result) => {
-        resolve(result.auth_session || null);
-      });
-    });
-  }
-
-  async setSession(session) {
-    return new Promise((resolve) => {
-      chrome.storage.local.set({ auth_session: session }, resolve);
-    });
-  }
-
-  async clearSession() {
-    return new Promise((resolve) => {
-      chrome.storage.local.remove(['auth_session', 'selected_item_id'], resolve);
-    });
-  }
-
-  isSessionExpired(session) {
-    if (!session || !session.expires_at) return true;
-    // Add 5 minute buffer
-    return Date.now() / 1000 > (session.expires_at - 300);
-  }
-
-  async refreshSession(session) {
-    if (!session?.refresh_token) return null;
+  document.getElementById('login-form').onsubmit = async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const pass = document.getElementById('password').value;
+    const errEl = document.getElementById('login-error');
+    errEl.style.display = 'none';
     try {
-      const response = await fetch(`${this.url}/auth/v1/token?grant_type=refresh_token`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': this.anonKey,
-        },
-        body: JSON.stringify({ refresh_token: session.refresh_token }),
-      });
-
-      if (!response.ok) return null;
-
-      const data = await response.json();
-      const newSession = {
-        access_token: data.access_token,
-        refresh_token: data.refresh_token,
-        user: data.user || session.user,
-        expires_at: data.expires_at || Math.floor(Date.now() / 1000) + 3600,
-      };
-      await this.setSession(newSession);
-      return newSession;
-    } catch (e) {
-      console.error('Token refresh failed:', e);
-      return null;
+      const session = await signIn(email, pass);
+      await setSession(session);
+      showMainScreen(session);
+    } catch (err) {
+      errEl.textContent = 'Login failed. Check your credentials.';
+      errEl.style.display = 'block';
     }
-  }
-
-  async getValidSession() {
-    const session = await this.getSession();
-    if (!session) return null;
-    if (!this.isSessionExpired(session)) return session;
-    // Try refresh
-    const refreshed = await this.refreshSession(session);
-    return refreshed;
-  }
+  };
 }
 
 // ============================================================
-// App State
+// Main Screen
 // ============================================================
 
-let auth;
-let currentItems = [];
-let selectedItemId = null;
-let selectedBatchItems = new Set(); // Set of item IDs selected for batch
-let isBatchRunning = false;
+async function showMainScreen(session) {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('main-screen').style.display = 'flex';
+  const emailEl = document.getElementById('user-email');
+  if (emailEl) emailEl.textContent = session.user.email;
 
-// ============================================================
-// DOM Elements
-// ============================================================
-
-const loginScreen = document.getElementById('login-screen');
-const itemsScreen = document.getElementById('items-screen');
-const detailScreen = document.getElementById('detail-screen');
-
-const loginForm = document.getElementById('login-form');
-const emailInput = document.getElementById('email');
-const passwordInput = document.getElementById('password');
-const loginError = document.getElementById('login-error');
-const loginBtn = document.getElementById('login-btn');
-
-const userEmailSpan = document.getElementById('user-email');
-const logoutBtn = document.getElementById('logout-btn');
-const refreshBtn = document.getElementById('refresh-btn');
-
-const statusText = document.getElementById('status-text');
-const statusIcon = document.getElementById('status-icon');
-
-const itemsList = document.getElementById('items-list');
-const itemsLoading = document.getElementById('items-loading');
-const itemsEmpty = document.getElementById('items-empty');
-
-const itemDetail = document.getElementById('item-detail');
-const backBtn = document.getElementById('back-btn');
-const fillFormBtn = document.getElementById('fill-form-btn');
-const markListedBtn = document.getElementById('mark-listed-btn');
-
-// ============================================================
-// Screen Management
-// ============================================================
-
-function showScreen(screenId) {
-  [loginScreen, itemsScreen, detailScreen].forEach(s => s.classList.add('hidden'));
-  document.getElementById(screenId).classList.remove('hidden');
-}
-
-function setStatus(text, type = 'success') {
-  statusText.textContent = text;
-  const icons = { success: '✅', error: '❌', warning: '⚠️', loading: '⏳' };
-  statusIcon.textContent = icons[type] || '✅';
-  const bar = document.getElementById('status-bar');
-  bar.className = `status-bar ${type}`;
-}
-
-// ============================================================
-// API URL Detection & API Calls
-// ============================================================
-
-let detectedApiUrl = null;
-
-async function detectApiUrl() {
-  if (detectedApiUrl) return detectedApiUrl;
-  const urls = [CONFIG.API_URL, CONFIG.API_URL_FALLBACK].filter(Boolean);
-  for (const url of urls) {
-    try {
-      const response = await fetch(`${url}/`, { method: 'GET', signal: AbortSignal.timeout(3000) });
-      if (response.ok) {
-        detectedApiUrl = url;
-        console.log(`[Sync] API detected at: ${url}`);
-        return url;
-      }
-    } catch (e) {
-      console.log(`[Sync] API not reachable at: ${url}`);
-    }
-  }
-  detectedApiUrl = CONFIG.API_URL;
-  return detectedApiUrl;
-}
-
-async function apiCall(endpoint, options = {}) {
-  const session = await auth.getValidSession();
-  if (!session) throw new Error('Not authenticated. Please log in again.');
-
-  const baseUrl = await detectApiUrl();
-  const url = `${baseUrl}${endpoint}`;
-  const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${session.access_token}`,
+  // Logout
+  document.getElementById('logout-btn').onclick = async () => {
+    await clearSession();
+    showLoginScreen();
   };
 
-  let response = await fetch(url, {
-    ...options,
-    headers: { ...headers, ...options.headers },
+  // Tabs
+  document.querySelectorAll('.tab-btn').forEach(tab => {
+    tab.onclick = () => {
+      document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      currentTab = tab.dataset.tab;
+      renderItemList();
+    };
   });
 
-  // If 401, try refreshing token once
-  if (response.status === 401) {
-    const refreshed = await auth.refreshSession(session);
-    if (refreshed) {
-      const retryHeaders = { ...headers, 'Authorization': `Bearer ${refreshed.access_token}` };
-      response = await fetch(url, {
-        ...options,
-        headers: { ...retryHeaders, ...options.headers },
-      });
-    }
-    if (!response.ok) {
-      await auth.clearSession();
-      throw new Error('Session expired. Please log in again.');
-    }
-  }
+  // Refresh
+  document.getElementById('refresh-btn').onclick = () => loadData(session);
 
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Request failed' }));
-    throw new Error(error.detail || `API Error: ${response.status}`);
-  }
+  // Save locally button
+  document.getElementById('save-local-btn').onclick = () => handleSaveLocal();
 
-  return response.json();
+  // Batch post
+  document.getElementById('batch-post-btn').onclick = () => handleBatchPost(session);
+
+  // Logs
+  document.getElementById('show-logs-btn').onclick = () => {
+    document.getElementById('log-overlay').style.display = 'flex';
+  };
+  document.getElementById('close-logs-btn').onclick = () => {
+    document.getElementById('log-overlay').style.display = 'none';
+  };
+
+  // Load data
+  await loadData(session);
 }
 
-// ============================================================
-// Items Management
-// ============================================================
+// Global log handler - only captures extension-specific logs
+function addLog(msg, type = 'info') {
+  const content = document.getElementById('log-content');
+  if (!content) return;
+  const time = new Date().toLocaleTimeString();
+  const div = document.createElement('div');
+  div.className = `log-entry ${type}`;
+  div.innerHTML = `<span class="log-time">[${time}]</span> ${msg}`;
+  content.appendChild(div);
+  content.scrollTop = content.scrollHeight;
+}
 
-async function loadItems() {
-  itemsLoading.classList.remove('hidden');
-  itemsList.innerHTML = '';
-  itemsEmpty.classList.add('hidden');
-  setStatus('Loading items...', 'loading');
+// Forward logs from content/inject scripts to the log viewer
+chrome.runtime.onMessage.addListener((msg) => {
+  if (msg.action === 'KA_LOG') {
+    addLog(msg.text, msg.type);
+  }
+});
 
+async function loadData(session) {
+  showStatus('Loading...', 'loading');
+  await fetchAppData(session.access_token);
+  await loadLocalDrafts();
+  renderItemList();
+  showStatus('', '');
+}
+
+async function fetchAppData(token) {
   try {
-    const data = await apiCall('/api/items');
-    currentItems = data.items || data || [];
-
-    if (currentItems.length === 0) {
-      itemsEmpty.classList.remove('hidden');
-      setStatus('No items yet', 'warning');
-    } else {
-      renderItems(currentItems);
-      setStatus(`${currentItems.length} items ready`, 'success');
-    }
-  } catch (err) {
-    console.error('Failed to load items:', err);
-    setStatus('Failed to load items', 'error');
-    itemsEmpty.classList.remove('hidden');
-    itemsEmpty.querySelector('p').textContent = `Error: ${err.message}`;
-  } finally {
-    itemsLoading.classList.add('hidden');
+    const res = await fetch(`${API_URL}/api/items`, { headers: { 'Authorization': `Bearer ${token}` } });
+    const data = await res.json();
+    appItems = data.items || [];
+  } catch (e) {
+    console.error('Fetch error:', e);
+    appItems = [];
   }
 }
 
-function renderItems(items) {
-  itemsList.innerHTML = '';
-
-  items.forEach(item => {
-    const card = document.createElement('div');
-    card.className = 'item-card';
-    if (item.item_id === selectedItemId) card.classList.add('selected');
-    if (selectedBatchItems.has(item.item_id)) card.classList.add('batch-selected');
-
-    const statusClass = item.listing_status ? `status-${item.listing_status}` : 'status-draft';
-    const statusLabel = formatStatus(item.listing_status || 'draft');
-
-    card.innerHTML = `
-      <input type="checkbox" class="item-checkbox" data-item-id="${item.item_id}" ${selectedBatchItems.has(item.item_id) ? 'checked' : ''}>
-      ${item.image_url
-        ? `<img class="item-card-image" src="${item.image_url}" alt="${item.title}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-           <div class="item-card-image-placeholder" style="display:none">📦</div>`
-        : `<div class="item-card-image-placeholder">📦</div>`
-      }
-      <div class="item-card-info">
-        <div class="item-card-title">${escapeHtml(item.title)}</div>
-        <div class="item-card-meta">${escapeHtml(item.category || '')} · ${escapeHtml(item.room || '')}</div>
-      </div>
-      <span class="item-card-status ${statusClass}">${statusLabel}</span>
-      <span class="item-card-price">${escapeHtml(item.price || '')}</span>
-    `;
-
-    // Checkbox click: toggle batch selection (stop propagation to prevent card click)
-    const checkbox = card.querySelector('.item-checkbox');
-    checkbox.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (e.target.checked) {
-        selectedBatchItems.add(item.item_id);
-        card.classList.add('batch-selected');
-      } else {
-        selectedBatchItems.delete(item.item_id);
-        card.classList.remove('batch-selected');
-      }
-      updateBatchBar();
-    });
-
-    // Card click: show detail (only if not clicking checkbox)
-    card.addEventListener('click', function(e) {
-      if (e.target.classList.contains('item-checkbox')) return;
-      selectItem(item, this);
-    });
-    
-    itemsList.appendChild(card);
-  });
-
-  updateBatchBar();
+async function loadLocalDrafts() {
+  const result = await chrome.storage.local.get(['local_drafts']);
+  localDrafts = result.local_drafts || [];
 }
 
-function updateBatchBar() {
+// ============================================================
+// Render Item List
+// ============================================================
+
+function renderItemList() {
+  const listEl = document.getElementById('item-list');
+  const items = currentTab === 'app' ? appItems : localDrafts;
+
+  // Batch bar
   const batchBar = document.getElementById('batch-bar');
-  const batchCount = document.getElementById('batch-count');
-  const count = selectedBatchItems.size;
-  
-  if (count > 0) {
-    batchBar.classList.remove('hidden');
-    batchCount.textContent = `${count} selected`;
+  if (currentTab === 'app' && selectedItemIds.size > 0) {
+    batchBar.style.display = 'block';
+    document.getElementById('batch-count').textContent = selectedItemIds.size;
   } else {
-    batchBar.classList.add('hidden');
-  }
-  
-  // Update select-all checkbox
-  const selectAll = document.getElementById('select-all-checkbox');
-  if (selectAll) {
-    selectAll.checked = currentItems.length > 0 && selectedBatchItems.size === currentItems.length;
-  }
-}
-
-// Select All checkbox
-document.getElementById('select-all-checkbox').addEventListener('change', (e) => {
-  if (e.target.checked) {
-    currentItems.forEach(item => selectedBatchItems.add(item.item_id));
-  } else {
-    selectedBatchItems.clear();
-  }
-  renderItems(currentItems);
-});
-
-// Stop Batch button
-document.getElementById('batch-stop-btn').addEventListener('click', () => {
-  if (!isBatchRunning) return;
-  chrome.runtime.sendMessage({ action: 'STOP_BATCH' });
-  document.getElementById('progress-text').textContent = '⏹ Stopping...';
-});
-
-// Batch List button
-document.getElementById('batch-list-btn').addEventListener('click', async () => {
-  if (isBatchRunning || selectedBatchItems.size === 0) return;
-  
-  isBatchRunning = true;
-  const batchBar = document.getElementById('batch-bar');
-  const batchProgress = document.getElementById('batch-progress');
-  const progressText = document.getElementById('progress-text');
-  const progressFill = document.getElementById('progress-fill');
-  
-  // Get full item data for selected items
-  const items = currentItems.filter(item => selectedBatchItems.has(item.item_id));
-  const totalItems = items.length;
-  
-  // Show progress
-  batchBar.classList.add('hidden');
-  batchProgress.classList.remove('hidden');
-  progressText.textContent = `Starting batch list for ${totalItems} items...`;
-  progressFill.style.width = '0%';
-  
-  try {
-    // Get auth session
-    const session = await auth.getValidSession();
-    if (!session) throw new Error('Not authenticated');
-    
-    // Send batch request to background script
-    chrome.runtime.sendMessage({
-      action: 'START_BATCH',
-      items: items,
-      token: session.access_token,
-      apiUrl: detectedApiUrl || CONFIG.API_URL,
-    });
-    
-    setStatus(`Batch listing ${totalItems} items...`, 'loading');
-  } catch (err) {
-    progressText.textContent = `❌ Error: ${err.message}`;
-    isBatchRunning = false;
-    batchProgress.classList.add('hidden');
-    batchBar.classList.remove('hidden');
-  }
-});
-
-// Listen for batch progress updates from background
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action === 'BATCH_PROGRESS') {
-    const progressText = document.getElementById('progress-text');
-    const progressFill = document.getElementById('progress-fill');
-    const batchProgress = document.getElementById('batch-progress');
-    
-    batchProgress.classList.remove('hidden');
-    progressText.textContent = message.text;
-    
-    if (message.current && message.total) {
-      const pct = Math.round((message.current / message.total) * 100);
-      progressFill.style.width = `${pct}%`;
-    }
-    
-    sendResponse({ ok: true });
-  }
-  
-  if (message.action === 'BATCH_COMPLETE') {
-    const progressText = document.getElementById('progress-text');
-    const progressFill = document.getElementById('progress-fill');
-    const batchProgress = document.getElementById('batch-progress');
-    
-    progressFill.style.width = '100%';
-    progressText.textContent = `✅ Batch complete! ${message.success} succeeded, ${message.failed} failed.`;
-    
-    isBatchRunning = false;
-    selectedBatchItems.clear();
-    setStatus(`Batch done: ${message.success} listed`, 'success');
-    
-    // Hide progress after a few seconds
-    setTimeout(() => {
-      batchProgress.classList.add('hidden');
-      updateBatchBar();
-      loadItems(); // Refresh items
-    }, 5000);
-    
-    sendResponse({ ok: true });
-  }
-  
-  return true;
-});
-
-function selectItem(item, cardElement) {
-  selectedItemId = item.item_id;
-  chrome.storage.local.set({ selected_item_id: item.item_id });
-
-  // Update selection visual
-  document.querySelectorAll('.item-card').forEach(c => c.classList.remove('selected'));
-  if (cardElement) cardElement.classList.add('selected');
-
-  // Show detail screen
-  showItemDetail(item);
-}
-
-function showItemDetail(item) {
-  const desc = item.description_de || item.description_en || 'No description';
-  
-  itemDetail.innerHTML = `
-    ${item.image_url
-      ? `<img class="item-detail-image" src="${item.image_url}" alt="${item.title}" onerror="this.style.display='none'">`
-      : ''
-    }
-    <div class="item-detail-title">${escapeHtml(item.title)}</div>
-    <div class="item-detail-price">${escapeHtml(item.price || 'No price')}</div>
-    <div class="item-detail-category">${escapeHtml(item.category || '')} · ${escapeHtml(item.room || '')}</div>
-    <div class="item-detail-description">${escapeHtml(desc)}</div>
-  `;
-
-  // Update mark-listed button state
-  if (item.listing_status === 'listed_kleinanzeigen') {
-    markListedBtn.textContent = '✅ Already Listed';
-    markListedBtn.disabled = true;
-  } else {
-    markListedBtn.textContent = '✅ Mark as Listed on Kleinanzeigen';
-    markListedBtn.disabled = false;
+    batchBar.style.display = 'none';
   }
 
-  showScreen('detail-screen');
-}
-
-// ============================================================
-// Event Handlers
-// ============================================================
-
-// Sign Up / Login Toggle
-let isSignUpMode = false;
-const signupToggleLink = document.getElementById('signup-toggle-link');
-const signupText = document.getElementById('signup-text');
-
-signupToggleLink.addEventListener('click', (e) => {
-  e.preventDefault();
-  isSignUpMode = !isSignUpMode;
-  if (isSignUpMode) {
-    loginBtn.textContent = 'Sign Up';
-    signupText.textContent = 'Already have an account?';
-    signupToggleLink.textContent = 'Log In';
-  } else {
-    loginBtn.textContent = 'Log In';
-    signupText.textContent = "Don't have an account?";
-    signupToggleLink.textContent = 'Sign Up';
-  }
-  loginError.classList.add('hidden');
-});
-
-// Login Form
-loginForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  loginError.classList.add('hidden');
-  loginBtn.disabled = true;
-
-  try {
-    if (isSignUpMode) {
-      loginBtn.textContent = 'Creating account...';
-      const result = await auth.signUp(emailInput.value, passwordInput.value);
-      
-      if (result.needsConfirmation) {
-        loginError.textContent = '✅ Account created! Please check your email to confirm, then log in.';
-        loginError.classList.remove('hidden');
-        loginError.style.color = '#86B817';
-        // Switch back to login mode
-        isSignUpMode = false;
-        loginBtn.textContent = 'Log In';
-        signupText.textContent = "Don't have an account?";
-        signupToggleLink.textContent = 'Sign Up';
-        return;
-      }
-      
-      await auth.setSession(result);
-      userEmailSpan.textContent = result.user.email;
-      showScreen('items-screen');
-      await loadItems();
-    } else {
-      loginBtn.textContent = 'Logging in...';
-      const session = await auth.signIn(emailInput.value, passwordInput.value);
-      await auth.setSession(session);
-      userEmailSpan.textContent = session.user.email;
-      showScreen('items-screen');
-      await loadItems();
-    }
-  } catch (err) {
-    loginError.textContent = err.message || (isSignUpMode ? 'Sign up failed.' : 'Login failed. Check your credentials.');
-    loginError.classList.remove('hidden');
-    loginError.style.color = '';
-  } finally {
-    loginBtn.disabled = false;
-    loginBtn.textContent = isSignUpMode ? 'Sign Up' : 'Log In';
-  }
-});
-
-// Logout
-logoutBtn.addEventListener('click', async () => {
-  await auth.clearSession();
-  currentItems = [];
-  selectedItemId = null;
-  emailInput.value = '';
-  passwordInput.value = '';
-  showScreen('login-screen');
-});
-
-// Refresh Items
-refreshBtn.addEventListener('click', loadItems);
-
-// Back from detail
-backBtn.addEventListener('click', () => {
-  showScreen('items-screen');
-});
-
-// Fill Form - sends selected item to content script
-fillFormBtn.addEventListener('click', async () => {
-  if (!selectedItemId) {
-    setStatus('Select an item first', 'warning');
+  if (items.length === 0) {
+    const icon = currentTab === 'app' ? '📦' : '💾';
+    const text = currentTab === 'app' ? 'No items from your app yet' : 'No local drafts saved yet';
+    listEl.innerHTML = `<div class="empty-state"><div class="empty-icon">${icon}</div><div class="empty-text">${text}</div></div>`;
     return;
   }
 
+  listEl.innerHTML = '';
+  items.forEach((item, index) => {
+    const card = document.createElement('div');
+    card.className = 'item-card';
+
+    const img = currentTab === 'app' ? item.image_url : (item.local_images?.[0] || '');
+    const itemId = item.item_id || item.id;
+    const isChecked = selectedItemIds.has(itemId);
+
+    let actionsHtml = `<button class="btn-fill" data-index="${index}">FILL</button>`;
+    if (currentTab === 'drafts') {
+      actionsHtml += `<button class="btn-delete" data-index="${index}">🗑</button>`;
+    }
+
+    card.innerHTML = `
+      <input type="checkbox" class="item-check" data-id="${itemId}" ${isChecked ? 'checked' : ''}>
+      <div class="item-thumb">${img ? `<img src="${img}">` : '📦'}</div>
+      <div class="item-info">
+        <div class="item-title">${item.title || 'Untitled'}</div>
+        <div class="item-price">${item.price || '0'}€</div>
+      </div>
+      ${actionsHtml}
+    `;
+
+    // Checkbox
+    card.querySelector('.item-check').onclick = (e) => {
+      e.stopPropagation();
+      if (e.target.checked) selectedItemIds.add(itemId);
+      else selectedItemIds.delete(itemId);
+      renderItemList();
+    };
+
+    // Fill button
+    card.querySelector('.btn-fill').onclick = (e) => {
+      e.stopPropagation();
+      handleFillItem(item);
+    };
+
+    // Delete button (drafts only)
+    const deleteBtn = card.querySelector('.btn-delete');
+    if (deleteBtn) {
+      deleteBtn.onclick = (e) => {
+        e.stopPropagation();
+        deleteDraft(index);
+      };
+    }
+
+    listEl.appendChild(card);
+  });
+}
+
+// ============================================================
+// Delete Draft
+// ============================================================
+
+async function deleteDraft(index) {
+  localDrafts.splice(index, 1);
+  await chrome.storage.local.set({ local_drafts: localDrafts });
+  renderItemList();
+  showStatus('🗑 Draft deleted', 'success');
+}
+
+// ============================================================
+// Fill Item - Send to content script on active Kleinanzeigen tab
+// ============================================================
+
+async function handleFillItem(item) {
+  showStatus('Preparing fill...', 'loading');
   try {
-    // Get full item data
-    const item = await apiCall(`/api/items/${selectedItemId}`);
-    
-    // Send to content script via chrome messaging
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    
-    if (!tab || !tab.url || !tab.url.includes('kleinanzeigen.de')) {
-      setStatus('Open Kleinanzeigen listing page first!', 'warning');
+    if (!tab?.url?.includes('kleinanzeigen.de')) {
+      showStatus('❌ Open Kleinanzeigen ad page first!', 'error');
       return;
     }
 
-    await chrome.tabs.sendMessage(tab.id, {
-      action: 'FILL_FORM',
-      item: item,
-    });
-
-    setStatus('Form filled! Check Kleinanzeigen.', 'success');
-  } catch (err) {
-    console.error('Fill form error:', err);
-    setStatus(`Error: ${err.message}`, 'error');
-  }
-});
-
-// Mark as Listed
-markListedBtn.addEventListener('click', async () => {
-  if (!selectedItemId) return;
-
-  try {
-    markListedBtn.disabled = true;
-    markListedBtn.textContent = 'Updating...';
-    
-    await apiCall(`/api/items/${selectedItemId}/mark-listed`, {
-      method: 'PATCH',
-      body: JSON.stringify({ platform: 'kleinanzeigen' }),
-    });
-
-    setStatus('Marked as listed! 🎉', 'success');
-    markListedBtn.textContent = '✅ Already Listed';
-    
-    // Refresh items in background
-    await loadItems();
-  } catch (err) {
-    setStatus(`Error: ${err.message}`, 'error');
-    markListedBtn.disabled = false;
-    markListedBtn.textContent = '✅ Mark as Listed on Kleinanzeigen';
-  }
-});
-
-// ============================================================
-// Utility Functions
-// ============================================================
-
-function escapeHtml(text) {
-  if (!text) return '';
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
-}
-
-function formatStatus(status) {
-  const labels = {
-    'draft': 'Draft',
-    'listed_kleinanzeigen': 'Listed',
-    'listed_ebay': 'eBay',
-    'sold': 'Sold',
-  };
-  return labels[status] || status || 'Draft';
-}
-
-// ============================================================
-// Initialize
-// ============================================================
-
-// DEV MODE: Set to true to auto-login with test account
-const EXT_DEV_MODE = true;
-const EXT_DEV_EMAIL = 'Hameed@Hd.com';
-const EXT_DEV_PASSWORD = 'Hameed2024!';
-
-async function init() {
-  auth = new SupabaseAuth(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
-
-  // Detect API URL in background
-  detectApiUrl();
-
-  // Check for existing session (with auto-refresh)
-  let session = await auth.getValidSession();
-  
-  if (session) {
-    userEmailSpan.textContent = session.user?.email || 'User';
-    showScreen('items-screen');
-    
-    // Restore selected item
-    const stored = await chrome.storage.local.get(['selected_item_id']);
-    if (stored.selected_item_id) selectedItemId = stored.selected_item_id;
-    
-    await loadItems();
-  } else if (EXT_DEV_MODE) {
-    // Auto-login with dev account
-    try {
-      loginBtn.disabled = true;
-      loginBtn.textContent = 'Auto-login...';
-      session = await auth.signIn(EXT_DEV_EMAIL, EXT_DEV_PASSWORD);
-      await auth.setSession(session);
-      userEmailSpan.textContent = session.user.email;
-      showScreen('items-screen');
-      await loadItems();
-    } catch (err) {
-      console.error('Dev auto-login failed:', err);
-      showScreen('login-screen');
-    } finally {
-      loginBtn.disabled = false;
-      loginBtn.textContent = 'Log In';
+    // Get full item data if from app
+    let fullItem = item;
+    if (currentTab === 'app' && item.item_id) {
+      const session = await getValidSession();
+      if (session) {
+        try {
+          showStatus('Fetching item details...', 'loading');
+          const res = await fetch(`${API_URL}/api/items/${item.item_id}`, {
+            headers: { 'Authorization': `Bearer ${session.access_token}` }
+          });
+          if (res.ok) fullItem = await res.json();
+        } catch (e) { /* use item as-is */ }
+      }
     }
-  } else {
-    showScreen('login-screen');
+
+    // Fetch images as base64 via background script (avoids CORS)
+    showStatus('Loading images...', 'loading');
+    let imageBlobs = [];
+    
+    // Collect all unique non-empty URLs
+    let urls = [];
+    if (fullItem.local_images && Array.isArray(fullItem.local_images)) urls.push(...fullItem.local_images);
+    if (fullItem.image_urls && Array.isArray(fullItem.image_urls)) urls.push(...fullItem.image_urls);
+    if (fullItem.image_url) urls.push(fullItem.image_url);
+    
+    // Deduplicate and filter
+    const uniqueUrls = [...new Set(urls)].filter(u => u && typeof u === 'string' && u.length > 0);
+    console.log('[Popup] Unique image URLs to fetch:', uniqueUrls.length);
+
+    for (const url of uniqueUrls) {
+      if (url.startsWith('data:')) {
+        imageBlobs.push(url);
+      } else {
+        try {
+          const response = await chrome.runtime.sendMessage({ action: 'FETCH_IMAGE', url });
+          if (response?.success && response.data) {
+            imageBlobs.push(response.data);
+          }
+        } catch (e) { console.error('Image fetch error:', e); }
+      }
+    }
+    
+    console.log('[Popup] Final image blobs collected:', imageBlobs.length);
+
+    // Send fill command to content script
+    const fillItem = {
+      title: fullItem.title || '',
+      description: fullItem.formatted_description || fullItem.description_de || fullItem.description || '',
+      price: fullItem.price || '',
+      imageBlobs: imageBlobs,
+    };
+
+    // Save to local drafts FIRST (before filling, so draft is guaranteed)
+    await saveToDrafts(fillItem);
+
+    showStatus('🪄 Uploading photos & filling form...', 'loading');
+
+    chrome.tabs.sendMessage(tab.id, { action: 'FILL_FORM', item: fillItem }, (response) => {
+      if (chrome.runtime.lastError) {
+        showStatus('❌ Content script not ready. Reload the page.', 'error');
+        return;
+      }
+      if (response?.success) {
+        // Wait 30 seconds before sending SAVE_DRAFT command
+        showStatus('⏳ Waiting 30s before saving draft...', 'loading');
+        console.log('[Popup] Initiating 30 second wait before save...');
+        
+        let timeLeft = 30;
+        const interval = setInterval(() => {
+          timeLeft--;
+          if (timeLeft > 0) {
+            showStatus(`⏳ Waiting ${timeLeft}s before saving draft...`, 'loading');
+          } else {
+            clearInterval(interval);
+            showStatus('💾 Saving draft...', 'loading');
+            
+            // Send the save command
+            chrome.tabs.sendMessage(tab.id, { action: 'SAVE_DRAFT' }, (saveRes) => {
+              if (saveRes?.success) {
+                showStatus('✅ Form filled & draft saved!', 'success');
+              } else {
+                showStatus('⚠️ Filled, but could not click save button', 'warn');
+              }
+            });
+          }
+        }, 1000);
+        
+      } else {
+        showStatus('❌ Fill failed', 'error');
+      }
+    });
+  } catch (err) {
+    showStatus('❌ ' + err.message, 'error');
   }
 }
 
-init();
+// ============================================================
+// Save to Local Drafts
+// ============================================================
+
+async function saveToDrafts(itemData) {
+  try {
+    const draft = {
+      id: 'draft_' + Date.now(),
+      title: itemData.title || 'Draft',
+      description: itemData.description || '',
+      price: itemData.price || '',
+      // Store images directly (unlimitedStorage permission handles size)
+      local_images: itemData.imageBlobs || [],
+      created_at: new Date().toISOString()
+    };
+
+    const res = await chrome.storage.local.get(['local_drafts']);
+    const existingDrafts = res.local_drafts || [];
+    const drafts = [draft, ...existingDrafts].slice(0, 30);
+    
+    await chrome.storage.local.set({ local_drafts: drafts });
+    
+    // Verify save worked
+    const verify = await chrome.storage.local.get(['local_drafts']);
+    console.log('[Popup] Draft saved:', draft.title, 'images:', draft.local_images.length, 'total drafts:', verify.local_drafts?.length);
+    
+    await loadLocalDrafts();
+    
+    // Switch to drafts tab to show the saved draft
+    currentTab = 'drafts';
+    document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+    document.querySelector('[data-tab="drafts"]')?.classList.add('active');
+    renderItemList();
+  } catch (e) {
+    console.error('[Popup] Draft save error:', e);
+    showStatus('⚠️ Draft save failed: ' + e.message, 'error');
+  }
+}
+
+// ============================================================
+// Save Local - Capture current form from Kleinanzeigen page
+// ============================================================
+
+async function handleSaveLocal() {
+  showStatus('Capturing form...', 'loading');
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (!tab?.url?.includes('kleinanzeigen.de')) {
+      showStatus('❌ Open Kleinanzeigen ad page first!', 'error');
+      return;
+    }
+
+    chrome.tabs.sendMessage(tab.id, { action: 'CAPTURE_FORM' }, async (response) => {
+      if (chrome.runtime.lastError) {
+        showStatus('❌ Content script not ready. Reload the page.', 'error');
+        return;
+      }
+      if (response?.success) {
+        await saveToDrafts({
+          title: response.title,
+          description: response.description,
+          price: response.price,
+          imageBlobs: response.images || [],
+        });
+        showStatus('✅ Saved locally!', 'success');
+      } else {
+        showStatus('❌ Capture failed', 'error');
+      }
+    });
+  } catch (err) {
+    showStatus('❌ ' + err.message, 'error');
+  }
+}
+
+// ============================================================
+// Batch Post
+// ============================================================
+
+async function handleBatchPost(session) {
+  const itemsToPost = appItems.filter(item => selectedItemIds.has(item.item_id || item.id));
+  if (itemsToPost.length === 0) return;
+
+  showStatus(`🚀 Starting batch for ${itemsToPost.length} items...`, 'loading');
+  chrome.runtime.sendMessage({
+    action: 'START_BATCH',
+    items: itemsToPost,
+    token: session.access_token,
+    apiUrl: API_URL
+  });
+  selectedItemIds.clear();
+  renderItemList();
+  showStatus('🚀 Batch started!', 'success');
+}
+
+// ============================================================
+// Status Bar
+// ============================================================
+
+function showStatus(msg, type) {
+  const bar = document.getElementById('status-bar');
+  if (!msg) { bar.style.display = 'none'; bar.className = 'status-bar'; return; }
+  bar.textContent = msg;
+  bar.className = 'status-bar ' + type;
+  if (type === 'success' || type === 'error') {
+    setTimeout(() => { bar.style.display = 'none'; }, 4000);
+  }
+}
