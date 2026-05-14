@@ -56,6 +56,7 @@ export default function ItemDetailScreen({ route, navigation }) {
   const [roomValue, setRoomValue] = useState(item?.room || 'Other');
   const [formattedDesc, setFormattedDesc] = useState(item?.formatted_description || '');
   const [condition, setCondition] = useState(item?.condition || '');
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const extraData = item?.extra_data || {};
 
   const CONDITIONS = [
@@ -215,6 +216,10 @@ export default function ItemDetailScreen({ route, navigation }) {
               pagingEnabled 
               showsHorizontalScrollIndicator={false}
               style={styles.imageCarousel}
+              onMomentumScrollEnd={(e) => {
+                const index = Math.round(e.nativeEvent.contentOffset.x / (SCREEN_WIDTH - spacing.page * 2));
+                setActiveImageIndex(index);
+              }}
             >
               {imageUrls.map((url, index) => (
                 <Image key={index} source={{ uri: url }} style={styles.mainImage} />
@@ -223,7 +228,7 @@ export default function ItemDetailScreen({ route, navigation }) {
             
             {imageUrls.length > 1 && (
               <View style={styles.imageBadge}>
-                <Text style={styles.imageBadgeText}>1 / {imageUrls.length}</Text>
+                <Text style={styles.imageBadgeText}>{activeImageIndex + 1} / {imageUrls.length}</Text>
               </View>
             )}
 
