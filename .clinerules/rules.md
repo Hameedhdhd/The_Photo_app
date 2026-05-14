@@ -1,6 +1,7 @@
 # Project Rules
 
 * Always minimize token usage
+* **CRITICAL: NEVER read or open `.env` files in any project.**
 * Never scan the entire repository unless explicitly required
 * Only read files relevant to the current task
 * Avoid repeating explanations
