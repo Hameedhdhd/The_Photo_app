@@ -43,7 +43,7 @@ export default function MyListingsScreen({ navigation }) {
     setLoading(true);
     try {
       let query = supabase
-        .from('APP_Table')
+        .from('items')
         .select('*')
         .order('created_at', { ascending: false });
 
@@ -114,10 +114,11 @@ export default function MyListingsScreen({ navigation }) {
       const query = searchQuery.toLowerCase();
       result = result.filter(item =>
         (item.title && item.title.toLowerCase().includes(query)) ||
+        (item.description && item.description.toLowerCase().includes(query)) ||
         (item.description_en && item.description_en.toLowerCase().includes(query)) ||
         (item.description_de && item.description_de.toLowerCase().includes(query)) ||
         (item.category && item.category.toLowerCase().includes(query)) ||
-        (item.room && item.room.toLowerCase().includes(query))
+        (item.address && item.address.toLowerCase().includes(query))
       );
     }
 
@@ -143,7 +144,7 @@ export default function MyListingsScreen({ navigation }) {
     );
     try {
       await supabase
-        .from('APP_Table')
+        .from('items')
         .update({ favorite: newValue })
         .eq('item_id', itemId);
     } catch (err) {

@@ -12,6 +12,9 @@ import HomeScreen from '../screens/HomeScreen';
 import MyListingsScreen from '../screens/MyListingsScreen';
 import ResultScreen from '../screens/ResultScreen';
 import ItemDetailScreen from '../screens/ItemDetailScreen';
+import MarketplaceScreen from '../screens/MarketplaceScreen';
+import ChatListScreen from '../screens/ChatListScreen';
+import ChatDetailScreen from '../screens/ChatDetailScreen';
 import { LoadingScreen } from '../components/LoadingSpinner';
 import { colors, typography, spacing, radius, shadows } from '../theme';
 
@@ -46,10 +49,14 @@ function MainTabs() {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, size }) => {
           let iconName;
-          if (route.name === 'Scan') {
+          if (route.name === 'Marketplace') {
+            iconName = focused ? 'storefront' : 'storefront-outline';
+          } else if (route.name === 'Scan') {
             iconName = focused ? 'scan' : 'scan-outline';
           } else if (route.name === 'My Items') {
             iconName = focused ? 'list' : 'list-outline';
+          } else if (route.name === 'Messages') {
+            iconName = focused ? 'chatbubbles' : 'chatbubbles-outline';
           }
           return <AnimatedTabIcon name={iconName} focused={focused} size={24} />;
         },
@@ -60,8 +67,10 @@ function MainTabs() {
         headerShown: false,
       })}
     >
+      <Tab.Screen name="Marketplace" component={MarketplaceScreen} />
       <Tab.Screen name="Scan" component={HomeScreen} />
       <Tab.Screen name="My Items" component={MyListingsScreen} />
+      <Tab.Screen name="Messages" component={ChatListScreen} />
     </Tab.Navigator>
   );
 }
@@ -104,6 +113,13 @@ export default function AppNavigator() {
             <Stack.Screen
               name="ItemDetail"
               component={ItemDetailScreen}
+              options={{
+                cardStyle: { backgroundColor: colors.gray50 },
+              }}
+            />
+            <Stack.Screen
+              name="ChatDetail"
+              component={ChatDetailScreen}
               options={{
                 cardStyle: { backgroundColor: colors.gray50 },
               }}

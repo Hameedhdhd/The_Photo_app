@@ -4,18 +4,22 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { colors, typography, spacing, radius, shadows } from '../theme';
+import { triggerHaptic } from '../utils/haptics';
 
 const VARIANT_STYLES = {
   primary: {
     gradient: [colors.primary, colors.primaryDark],
     textColor: colors.white,
     shadow: shadows.primary,
+    hapticType: 'medium',
   },
   accent: {
     gradient: [colors.accent, '#D97706'],
     textColor: colors.white,
     shadow: shadows.accent,
+    hapticType: 'medium',
   },
   secondary: {
     gradient: null,
@@ -23,6 +27,7 @@ const VARIANT_STYLES = {
     textColor: colors.primary,
     borderColor: colors.border,
     shadow: shadows.sm,
+    hapticType: 'light',
   },
   ghost: {
     gradient: null,
@@ -30,16 +35,19 @@ const VARIANT_STYLES = {
     textColor: colors.primary,
     borderColor: 'transparent',
     shadow: null,
+    hapticType: 'light',
   },
   danger: {
     gradient: [colors.error, '#DC2626'],
     textColor: colors.white,
     shadow: { ...shadows.lg, shadowColor: colors.error },
+    hapticType: 'warning',
   },
   dark: {
     gradient: [colors.gray800, colors.gray900],
     textColor: colors.white,
     shadow: shadows.md,
+    hapticType: 'medium',
   },
 };
 
@@ -65,6 +73,20 @@ export default function Button({
 }) {
   const variantConfig = VARIANT_STYLES[variant] || VARIANT_STYLES.primary;
   const sizeConfig = SIZE_STYLES[size] || SIZE_STYLES.medium;
+  const scale = useSharedValue(1);
+
+  const handlePressIn = () => {
+    triggerHaptic(variantConfig.hapticType);
+    scale.value = withSpring(0.96, { damping: 15, stiffness: 200 });
+  };
+
+  const handlePressOut = () => {
+    scale.value = withSpring(1, { damping: 15, stiffness: 200 });
+  };
+
+  const animatedButtonStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
 
   const containerStyle = useMemo(() => ({
     ...styles.container,
@@ -121,33 +143,41 @@ export default function Button({
 
   if (variantConfig.gradient) {
     return (
-      <TouchableOpacity
-        onPress={onPress}
-        disabled={disabled || loading}
-        activeOpacity={activeOpacity}
-        style={[containerStyle, disabled && styles.disabled]}
-      >
-        <LinearGradient
-          colors={variantConfig.gradient}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={innerStyle}
+      <Animated.View style={[animatedButtonStyle]}>
+        <TouchableOpacity
+          onPress={onPress}
+          onPressIn={!disabled && !loading ? handlePressIn : undefined}
+          onPressOut={!disabled && !loading ? handlePressOut : undefined}
+          disabled={disabled || loading}
+          activeOpacity={activeOpacity}
+          style={[containerStyle, disabled && styles.disabled]}
         >
-          {renderContent()}
-        </LinearGradient>
-      </TouchableOpacity>
+          <LinearGradient
+            colors={variantConfig.gradient}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={innerStyle}
+          >
+            {renderContent()}
+          </LinearGradient>
+        </TouchableOpacity>
+      </Animated.View>
     );
   }
 
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      disabled={disabled || loading}
-      activeOpacity={activeOpacity}
-      style={[containerStyle, innerStyle, disabled && styles.disabled]}
-    >
-      {renderContent()}
-    </TouchableOpacity>
+    <Animated.View style={[animatedButtonStyle]}>
+      <TouchableOpacity
+        onPress={onPress}
+        onPressIn={!disabled && !loading ? handlePressIn : undefined}
+        onPressOut={!disabled && !loading ? handlePressOut : undefined}
+        disabled={disabled || loading}
+        activeOpacity={activeOpacity}
+        style={[containerStyle, innerStyle, disabled && styles.disabled]}
+      >
+        {renderContent()}
+      </TouchableOpacity>
+    </Animated.View>
   );
 }
 

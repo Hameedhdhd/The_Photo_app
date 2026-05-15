@@ -7,7 +7,7 @@
 
 ## Project Overview
 
-The Photo App is a **personal inventory & marketplace listing tool**. Users photograph items, AI generates titles/descriptions/prices, and items are saved to a Supabase database. The app supports bilingual listings (German/English) and is designed for eventual integration with eBay Kleinanzeigen. It runs as a React Native (Expo) frontend with a FastAPI Python backend and Google Gemini 2.5 Flash for AI vision analysis.
+The Photo App is an **AI-Driven Community Marketplace**. It enables users to sell used items or offer services through a streamlined AI listing flow. Gemini handles visual recognition, and Deepseek generates high-conversion descriptions based on a specific formula. The platform features integrated real-time messaging, address-based listings, and map-based discovery.
 
 ---
 
@@ -16,18 +16,23 @@ The Photo App is a **personal inventory & marketplace listing tool**. Users phot
 ```
 ┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
 │  React Native    │────▶│  FastAPI Backend  │────▶│  Google Gemini  │
-│  (Expo SDK 54)   │     │  (Python 3.12)    │     │  2.5 Flash      │
+│  (Expo SDK 54)   │     │  (Python 3.12)    │     │  (Vision)       │
 │                  │     │                   │     └─────────────────┘
-│  - Camera/Pick   │     │  /api/analyze-img │
-│  - Inventory UI  │     │  - Receives photo │     ┌─────────────────┐
-│  - Auth (Supa)   │     │  - Calls Gemini   │────▶│  Supabase       │
-│                  │     │  - Uploads image  │     │  - PostgreSQL DB │
-│                  │◀────│  - Returns result  │     │  - Auth          │
-│                  │     │  - Saves to DB     │     │  - Storage       │
-└─────────────────┘     └──────────────────┘     └─────────────────┘
+│  - Camera/Maps   │     │  /api/analyze-img │              │
+│  - Chat UI       │     │  - Receives photo │     ┌─────────────────┐
+│  - Auth (Supa)   │     │  - Calls Gemini   │     │  Deepseek V3    │
+│                  │     │  - Calls Deepseek │◀───▶│  (Descriptions) │
+│                  │◀────│  - Returns result │     └─────────────────┘
+│                  │     │  - Saves to DB    │
+└─────────────────┘     └──────────────────┘     ┌─────────────────┐
+         │                                       │  Supabase       │
+         └──────────────────────────────────────▶│  - PostgreSQL   │
+                                                 │  - Real-time    │
+                                                 │  - Storage      │
+                                                 └─────────────────┘
 ```
 
-**Data Flow:** Photo → FastAPI → Gemini analysis → Save to Supabase → Return to frontend → Display in inventory
+**Data Flow:** Photo → FastAPI → Gemini (Visuals) → Deepseek (Formulaic Description) → Save to Supabase → Frontend → Discover via Map/List → Chat to Buy.
 
 ---
 
@@ -90,8 +95,11 @@ The_Photo_app/
 │       │   ├── HomeScreen.js      # Main screen — camera/gallery, room selector, multi-photo
 │       │   ├── LoginScreen.js     # Simplified login (Supabase auth + mock mode)
 │       │   ├── ResultScreen.js    # AI results — editable fields, language toggle, copy button
-│       │   ├── MyListingsScreen.js # Inventory grid — search, filter, favorites
-│       │   └── ItemDetailScreen.js # Single item view — edit, favorite, copy description
+│       │   ├── MarketplaceScreen.js # List/Map discovery view
+│       │   ├── ChatListScreen.js  # Overview of active conversations
+│       │   ├── ChatDetailScreen.js # Real-time messaging UI
+│       │   ├── MyListingsScreen.js # User's own items
+│       │   └── ItemDetailScreen.js # Single item view with "Message Seller" button
 │       ├── theme/
 │       │   └── index.js           # Colors, spacing, typography constants
 │       └── utils/
@@ -105,23 +113,34 @@ The_Photo_app/
 
 ## Database Schema
 
-### Table: `public.items`
+### Table: `public.items` (Updated for Marketplace)
 
 | Column | Type | Default | Description |
 |--------|------|---------|-------------|
 | `item_id` | TEXT (PK) | `'draft'` | Primary key, format: `ITEM-XXXXXXXX` |
 | `title` | VARCHAR | `'draft'` | Item title from AI |
-| `room` | TEXT | `'draft'` | Room category (Kitchen, Bathroom, etc.) |
 | `price` | VARCHAR | `'draft'` | Price string (e.g., "45 EUR") |
 | `category` | VARCHAR | `'draft'` | Item category from AI |
-| `status` | TEXT | `'draft'` | Item status (draft/listed/sold) |
-| `description_en` | TEXT | `'draft'` | English description |
-| `description_de` | TEXT | `'draft'` | German description |
-| `user_id` | UUID | null | Links to auth.users (null = anonymous) |
-| `image_url` | TEXT | null | Supabase storage public URL |
+| `status` | TEXT | `'listed'` | Item status (listed/sold/archived) |
+| `description` | TEXT | null | Formulaic description from Deepseek |
+| `address` | TEXT | null | Pickup/Service location |
+| `latitude` | FLOAT8 | null | Geocoded latitude for map |
+| `longitude` | FLOAT8 | null | Geocoded longitude for map |
+| `user_id` | UUID | null | Seller's user ID |
+| `image_url` | TEXT | null | Main product image |
 | `created_at` | TIMESTAMPTZ | `now()` | Creation timestamp |
-| `updated_at` | TIMESTAMPTZ | `now()` | Last update timestamp |
 | `favorite` | BOOLEAN | `false` | User favorite flag |
+
+### Table: `public.messages` (New)
+
+| Column | Type | Default | Description |
+|--------|------|---------|-------------|
+| `message_id` | UUID (PK) | `uuid_generate_v4()` | Unique message ID |
+| `chat_id` | UUID | null | Links to a specific buyer-seller-item combo |
+| `sender_id` | UUID | null | User ID of the sender |
+| `content` | TEXT | null | Text message or photo URL |
+| `is_image` | BOOLEAN | `false` | Flag for photo messages |
+| `created_at` | TIMESTAMPTZ | `now()` | Timestamp |
 
 ### View: `api.items`
 - Mirrors `public.items` for REST API access

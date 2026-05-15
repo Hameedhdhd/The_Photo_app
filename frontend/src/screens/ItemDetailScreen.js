@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import {
   StyleSheet, Text, View, ScrollView, Image, TextInput,
   KeyboardAvoidingView, Platform, Alert, TouchableOpacity
@@ -11,7 +11,7 @@ import Button from '../components/Button';
 import Card from '../components/Card';
 import LanguageToggle from '../components/LanguageToggle';
 import CategoryScroll from '../components/CategoryScroll';
-import { colors, typography, spacing, radius } from '../theme';
+import { colors, typography, spacing, radius, shadows } from '../theme';
 
 const ROOMS = [
   'Kitchen', 'Bathroom', 'Bedroom', 'Living Room', 'Garage', 'Office', 'Other'
@@ -23,23 +23,45 @@ export default function ItemDetailScreen({ route, navigation }) {
   const [title, setTitle] = useState(item?.title || '');
   const [descriptionDe, setDescriptionDe] = useState(item?.description_de || '');
   const [descriptionEn, setDescriptionEn] = useState(item?.description_en || '');
+  const [description, setDescription] = useState(item?.description || '');
   const [price, setPrice] = useState(item?.price || '');
   const [lang, setLang] = useState('de');
   const [editingField, setEditingField] = useState(null);
   const [saving, setSaving] = useState(false);
   const [isFavorite, setIsFavorite] = useState(item?.favorite || false);
   const [roomValue, setRoomValue] = useState(item?.room || 'Other');
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const [loadingUser, setLoadingUser] = useState(true);
 
   const titleRef = useRef(null);
   const descRef = useRef(null);
   const priceRef = useRef(null);
 
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          setCurrentUserId(user.id);
+        }
+      } catch (err) {
+        console.error('Error getting user:', err);
+      } finally {
+        setLoadingUser(false);
+      }
+    };
+    getUser();
+  }, []);
+
   const itemId = item?.item_id || item?.id;
   const imageUrl = item?.image_url;
   const category = item?.category;
+  // Only mark as owner once user loads AND item has a user_id. Avoids null === null = true.
+  const isOwner = !loadingUser && currentUserId !== null && currentUserId === item?.user_id;
+  const hasSingleDescription = !!description;
 
-  const currentDescription = lang === 'en' ? descriptionEn : descriptionDe;
-  const setCurrentDescription = lang === 'en' ? setDescriptionEn : setDescriptionDe;
+  const currentDescription = hasSingleDescription ? description : (lang === 'en' ? descriptionEn : descriptionDe);
+  const setCurrentDescription = hasSingleDescription ? setDescription : (lang === 'en' ? setDescriptionEn : setDescriptionDe);
 
   const toggleFavorite = useCallback(async () => {
     const newValue = !isFavorite;
@@ -47,7 +69,7 @@ export default function ItemDetailScreen({ route, navigation }) {
     try {
       if (itemId) {
         await supabase
-          .from('APP_Table')
+          .from('items')
           .update({ favorite: newValue })
           .eq('item_id', itemId);
       }
@@ -58,6 +80,7 @@ export default function ItemDetailScreen({ route, navigation }) {
   }, [isFavorite, itemId]);
 
   const handleSave = useCallback(async () => {
+    if (!isOwner) return;
     setSaving(true);
     try {
       const updateData = {
@@ -66,11 +89,12 @@ export default function ItemDetailScreen({ route, navigation }) {
         room: roomValue,
         description_de: descriptionDe,
         description_en: descriptionEn,
+        description: description,
       };
 
       if (itemId) {
         const { error } = await supabase
-          .from('APP_Table')
+          .from('items')
           .update(updateData)
           .eq('item_id', itemId);
 
@@ -103,15 +127,30 @@ export default function ItemDetailScreen({ route, navigation }) {
   }, [currentDescription]);
 
   const focusField = useCallback((field) => {
+    if (!isOwner) return;
     setEditingField(field);
     if (field === 'title') titleRef.current?.focus();
     else if (field === 'price') priceRef.current?.focus();
     else if (field === 'description') descRef.current?.focus();
-  }, []);
+  }, [isOwner]);
 
   const blurField = useCallback(() => {
     setEditingField(null);
   }, []);
+
+  const handleMessageSeller = useCallback(() => {
+    if (!item?.user_id || !currentUserId) return;
+    
+    // Generate chat ID from user IDs (sorted)
+    const sortedIds = [currentUserId, item.user_id].sort();
+    const chatId = `${sortedIds[0]}_${sortedIds[1]}_${item.item_id}`;
+    
+    navigation.navigate('ChatDetail', {
+      chatId,
+      otherUserId: item.user_id,
+      item,
+    });
+  }, [item, currentUserId, navigation]);
 
   return (
     <KeyboardAvoidingView
@@ -168,10 +207,12 @@ export default function ItemDetailScreen({ route, navigation }) {
           )}
         </Animated.View>
 
-        {/* Language Toggle */}
-        <Animated.View entering={FadeInDown.duration(300).delay(100)} style={styles.langSection}>
-          <LanguageToggle value={lang} onChange={setLang} />
-        </Animated.View>
+        {/* Language Toggle (only show if using old bilingual descriptions) */}
+        {!hasSingleDescription && (
+          <Animated.View entering={FadeInDown.duration(300).delay(100)} style={styles.langSection}>
+            <LanguageToggle value={lang} onChange={setLang} />
+          </Animated.View>
+        )}
 
         {/* Editable Title */}
         <Animated.View entering={FadeInDown.duration(300).delay(150)}>
@@ -196,6 +237,7 @@ export default function ItemDetailScreen({ route, navigation }) {
               placeholderTextColor={colors.textTertiary}
               returnKeyType="next"
               onSubmitEditing={() => focusField('price')}
+              editable={isOwner}
             />
           </Card>
         </Animated.View>
@@ -224,6 +266,7 @@ export default function ItemDetailScreen({ route, navigation }) {
               keyboardType="decimal-pad"
               returnKeyType="next"
               onSubmitEditing={() => focusField('description')}
+              editable={isOwner}
             />
           </Card>
         </Animated.View>
@@ -272,27 +315,44 @@ export default function ItemDetailScreen({ route, navigation }) {
               onChangeText={setCurrentDescription}
               onFocus={() => setEditingField('description')}
               onBlur={blurField}
-              placeholder={`Enter ${lang === 'en' ? 'English' : 'German'} description...`}
+              placeholder={hasSingleDescription ? "Item description..." : `Enter ${lang === 'en' ? 'English' : 'German'} description...`}
               placeholderTextColor={colors.textTertiary}
               multiline
               textAlignVertical="top"
+              editable={isOwner}
             />
           </Card>
         </Animated.View>
 
-        {/* Save Button */}
-        <Animated.View entering={FadeInDown.duration(300).delay(350)} style={styles.actions}>
+        {/* Save Button (Owner Only) */}
+        {isOwner && (
+          <Animated.View entering={FadeInDown.duration(300).delay(350)} style={styles.actions}>
+            <Button
+              title="Save Changes"
+              onPress={handleSave}
+              loading={saving}
+              variant="primary"
+              icon="checkmark-circle"
+              fullWidth
+              size="large"
+            />
+          </Animated.View>
+        )}
+      </ScrollView>
+
+      {/* Message Seller Footer (Non-Owner Only) */}
+      {!isOwner && !loadingUser && currentUserId && (
+        <Animated.View entering={FadeInDown.duration(400)} style={styles.footer}>
           <Button
-            title="Save Changes"
-            onPress={handleSave}
-            loading={saving}
+            title="Message Seller"
+            onPress={handleMessageSeller}
             variant="primary"
-            icon="checkmark-circle"
+            icon="chatbubbles-outline"
             fullWidth
             size="large"
           />
         </Animated.View>
-      </ScrollView>
+      )}
     </KeyboardAvoidingView>
   );
 }
@@ -423,5 +483,18 @@ const styles = StyleSheet.create({
   // Actions
   actions: {
     marginTop: spacing.xl,
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: colors.white,
+    paddingHorizontal: spacing.page,
+    paddingTop: spacing.md,
+    paddingBottom: Platform.OS === 'ios' ? 34 : spacing.md,
+    ...shadows.lg,
+    borderTopWidth: 1,
+    borderTopColor: colors.gray100,
   },
 });

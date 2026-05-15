@@ -2,8 +2,9 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
-import { colors, typography, spacing, radius } from '../theme';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring, FadeInDown } from 'react-native-reanimated';
+import { colors, typography, spacing, radius, gradients } from '../theme';
+import { triggerHaptic } from '../utils/haptics';
 
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
@@ -23,21 +24,36 @@ export default function Header({
 }) {
   const Wrapper = gradient ? LinearGradient : View;
   const wrapperProps = gradient
-    ? { colors: [colors.primary, colors.primaryDark], start: { x: 0, y: 0 }, end: { x: 1, y: 1 } }
+    ? { colors: gradients.primary, start: { x: 0, y: 0 }, end: { x: 1, y: 1 } }
     : {};
 
-  const scale = useSharedValue(1);
+  const menuScale = useSharedValue(1);
+  const rightScale = useSharedValue(1);
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
+  const menuAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: menuScale.value }],
   }));
 
-  const handlePressIn = () => {
-    scale.value = withSpring(0.92, { damping: 15, stiffness: 300 });
+  const rightAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: rightScale.value }],
+  }));
+
+  const handleMenuPressIn = () => {
+    triggerHaptic('light');
+    menuScale.value = withSpring(0.92, { damping: 15, stiffness: 300 });
   };
 
-  const handlePressOut = () => {
-    scale.value = withSpring(1, { damping: 15, stiffness: 300 });
+  const handleMenuPressOut = () => {
+    menuScale.value = withSpring(1, { damping: 15, stiffness: 300 });
+  };
+
+  const handleRightPressIn = () => {
+    triggerHaptic('light');
+    rightScale.value = withSpring(0.92, { damping: 15, stiffness: 300 });
+  };
+
+  const handleRightPressOut = () => {
+    rightScale.value = withSpring(1, { damping: 15, stiffness: 300 });
   };
 
   const renderLeftAction = () => {
@@ -45,9 +61,9 @@ export default function Header({
       return (
         <AnimatedTouchable
           onPress={onMenuPress}
-          onPressIn={handlePressIn}
-          onPressOut={handlePressOut}
-          style={[styles.actionButton, animatedStyle]}
+          onPressIn={handleMenuPressIn}
+          onPressOut={handleMenuPressOut}
+          style={[styles.actionButton, menuAnimatedStyle]}
           activeOpacity={0.9}
         >
           <Ionicons name="menu" size={24} color={colors.white} />
@@ -67,23 +83,31 @@ export default function Header({
   return (
     <Wrapper style={styles.header} {...wrapperProps}>
       <SafeAreaView style={styles.safeArea}>
-        <View style={styles.row}>
-          {renderLeftAction()}
+        <Animated.View entering={FadeInDown.duration(300)}>
+          <View style={styles.row}>
+            {renderLeftAction()}
 
-          <View style={styles.titleContainer}>
-            <Text style={styles.title}>{title}</Text>
-            {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
+            <View style={styles.titleContainer}>
+              <Text style={styles.title}>{title}</Text>
+              {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
+            </View>
+
+            {rightAction ? (
+              <AnimatedTouchable
+                onPress={onRightPress}
+                onPressIn={handleRightPressIn}
+                onPressOut={handleRightPressOut}
+                style={[styles.actionButton, rightAnimatedStyle]}
+                activeOpacity={0.7}
+              >
+                <Ionicons name={rightIcon || 'settings-outline'} size={24} color={colors.white} />
+              </AnimatedTouchable>
+            ) : (
+              <View style={styles.actionPlaceholder} />
+            )}
           </View>
-
-          {rightAction ? (
-            <TouchableOpacity onPress={onRightPress} style={styles.actionButton} activeOpacity={0.7}>
-              <Ionicons name={rightIcon || 'settings-outline'} size={24} color={colors.white} />
-            </TouchableOpacity>
-          ) : (
-            <View style={styles.actionPlaceholder} />
-          )}
-        </View>
-        {children}
+          {children}
+        </Animated.View>
       </SafeAreaView>
     </Wrapper>
   );

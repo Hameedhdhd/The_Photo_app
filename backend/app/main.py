@@ -22,26 +22,43 @@ VALID_ROOMS = ['Kitchen', 'Bathroom', 'Bedroom', 'Living Room', 'Garage', 'Offic
 
 class ListingResponse(BaseModel):
     title: str
-    description_en: str
-    description_de: str
+    description: str | None = None
+    description_en: str | None = None  # Deprecated, kept for compatibility
+    description_de: str | None = None  # Deprecated, kept for compatibility
     price: str
     category: str
-    room: str | None = None
     item_id: str | None = None
     image_url: str | None = None
     user_id: str | None = None
+    address: str | None = None
+    latitude: float | None = None
+    longitude: float | None = None
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to The Photo App API"}
+    return {"message": "Welcome to The Photo App API", "version": "2.0.0", "status": "online"}
+
+@app.get("/health")
+def health_check():
+    from app.database import supabase
+    db_status = "connected" if supabase else "disconnected"
+    gemini_status = "configured" if os.environ.get("GEMINI_API_KEY") else "missing"
+    deepseek_status = "configured" if os.environ.get("DEEPSEEK_API_KEY") else "missing (using Gemini fallback)"
+    maps_status = "configured" if os.environ.get("GOOGLE_MAPS_API_KEY") else "missing"
+    return {
+        "status": "healthy",
+        "database": db_status,
+        "ai": {"gemini": gemini_status, "deepseek": deepseek_status},
+        "maps": maps_status,
+    }
 
 @app.post("/api/analyze-image", response_model=ListingResponse)
 async def analyze_image(
     file: UploadFile = File(...),
-    room: str = Form(None),
-    user_id: str = Form(None)
+    user_id: str = Form(None),
+    address: str = Form(None)
 ):
-    print(f"Received upload: filename={file.filename}, content_type={file.content_type}, room={room}, user_id={user_id}")
+    print(f"Received upload: filename={file.filename}, content_type={file.content_type}, user_id={user_id}, address={address}")
     
     if not file.filename:
         # Set a default filename if none provided (common on web uploads)
@@ -61,38 +78,73 @@ async def analyze_image(
         if not os.environ.get("GEMINI_API_KEY"):
             response_data = ListingResponse(
                 title=f"Mock AI: {file.filename}",
+                description="Please set GEMINI_API_KEY to see real AI results. This is mock data.",
                 description_en="Please set GEMINI_API_KEY to see real AI results. This is mock data.",
                 description_de="Bitte GEMINI_API_KEY setzen, um echte KI-Ergebnisse zu sehen. Dies sind Testdaten.",
                 price="45 EUR",
                 category="Electronics",
-                room=room,
                 item_id=f"ITEM-{uuid.uuid4().hex[:8].upper()}",
                 image_url=None,
-                user_id=user_id
+                user_id=user_id,
+                address=address,
+                latitude=None,
+                longitude=None
             )
         else:
             from app.vision import get_vision_engine
+            from app.description_engine import get_description_engine
+            
             vision_engine = get_vision_engine()
+            description_engine = get_description_engine()
+            
             if not vision_engine:
                 raise HTTPException(status_code=500, detail="AI engine not initialized. Check GEMINI_API_KEY.")
+            
+            # Step 1: Gemini analyzes the image
             ai_result = vision_engine.analyze_image(file_path)
+            
+            # Step 2: Deepseek generates high-conversion description
+            gemini_base_desc = ai_result.get("description_en", "")
+            high_conversion_desc = description_engine.generate_description(
+                title=ai_result.get("title", ""),
+                category=ai_result.get("category", ""),
+                gemini_description=gemini_base_desc,
+                price=ai_result.get("price")
+            )
 
-            # Use AI-suggested room if user didn't pick one or picked "Other"
-            ai_room = ai_result.get("room", "Other")
-            if ai_room not in VALID_ROOMS:
-                ai_room = "Other"
-            final_room = room if room and room != "Other" else ai_room
+            # Geocode address if provided
+            lat, lng = None, None
+            if address:
+                try:
+                    import requests
+                    geocode_url = f"https://maps.googleapis.com/maps/api/geocode/json"
+                    params = {
+                        "address": address,
+                        "key": os.environ.get("GOOGLE_MAPS_API_KEY", "")
+                    }
+                    geo_response = requests.get(geocode_url, params=params, timeout=5)
+                    if geo_response.status_code == 200:
+                        geo_data = geo_response.json()
+                        if geo_data.get("results"):
+                            location = geo_data["results"][0]["geometry"]["location"]
+                            lat = location.get("lat")
+                            lng = location.get("lng")
+                except Exception as geocode_err:
+                    print(f"Warning: Could not geocode address: {geocode_err}")
 
             response_data = ListingResponse(
                 title=ai_result.get("title", f"Analyzed: {file.filename}"),
+                description=high_conversion_desc,
                 description_en=ai_result.get("description_en", "No description generated."),
                 description_de=ai_result.get("description_de", "Keine Beschreibung erstellt."),
                 price=ai_result.get("price", "TBD"),
                 category=ai_result.get("category", "Uncategorized"),
-                room=final_room,
                 item_id=f"ITEM-{uuid.uuid4().hex[:8].upper()}",
                 image_url=None,
-                user_id=user_id
+                user_id=user_id,
+                address=address,
+                latitude=lat,
+                longitude=lng
             )
 
         # Upload image to Supabase Storage and save item to database
@@ -120,20 +172,26 @@ async def analyze_image(
             try:
                 db_data = {
                     "title": response_data.title,
+                    "description": response_data.description,
                     "description_en": response_data.description_en,
                     "description_de": response_data.description_de,
                     "price": response_data.price,
                     "category": response_data.category,
-                    "room": response_data.room,
                     "item_id": response_data.item_id,
-                    "status": "draft",
+                    "status": "draft",  # draft until user confirms listing
                     "image_url": image_public_url,
                 }
                 if user_id:
                     db_data["user_id"] = user_id
+                if response_data.address:
+                    db_data["address"] = response_data.address
+                if response_data.latitude is not None:
+                    db_data["latitude"] = response_data.latitude
+                if response_data.longitude is not None:
+                    db_data["longitude"] = response_data.longitude
 
-                supabase.table("APP_Table").insert(db_data).execute()
-                print(f"Successfully saved item to APP_Table for user {user_id or 'anonymous'} in room {room or 'none'}!")
+                supabase.table("items").insert(db_data).execute()
+                print(f"Successfully saved item to items table!")
             except Exception as db_err:
                 print(f"Warning: Could not save to database. Error: {db_err}")
 

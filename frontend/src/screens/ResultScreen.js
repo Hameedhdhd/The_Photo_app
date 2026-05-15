@@ -25,52 +25,69 @@ export default function ResultScreen({ route, navigation }) {
   const photos = imageUris || [];
 
   const [title, setTitle] = useState(result?.title || '');
-  const [descriptionDe, setDescriptionDe] = useState(result?.description_de || '');
-  const [descriptionEn, setDescriptionEn] = useState(result?.description_en || '');
+  const [description, setDescription] = useState(result?.description || '');
   const [price, setPrice] = useState(result?.price || '');
-  const [lang, setLang] = useState('de');
+  const [address, setAddress] = useState('');
   const [editingField, setEditingField] = useState(null);
   const [saving, setSaving] = useState(false);
   const [activePhotoIndex, setActivePhotoIndex] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
-  const [roomValue, setRoomValue] = useState(room || result?.room || 'Other');
+  const [status, setStatus] = useState('listed');
 
   const titleRef = useRef(null);
   const descRef = useRef(null);
   const priceRef = useRef(null);
 
   const itemId = result?.item_id || result?.id;
-  const currentDescription = lang === 'en' ? descriptionEn : descriptionDe;
-  const setCurrentDescription = lang === 'en' ? setDescriptionEn : setDescriptionDe;
 
   const handleSave = useCallback(async () => {
+    // Validate required fields
+    if (!title.trim()) {
+      Alert.alert('Missing Title', 'Please enter a title for your item.');
+      return;
+    }
+    if (!price.trim()) {
+      Alert.alert('Missing Price', 'Please enter a price for your item.');
+      return;
+    }
+    if (!address.trim()) {
+      Alert.alert('Missing Address', 'Please enter your address so buyers know where to pick up the item.');
+      return;
+    }
+
     setSaving(true);
     try {
+      // Get the current user to save user_id with the listing
+      const { data: { user } } = await supabase.auth.getUser();
+      
       const updateData = {
         title,
         price,
-        room: roomValue,
-        description_de: descriptionDe,
-        description_en: descriptionEn,
+        description,
+        address,
+        status,
+        user_id: user?.id || null,
+        listed_at: new Date().toISOString(),
       };
 
       if (itemId) {
         const { error } = await supabase
-          .from('APP_Table')
+          .from('items')
           .update(updateData)
           .eq('item_id', itemId);
 
         if (error) throw error;
       }
 
-      Alert.alert('Saved!', 'Your changes have been saved.');
+      Alert.alert('🎉 Listed!', 'Your item is now live on the marketplace. Buyers can message you directly!');
+      navigation.navigate('Main', { screen: 'Marketplace' });
     } catch (error) {
       console.error('Save error:', error);
       Alert.alert('Save Failed', 'Could not save changes. Please try again.');
     } finally {
       setSaving(false);
     }
-  }, [title, price, descriptionDe, descriptionEn, roomValue, itemId]);
+  }, [title, price, description, address, status, itemId, navigation]);
 
   const toggleFavorite = useCallback(async () => {
     const newValue = !isFavorite;
@@ -78,7 +95,7 @@ export default function ResultScreen({ route, navigation }) {
     try {
       if (itemId) {
         await supabase
-          .from('APP_Table')
+          .from('items')
           .update({ favorite: newValue })
           .eq('item_id', itemId);
       }
@@ -89,7 +106,7 @@ export default function ResultScreen({ route, navigation }) {
   }, [isFavorite, itemId]);
 
   const copyToClipboard = useCallback(async () => {
-    const text = currentDescription;
+    const text = description;
     if (!text) return;
     try {
       if (Platform.OS === 'web') {
@@ -102,7 +119,7 @@ export default function ResultScreen({ route, navigation }) {
     } catch (err) {
       console.error('Clipboard error:', err);
     }
-  }, [currentDescription]);
+  }, [description]);
 
   const handleDone = useCallback(() => {
     // Navigate back to scan screen with reset
@@ -114,6 +131,7 @@ export default function ResultScreen({ route, navigation }) {
     if (field === 'title') titleRef.current?.focus();
     else if (field === 'price') priceRef.current?.focus();
     else if (field === 'description') descRef.current?.focus();
+    else if (field === 'address') setEditingField('address');
   }, []);
 
   const blurField = useCallback(() => {
@@ -204,11 +222,6 @@ export default function ResultScreen({ route, navigation }) {
           </Animated.View>
         )}
 
-        {/* Language Toggle */}
-        <Animated.View entering={FadeInDown.duration(300).delay(100)} style={styles.langSection}>
-          <LanguageToggle value={lang} onChange={setLang} />
-        </Animated.View>
-
         {/* Editable Title */}
         <Animated.View entering={FadeInDown.duration(300).delay(150)}>
           <Card shadow="sm" style={[styles.fieldCard, editingField === 'title' && styles.fieldCardActive]}>
@@ -264,24 +277,6 @@ export default function ResultScreen({ route, navigation }) {
           </Card>
         </Animated.View>
 
-        {/* Room Selector */}
-        <Animated.View entering={FadeInDown.duration(300).delay(250)}>
-          <Card shadow="sm" style={styles.fieldCard}>
-            <View style={styles.fieldHeader}>
-              <View style={styles.fieldHeaderLeft}>
-                <Ionicons name="location-outline" size={16} color={colors.primary} />
-                <Text style={[styles.fieldLabel, { color: colors.primary }]}>Room / Section</Text>
-              </View>
-            </View>
-            <CategoryScroll
-              categories={ROOMS}
-              selectedCategory={roomValue}
-              onSelect={setRoomValue}
-              showAllOption={false}
-            />
-          </Card>
-        </Animated.View>
-
         {/* Editable Description */}
         <Animated.View entering={FadeInDown.duration(300).delay(300)}>
           <Card shadow="sm" style={[styles.fieldCard, editingField === 'description' && styles.fieldCardActive]}>
@@ -289,7 +284,7 @@ export default function ResultScreen({ route, navigation }) {
               <View style={styles.fieldHeaderLeft}>
                 <Ionicons name="document-text-outline" size={16} color={editingField === 'description' ? colors.primary : colors.textTertiary} />
                 <Text style={[styles.fieldLabel, editingField === 'description' && styles.fieldLabelActive]}>
-                  Description ({lang.toUpperCase()})
+                  Description
                 </Text>
               </View>
               <View style={styles.fieldHeaderRight}>
@@ -304,29 +299,59 @@ export default function ResultScreen({ route, navigation }) {
             <TextInput
               ref={descRef}
               style={styles.descriptionInput}
-              value={currentDescription}
-              onChangeText={setCurrentDescription}
+              value={description}
+              onChangeText={setDescription}
               onFocus={() => setEditingField('description')}
               onBlur={blurField}
-              placeholder={`Enter ${lang === 'en' ? 'English' : 'German'} description...`}
+              placeholder="Enter description..."
               placeholderTextColor={colors.textTertiary}
               multiline
               textAlignVertical="top"
             />
           </Card>
-        </Animated.View>
+       </Animated.View>
 
-        {/* Action Buttons */}
-        <Animated.View entering={FadeInDown.duration(300).delay(350)} style={styles.actions}>
-          <Button
-            title="Save Changes"
-            onPress={handleSave}
-            loading={saving}
-            variant="primary"
-            icon="checkmark-circle"
-            fullWidth
-            size="large"
-          />
+       {/* Address Input */}
+       <Animated.View entering={FadeInDown.duration(300).delay(350)}>
+         <Card shadow="sm" style={[styles.fieldCard, editingField === 'address' && styles.fieldCardActive]}>
+           <View style={styles.fieldHeader}>
+             <View style={styles.fieldHeaderLeft}>
+               <Ionicons name="location" size={16} color={editingField === 'address' ? colors.primary : colors.textTertiary} />
+               <Text style={[styles.fieldLabel, editingField === 'address' && styles.fieldLabelActive]}>
+                 Pickup Address *
+               </Text>
+             </View>
+             <TouchableOpacity onPress={() => focusField('address')} activeOpacity={0.7}>
+               <Ionicons name="pencil-outline" size={16} color={editingField === 'address' ? colors.primary : colors.textTertiary} />
+             </TouchableOpacity>
+           </View>
+           <TextInput
+             ref={null}
+             style={styles.addressInput}
+             value={address}
+             onChangeText={setAddress}
+             onFocus={() => setEditingField('address')}
+             onBlur={blurField}
+             placeholder="Enter street, city, postal code..."
+             placeholderTextColor={colors.textTertiary}
+             multiline
+             numberOfLines={2}
+           />
+           <Text style={styles.hintText}>Required: Buyers need to know where to pick up the item</Text>
+         </Card>
+       </Animated.View>
+
+       {/* Action Buttons */}
+       <Animated.View entering={FadeInDown.duration(300).delay(400)} style={styles.actions}>
+         <Button
+           title="List Item"
+           onPress={handleSave}
+           loading={saving}
+           variant="primary"
+           icon="checkmark-circle"
+           fullWidth
+           size="large"
+         />
           <View style={styles.buttonGap} />
           <Button
             title="Done — Back to Scanner"
@@ -501,6 +526,19 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.xs,
     paddingHorizontal: 0,
     textAlignVertical: 'top',
+  },
+  // Address Input
+  addressInput: {
+    ...typography.body,
+    color: colors.textPrimary,
+    paddingVertical: spacing.xs,
+    paddingHorizontal: 0,
+    minHeight: 50,
+  },
+  hintText: {
+    ...typography.small,
+    color: colors.textTertiary,
+    marginTop: spacing.xs,
   },
   // Actions
   actions: {

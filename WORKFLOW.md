@@ -11,7 +11,9 @@
 - **Python** 3.12+ with venv
 - **Expo Go** app on your phone (for testing)
 - **Supabase** account with project configured
-- **Google Gemini** API key (optional — mock mode works without it)
+- **Google Gemini** API key (for vision analysis)
+- **Deepseek** API key (for high-conversion descriptions)
+- **Google Maps API Key** (for React Native Maps integration)
 
 ---
 
@@ -71,7 +73,8 @@ npm install
 ```
 SUPABASE_URL=https://awwahpecfvdljgupnzft.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=<from Supabase Dashboard — API Settings>
-GEMINI_API_KEY=<from Google AI Studio — optional, mock mode without it>
+GEMINI_API_KEY=<from Google AI Studio>
+DEEPSEEK_API_KEY=<from Deepseek Dashboard>
 ```
 
 **`frontend/.env`** (create if missing):
@@ -79,6 +82,7 @@ GEMINI_API_KEY=<from Google AI Studio — optional, mock mode without it>
 EXPO_PUBLIC_SUPABASE_URL=https://awwahpecfvdljgupnzft.supabase.co
 EXPO_PUBLIC_SUPABASE_ANON_KEY=<from Supabase Dashboard — API Settings>
 EXPO_PUBLIC_API_URL=http://localhost:8000/api/analyze-image
+EXPO_PUBLIC_GOOGLE_MAPS_API_KEY=<from Google Cloud Console>
 ```
 
 **Root `.env`** (already exists — contains Supabase access token for Management API):
@@ -139,9 +143,9 @@ Run `supabase/migration.sql` in the Supabase Dashboard SQL Editor. This drops an
 
 ### Adding a Feature
 1. **Database change?** → Run migration SQL → Update `api.items` view → Update `supabase/migration.sql`
-2. **New screen?** → Create in `src/screens/` → Add to `src/navigation/AppNavigator.js`
-3. **New component?** → Create in `src/components/` → Follow existing patterns
-4. **AI prompt change?** → Edit `backend/app/vision.py` → Restart backend
+2. **Messaging?** → Enable Supabase Realtime for the `messages` table.
+3. **New screen?** → Create in `src/screens/` → Add to `src/navigation/AppNavigator.js`
+4. **AI prompt change?** → Edit `backend/app/vision.py` (Gemini) or `backend/app/descriptions.py` (Deepseek).
 
 ### Testing the AI Flow
 - **Without GEMINI_API_KEY:** Backend returns mock data — good for UI testing

@@ -8,9 +8,9 @@
 
 ## Vision
 
-A personal inventory app that lets you **scan items with your phone**, get **AI-generated listings instantly**, and manage everything in one place. Built for people who want to catalog their belongings and sell them on marketplaces like eBay Kleinanzeigen — fast and effortlessly.
+A community-driven **AI Marketplace** where anyone can **scan items with their phone**, get **AI-optimized listings**, and sell to others in their neighborhood. 
 
-**One photo → AI title, description, price, category → Saved to your inventory → Ready to sell.**
+**Photo → AI Analysis (Gemini) → High-Conversion Description (Deepseek) → Map Discovery → Real-time Chat → Sold.**
 
 ---
 
@@ -41,39 +41,36 @@ A personal inventory app that lets you **scan items with your phone**, get **AI-
 
 ---
 
-## V2 — Marketplace Integration (Next)
+## V2 — Social Marketplace & AI Engine (Next)
 
-**Goal:** Go from "inventory app" to "selling tool" — list items on Kleinanzeigen directly.
+**Goal:** Transform into a community marketplace with native messaging and advanced AI.
 
 | Feature | Priority | Effort | Description |
 |---------|----------|--------|-------------|
-| Kleinanzeigen Deep-Link | 🔴 High | Medium | Generate pre-filled Kleinanzeigen listing URL |
-| Export to CSV | 🟡 Medium | Low | Export inventory as spreadsheet |
-| Share Item Card | 🟡 Medium | Low | Generate shareable image/card for an item |
-| Bulk Actions | 🟡 Medium | Medium | Select multiple items → delete, favorite, export |
-| Price Suggestion | 🟢 Low | Medium | AI suggests optimal price based on similar items |
-| Item Status Flow | 🔴 High | Low | Draft → Listed → Sold status tracking |
+| **Real-time Chat** | 🔴 High | High | In-app messaging service with photo-sharing |
+| **Deepseek Integration** | 🔴 High | Medium | Generate descriptions via Deepseek using a specific formula |
+| **Address Listings** | 🔴 High | Low | Requirement for sellers to put an address for pickup |
+| **Interactive Map** | 🔴 High | High | View and discover items on a map based on location |
+| Item Status Flow | 🟡 Medium | Low | Draft → Listed → Sold status tracking |
+| Share Item Card | 🟢 Low | Low | Generate shareable image/card for an item |
 
-### Kleinanzeigen Integration Options
-1. **Deep-linking (Recommended V2):** Generate a URL that pre-fills the Kleinanzeigen listing form
-2. **Clipboard Export (Fallback):** One-tap copy of formatted listing text
-3. **Headless Browser (V3):** Automated listing creation via Playwright
+### AI Selling Flow
+1. **Gemini 2.5 Flash:** High-speed visual analysis to extract item details.
+2. **Deepseek V3:** Refines details into a high-conversion description based on the user's formula.
 
 ---
 
-## V3 — Smart Inventory
+## V3 — Smart Marketplace Features
 
-**Goal:** Make the app indispensable with smart features and polish.
+**Goal:** Enhance the marketplace experience with automation and trust.
 
 | Feature | Priority | Description |
 |---------|----------|-------------|
-| Barcode/QR Scanner | 🟡 Medium | Scan barcodes to auto-fill item details |
-| Receipt Scanner | 🟡 Medium | Scan receipts to auto-add purchase price & date |
-| Value Tracking | 🟢 Low | Track item value over time, depreciation |
-| Multi-Marketplace | 🟡 Medium | List on eBay, Vinted, Kleinanzeigen simultaneously |
-| Smart Categories | 🟢 Low | AI auto-suggests categories based on photo |
-| Notifications | 🟢 Low | Reminders for unsold listings, price drops |
-| Offline Mode | 🟢 Low | Queue scans when offline, sync when connected |
+| **Marketplace Sync** | 🟡 Medium | Cross-post to eBay Kleinanzeigen, Vinted, and eBay simultaneously |
+| **User Ratings** | 🟡 Medium | Buyer and seller rating system for trust |
+| **Payment Integration** | 🔴 High | Secure in-app payments for services and products |
+| **Smart Pricing** | 🟢 Low | AI suggests optimal price based on local market data |
+| Notifications | 🔴 High | Push notifications for new messages and nearby deals |
 | Dark Mode | 🟢 Low | System-aware dark theme |
 
 ---

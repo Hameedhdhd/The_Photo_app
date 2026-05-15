@@ -224,6 +224,19 @@ const animation = {
   },
 };
 
+// ─── Gradients ───────────────────────────────────────────────────
+const gradients = {
+  primary: [colors.primary, colors.primaryDark],
+  accent: [colors.accent, '#D97706'],
+  success: [colors.success, '#059669'],
+  error: [colors.error, '#DC2626'],
+  dark: [colors.gray800, colors.gray900],
+  light: ['#F1F5F9', '#E2E8F0'],
+  subtle: [colors.white, colors.gray50],
+  hero: ['#6366F1', '#8B5CF6', '#D946EF'],
+  glass: ['rgba(255,255,255,0.15)', 'rgba(255,255,255,0.05)'],
+};
+
 export {
   colors,
   typography,
@@ -232,6 +245,7 @@ export {
   shadows,
   layout,
   animation,
+  gradients,
 };
 
 export default {
@@ -242,4 +256,5 @@ export default {
   shadows,
   layout,
   animation,
+  gradients,
 };

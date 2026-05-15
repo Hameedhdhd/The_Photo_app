@@ -1,9 +1,9 @@
-# The Photo App - Project Plan & Architecture
+# The Photo App - AI Marketplace Project Plan
 
 ## Overview
-The goal of this project is to evolve the existing "Sell-Items" script into a cross-platform mobile and web application. This app serves as a **personal inventory database**, allowing users to catalog their items, know exactly what they own, and have the ability to list them directly on marketplaces like **eBay Kleinanzeigen**.
+The goal of this project is to create a community-driven **AI Marketplace** where users can post products or services, discover items via an interactive map, and communicate in real-time to close deals. The app leverages a dual-AI approach (Gemini + Deepseek) to automate the listing process, making it effortless to sell used items or offer services.
 
-The primary constraint is a **low budget**, necessitating a stack that maximizes free tiers and serverless architecture while minimizing ongoing operational costs.
+The primary constraint is a **low budget**, necessitating a stack that maximizes free tiers (Supabase, Gemini Free Tier) while providing a premium user experience.
 
 ## Proposed Technology Stack (Low Budget & High Efficiency)
 
@@ -21,14 +21,15 @@ The primary constraint is a **low budget**, necessitating a stack that maximizes
    * **Cost:** Pay-per-use (very low).
 
 ## User Flow
-1. **Quick Access:** User clicks "Login" to enter the app immediately (full auth activation later).
-2. **Capture/Upload:** Take a photo or select one from gallery.
-3. **AI Analysis:** Backend analyzes image via Gemini to generate Title, Description, Category, and Price.
-4. **Inventory Save:** Items are saved to the user's personal database.
-5. **Database Management:** Users browse their inventory with a search bar and category filters.
-6. **Marketplace Listing:**
-   * **V1:** Copy details to clipboard for manual pasting.
-   * **V2:** Direct listing integration for eBay Kleinanzeigen.
+1. **Quick Access:** User clicks "Login" to enter the app.
+2. **Post Listing:** User takes a photo of a product or describes a service.
+3. **AI Generation:** 
+   * **Gemini** analyzes the photo to identify the item.
+   * **Deepseek** writes a compelling description using a specific high-conversion formula.
+4. **Location & Address:** User enters an address (or uses GPS) for the listing.
+5. **Marketplace Discovery:** Users explore listings via a list or an **Interactive Map**.
+6. **Communication:** Interested buyers text the seller directly via **In-app Chat**.
+7. **Deal Closure:** Buyers and sellers agree on a price and meeting point/pickup address.
 
 ## Step-by-Step Working Plan
 
@@ -46,11 +47,19 @@ The primary constraint is a **low budget**, necessitating a stack that maximizes
 * **Search & Filter:** Search bar on top with category/section filtering.
 * **Smooth Scrolling:** Optimized list performance for large inventories.
 
-### Phase 4: Kleinanzeigen Integration
-* **Goal:** Direct listing from the app to Kleinanzeigen.
+### Phase 4: Marketplace & Messaging
+* **Goal:** Transform the app into a social marketplace.
 * **Tasks:**
-  1. Implement "List on Kleinanzeigen" button.
-  2. Research and implement automation (Deep-linking or headless browser workers).
+  1. **Messaging Service:** Implement real-time chat between users with photo-sharing support.
+  2. **Address Support:** Add mandatory address fields to the listing creation flow.
+  3. **AI Description Formula:** Integrate Deepseek API to process Gemini's output into a final listing description.
+
+### Phase 5: Maps & Discovery
+* **Goal:** Enable geographic discovery of items.
+* **Tasks:**
+  1. **Map Integration:** Add a Map view to the frontend (React Native Maps).
+  2. **Geocoding:** Convert addresses to lat/long coordinates for map markers.
+  3. **Discovery UI:** Allow users to toggle between grid view and map view.
 
 ## Estimated Budget
 * **Frontend Hosting:** $0 (Vercel / Netlify)
