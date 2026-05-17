@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "description": "The Photo App - Marketplace",
   "scripts": {
-    "dev:frontend": "cd frontend && npm start",
-    "dev:backend": "cd backend && call venv/Scripts/activate.bat && uvicorn app.main:app --reload",
-    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\""
+    "backend": "cd backend && call venv/Scripts/activate.bat && uvicorn app.main:app --reload",
+    "frontend": "cd frontend && npx expo start --clear"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",

@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 # File paths
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-OUTPUT_FILE = os.path.join(BASE_DIR, "DE_organized.csv")
+OUTPUT_FILE = os.path.join(BASE_DIR, "German ZIP Codes (Postleitzahl) 2026.csv")
 
 # Supabase config
 # Load from root backend/.env

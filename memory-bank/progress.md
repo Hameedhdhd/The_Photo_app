@@ -87,6 +87,8 @@
 3. ~~**Footer icons hidden on phone**~~ → Fixed tabBar height
 4. ~~**ImageCropper white screen**~~ → Fixed undefined variables
 5. ~~**RLS policy blocking inserts**~~ → Added auth checks
+6. ~~**CSV city names had company names mixed in**~~ → Fixed data cleaning with improved regex filters
+7. ~~**Database column name mismatches (`postal_code` vs `postcode`)**~~ → Updated all frontend code to use correct `postcode` column (May 17 ✅)
 
 ### Pending Tasks
 

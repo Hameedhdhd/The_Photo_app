@@ -110,3 +110,21 @@ A community-driven **AI Marketplace** where anyone can **scan items with their p
 | AI API (Gemini) | ~$0.01/item | Pay-per-use, very affordable |
 | Domain | $10/yr | Optional for production |
 | **Total** | **~$0–15/mo** | |
+
+
+
+
+
+
+
+
+
+
+
+cd backend                                                                                                                                                                                                                     
+>> .\venv\Scripts\activate                                                                                                            
+>> uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+
+cd frontend                                                                                                                                                                                                                    
+>> npm start -- --clear                         

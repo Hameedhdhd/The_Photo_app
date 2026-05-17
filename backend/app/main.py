@@ -248,6 +248,7 @@ async def get_items(
                 distance_km=0  # Not applicable for regular items fetch
             )
             for item in items
+            if item.get("item_id")  # Filter out items without item_id
         ]
         
         print(f"[API] Fetched {len(results)} items (limit={limit}, offset={offset})")
@@ -296,7 +297,7 @@ async def search_radius(
         results = []
         
         for item in items:
-            if item.get("latitude") and item.get("longitude"):
+            if item.get("latitude") and item.get("longitude") and item.get("item_id"):
                 # Simple distance calculation (Haversine formula)
                 from math import radians, cos, sin, asin, sqrt
                 

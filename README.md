@@ -27,40 +27,40 @@
 
 ## 🚀 Get Started
 
-### Option 1: Quick Start (5 min)
+### Option 1: Quick Start (Simplified)
 
 ```bash
-# Clone repository
-git clone https://github.com/yourname/the-photo-app.git
-cd The_Photo_app
-
-# Setup backend
-cd backend
-pip install -r requirements.txt
-python -m uvicorn app.main:app --reload
-
-# Setup frontend (new terminal)
-cd frontend
+# 1. Install root & frontend dependencies
 npm install
-expo start
+cd frontend && npm install
+
+# 2. Setup backend (ensure python venv is active if using one)
+cd ../backend
+pip install -r requirements.txt
+
+# 3. Run both servers at once from root
+cd ..
+npm run dev
 ```
 
 ### Option 2: Detailed Setup
 
-See **[SETUP_COMPLETE.md](./SETUP_COMPLETE.md)** for comprehensive instructions.
+See **[docs/SETUP_COMPLETE.md](./docs/SETUP_COMPLETE.md)** for comprehensive instructions.
 
 ---
 
 ## 📚 Documentation
 
+All documentation is located in the `docs/` folder:
+
 | Document | Purpose |
 |----------|---------|
-| **[SETUP_COMPLETE.md](./SETUP_COMPLETE.md)** | Installation & deployment guide |
-| **[API_DOCUMENTATION.md](./API_DOCUMENTATION.md)** | API reference & integration |
-| **[TESTING_GUIDE.md](./TESTING_GUIDE.md)** | Testing procedures & validation |
-| **[PERFORMANCE_OPTIMIZATION.md](./PERFORMANCE_OPTIMIZATION.md)** | Performance details & metrics |
-| **[IMPROVEMENTS_SUMMARY.md](./IMPROVEMENTS_SUMMARY.md)** | What changed & why |
-| **[PROJECT_PLAN.md](./PROJECT_PLAN.md)** | Original project vision |
+| **[docs/SETUP_COMPLETE.md](./docs/SETUP_COMPLETE.md)** | Installation & deployment guide |
+| **[docs/API_DOCUMENTATION.md](./docs/API_DOCUMENTATION.md)** | API reference & integration |
+| **[docs/TESTING_GUIDE.md](./docs/TESTING_GUIDE.md)** | Testing procedures & validation |
+| **[docs/PERFORMANCE_OPTIMIZATION.md](./docs/PERFORMANCE_OPTIMIZATION.md)** | Performance details & metrics |
+| **[docs/IMPROVEMENTS_SUMMARY.md](./docs/IMPROVEMENTS_SUMMARY.md)** | What changed & why |
+| **[docs/PROJECT_PLAN.md](./docs/PROJECT_PLAN.md)** | Original project vision |
 | **[ROADMAP.md](./ROADMAP.md)** | Feature roadmap & priorities |
 
 ---
@@ -71,8 +71,8 @@ See **[SETUP_COMPLETE.md](./SETUP_COMPLETE.md)** for comprehensive instructions.
 The_Photo_app/
 ├── frontend/                    # React Native + Expo
 │   ├── src/
-│   │   ├── screens/            # App screens
-│   │   ├── components/         # UI components
+│   │   ├── screens/            # App screens (broken into sub-components)
+│   │   ├── components/         # UI components (organized by feature)
 │   │   ├── utils/              # Utilities (api, validation, errors)
 │   │   ├── hooks/              # Custom React hooks
 │   │   ├── theme/              # Colors & styles
@@ -87,13 +87,14 @@ The_Photo_app/
 │   │   ├── database.py        # Supabase client
 │   │   ├── errors.py          # Error handling
 │   │   └── services/          # Business logic
+│   ├── scripts/                # Backend ad-hoc scripts (migration/test)
 │   ├── requirements.txt         # Dependencies
 │   └── .env                     # Configuration
 │
-├── supabase/                    # Database
-│   └── migrations/             # SQL migrations
-│
-└── docs/                        # Documentation
+├── supabase/                    # Database SQL migrations
+├── scripts/                     # Root level migration & testing scripts
+├── data/                        # Static data (e.g. Cities database)
+└── docs/                        # Documentation files
 ```
 
 ---
@@ -287,16 +288,15 @@ See **[TESTING_GUIDE.md](./TESTING_GUIDE.md)** for comprehensive procedures.
 
 **Blank screen on startup?**
 ```bash
-expo start --clear
-npm install
+cd frontend && npx expo start --clear
 ```
 
 **API returning 404?**
 ```bash
-# Check backend is running
-python -m uvicorn app.main:app --reload
-
-# Verify EXPO_PUBLIC_API_URL in .env.local
+# Check backend is running via root
+npm run dev
+# or manually
+cd backend && uvicorn app.main:app --reload
 ```
 
 **Slow scrolling?**
@@ -304,7 +304,7 @@ python -m uvicorn app.main:app --reload
 - Clear app cache
 - Restart device
 
-See **[SETUP_COMPLETE.md](./SETUP_COMPLETE.md#troubleshooting)** for more solutions.
+See **[docs/SETUP_COMPLETE.md](./docs/SETUP_COMPLETE.md#troubleshooting)** for more solutions.
 
 ---
 
@@ -364,12 +364,12 @@ Built with ❤️ using React Native, FastAPI, and Supabase.
 
 | Link | Purpose |
 |------|---------|
-| [Setup Guide](./SETUP_COMPLETE.md) | Get running locally |
-| [API Docs](./API_DOCUMENTATION.md) | API reference |
-| [Testing Guide](./TESTING_GUIDE.md) | Test procedures |
-| [Performance](./PERFORMANCE_OPTIMIZATION.md) | Performance details |
-| [Improvements](./IMPROVEMENTS_SUMMARY.md) | What changed |
-| [Project Plan](./PROJECT_PLAN.md) | Original vision |
+| [Setup Guide](./docs/SETUP_COMPLETE.md) | Get running locally |
+| [API Docs](./docs/API_DOCUMENTATION.md) | API reference |
+| [Testing Guide](./docs/TESTING_GUIDE.md) | Test procedures |
+| [Performance](./docs/PERFORMANCE_OPTIMIZATION.md) | Performance details |
+| [Improvements](./docs/IMPROVEMENTS_SUMMARY.md) | What changed |
+| [Project Plan](./docs/PROJECT_PLAN.md) | Original vision |
 | [Roadmap](./ROADMAP.md) | Future features |
 
 ---

@@ -1,12 +1,11 @@
 ﻿Postal Code,City,State,Country
 01054,Sächsische Aufbaubank,Sachsen,Germany
+01057,HUK-Coburg,Sachsen,Germany
 01067,Dresden,Sachsen,Germany
 01067,Dresden Friedrichstadt,Sachsen,Germany
 01067,Dresden Innere Altstadt,Sachsen,Germany
 01069,Dresden,Sachsen,Germany
-01095,Ministerpräsident des Freistaates Sachsen,Sachsen,Germany
 01095,Sächsische Staatskanzlei,Sachsen,Germany
-01095,Sächsisches Staatsministerium des Innern,Sachsen,Germany
 01097,Dresden,Sachsen,Germany
 01099,Dresden,Sachsen,Germany
 01108,Dresden,Sachsen,Germany
@@ -45,13 +44,13 @@
 01277,Dresden Tolkewitz,Sachsen,Germany
 01279,Dresden,Sachsen,Germany
 01279,Dresden Tolkewitz,Sachsen,Germany
+01305,Ostsächsische Sparkasse Dresden,Sachsen,Germany
 01307,Dresden,Sachsen,Germany
 01309,Dresden,Sachsen,Germany
 01309,Dresden Blasewitz,Sachsen,Germany
 01324,Dresden,Sachsen,Germany
 01326,Dresden,Sachsen,Germany
 01328,Dresden,Sachsen,Germany
-01332,Amazon FC WRO2,Sachsen,Germany
 01445,Radebeul,Sachsen,Germany
 01454,Radeberg,Sachsen,Germany
 01454,Wachau,Sachsen,Germany
@@ -222,7 +221,6 @@
 02681,Kirschau,Sachsen,Germany
 02681,Schirgiswalde,Sachsen,Germany
 02681,Wilthen,Sachsen,Germany
-02689,Sohland an der Spree,Sachsen,Germany
 02692,Doberschau-Gaußig,Sachsen,Germany
 02692,Eulowitz,Sachsen,Germany
 02692,Großpostwitz/Oberlausitz,Sachsen,Germany
@@ -254,7 +252,6 @@
 02747,Großhennersdorf,Sachsen,Germany
 02747,Herrnhut,Sachsen,Germany
 02747,Strahwalde,Sachsen,Germany
-02748,Bernstadt auf dem Eigen,Sachsen,Germany
 02763,Bertsdorf-Hörnitz,Sachsen,Germany
 02763,Mittelherwigsdorf,Sachsen,Germany
 02763,Zittau,Sachsen,Germany
@@ -281,7 +278,6 @@
 02894,Sohland am Rotstein,Sachsen,Germany
 02894,Vierkirchen,Sachsen,Germany
 02899,Ostritz,Sachsen,Germany
-02899,Schönau-Berzdorf auf dem Eigen,Sachsen,Germany
 02906,Hohendubrau,Sachsen,Germany
 02906,Klitten,Sachsen,Germany
 02906,Kreba-Neudorf,Sachsen,Germany
@@ -342,7 +338,6 @@
 03058,Neuhausen,Brandenburg,Germany
 03058,Roggosen,Brandenburg,Germany
 03058,Sergen,Brandenburg,Germany
-03075,Landwirtschaftskammer Nordr./Westf Abt. Tierseuchenkasse,Nordrhein-Westfalen,Germany
 03096,Briesen,Brandenburg,Germany
 03096,Burg (Spreewald),Brandenburg,Germany
 03096,Dissen-Striesow,Brandenburg,Germany
@@ -478,7 +473,7 @@
 04022,Sächsische Aufbaubank,Sachsen,Germany
 04063,IKK classic Hauptverwaltung,Sachsen,Germany
 04064,IKK classic Hauptverwaltung,Sachsen,Germany
-04092,Stadt Leipzig Neues Rathaus,Sachsen,Germany
+04097,HUK-Coburg,Sachsen,Germany
 04103,Leipzig,Sachsen,Germany
 04105,Leipzig,Sachsen,Germany
 04107,Leipzig,Sachsen,Germany
@@ -705,6 +700,7 @@
 04936,Wehrhain,Brandenburg,Germany
 04936,Ölsig,Brandenburg,Germany
 04938,Uebigau-Wahrenbrück,Brandenburg,Germany
+06073,Familienkasse Sachsen-Anhalt-Thüringen,Sachsen-Anhalt,Germany
 06077,IHK Halle-Dessau,Sachsen-Anhalt,Germany
 06091,BKK für Heilberufe,Sachsen-Anhalt,Germany
 06092,Deutsche Rentenversicherung Mitteldeutschland,Sachsen-Anhalt,Germany
@@ -726,7 +722,7 @@
 06128,Halle,Sachsen-Anhalt,Germany
 06130,Halle,Sachsen-Anhalt,Germany
 06132,Halle,Sachsen-Anhalt,Germany
-06144,Apotheke Zur Rose Offizin,Sachsen-Anhalt,Germany
+06146,HUK-Coburg,Sachsen-Anhalt,Germany
 06179,Angersdorf,Sachsen-Anhalt,Germany
 06179,Bennstedt,Sachsen-Anhalt,Germany
 06179,Dornstedt,Sachsen-Anhalt,Germany
@@ -809,7 +805,6 @@
 06246,Knapendorf,Sachsen-Anhalt,Germany
 06246,Milzau,Sachsen-Anhalt,Germany
 06249,Mücheln (Geiseltal),Sachsen-Anhalt,Germany
-06252,Christ Juweliere und Uhrmacher,Sachsen-Anhalt,Germany
 06252,Hunkemöller,Sachsen-Anhalt,Germany
 06252,Höffner Möbelgeschäft,Sachsen-Anhalt,Germany
 06252,Ludwig Görtz,Sachsen-Anhalt,Germany
@@ -921,13 +916,11 @@
 06369,Großbadegast,Sachsen-Anhalt,Germany
 06369,Großpaschleben,Sachsen-Anhalt,Germany
 06369,Görzig,Sachsen-Anhalt,Germany
-06369,Löbnitz an der Linde,Sachsen-Anhalt,Germany
 06369,Prosigk,Sachsen-Anhalt,Germany
 06369,Radegast,Sachsen-Anhalt,Germany
 06369,Reupzig,Sachsen-Anhalt,Germany
 06369,Riesdorf,Sachsen-Anhalt,Germany
 06369,Schortewitz,Sachsen-Anhalt,Germany
-06369,Trebbichau an der Fuhne,Sachsen-Anhalt,Germany
 06369,Trinum,Sachsen-Anhalt,Germany
 06369,Weißandt-Gölzau,Sachsen-Anhalt,Germany
 06369,Wulfen,Sachsen-Anhalt,Germany
@@ -1413,7 +1406,6 @@
 06917,Jessen (Elster) Grabo,Sachsen-Anhalt,Germany
 06917,Jessen (Elster) Großkorga,Sachsen-Anhalt,Germany
 06917,Jessen (Elster) Holzdorf,Sachsen-Anhalt,Germany
-06917,Jessen (Elster) Jessen (Elster),Sachsen-Anhalt,Germany
 06917,Jessen (Elster) Kleindröben,Sachsen-Anhalt,Germany
 06917,Jessen (Elster) Kleinkorga,Sachsen-Anhalt,Germany
 06917,Jessen (Elster) Klossa,Sachsen-Anhalt,Germany
@@ -1422,7 +1414,6 @@
 06917,Jessen (Elster) Linda,Sachsen-Anhalt,Germany
 06917,Jessen (Elster) Lindwerder,Sachsen-Anhalt,Germany
 06917,Jessen (Elster) Lüttchenseyda,Sachsen-Anhalt,Germany
-06917,Jessen (Elster) Mark Zwuschen,Sachsen-Anhalt,Germany
 06917,Jessen (Elster) Mellnitz,Sachsen-Anhalt,Germany
 06917,Jessen (Elster) Morxdorf,Sachsen-Anhalt,Germany
 06917,Jessen (Elster) Mönchenhöfe,Sachsen-Anhalt,Germany
@@ -1602,7 +1593,6 @@
 07607,Gösen,Thüringen,Germany
 07607,Hainspitz,Thüringen,Germany
 07607,Heideland,Thüringen,Germany
-07613,Crossen an der Elster,Thüringen,Germany
 07613,Hartmannsdorf,Thüringen,Germany
 07613,Rauda,Thüringen,Germany
 07613,Seifartsdorf,Thüringen,Germany
@@ -1659,7 +1649,6 @@
 07646,Waldeck,Thüringen,Germany
 07646,Waltersdorf,Thüringen,Germany
 07646,Weißbach,Thüringen,Germany
-07738,Deutsches Patentamt Außenstelle Jena,Thüringen,Germany
 07743,Jena,Thüringen,Germany
 07745,Jena,Thüringen,Germany
 07747,Jena,Thüringen,Germany
@@ -1700,7 +1689,6 @@
 07778,Tautenburg,Thüringen,Germany
 07778,Zimmern,Thüringen,Germany
 07806,Dreba,Thüringen,Germany
-07806,Neustadt an der Orla,Thüringen,Germany
 07806,Weira,Thüringen,Germany
 07819,Dreitzsch,Thüringen,Germany
 07819,Geroda,Thüringen,Germany
@@ -1768,7 +1756,6 @@
 08062,Zwickau,Sachsen,Germany
 08064,Zwickau,Sachsen,Germany
 08066,Zwickau,Sachsen,Germany
-08081,Amazon FC PRG 2,Sachsen,Germany
 08107,Hartmannsdorf bei Kirchberg,Sachsen,Germany
 08107,Hirschfeld,Sachsen,Germany
 08107,Kirchberg,Sachsen,Germany
@@ -1779,9 +1766,6 @@
 08118,Hartenstein Thierfeld,Sachsen,Germany
 08118,Hartenstein Zschocken,Sachsen,Germany
 08132,Mülsen,Sachsen,Germany
-08132,Mülsen Mülsen Sankt Jacob,Sachsen,Germany
-08132,Mülsen Mülsen Sankt Micheln,Sachsen,Germany
-08132,Mülsen Mülsen Sankt Niclas,Sachsen,Germany
 08132,Mülsen Niedermülsen,Sachsen,Germany
 08132,Mülsen Ortmannsdorf,Sachsen,Germany
 08132,"Mülsen Ortmannsdorf, Marienau",Sachsen,Germany
@@ -1894,6 +1878,8 @@
 08648,Bad Brambach,Sachsen,Germany
 09028,"Chemnitz, Sachsen",Sachsen,Germany
 09030,"Chemnitz, Sachsen",Sachsen,Germany
+09092,Familienkasse Sachsen,Sachsen,Germany
+09094,HUK Coburg,Sachsen,Germany
 09105,Landesdirektion Sachsen,Sachsen,Germany
 09106,Stadtverwaltung,Sachsen,Germany
 09108,Bundesknappschaft,Sachsen,Germany
@@ -2047,9 +2033,6 @@
 10107,Bundesrechnungshof -Außenstelle Berlin-,Land Berlin,Germany
 10107,Verlag Construktiv,Land Berlin,Germany
 10107,West östl. Diven,Land Berlin,Germany
-10108,Deutsches Institut für Wirtschaftsforschung,Land Berlin,Germany
-10108,Naturschutzbund Deutschland e.V. Bundesgeschäftsstelle,Land Berlin,Germany
-10109,Stiftung Oper in Berlin,Land Berlin,Germany
 10112,ver.di Bundesverwaltung,Land Berlin,Germany
 10115,Berlin,Berlin,Germany
 10117,Berlin,Berlin,Germany
@@ -2062,14 +2045,11 @@
 10245,Berlin Friedrichshain,Berlin,Germany
 10247,Berlin Friedrichshain,Berlin,Germany
 10249,Berlin Friedrichshain,Berlin,Germany
-10306,Amt für Statistik Berlin-Brandenburg,Land Berlin,Germany
 10315,Berlin,Berlin,Germany
 10317,Berlin,Berlin,Germany
 10318,Berlin,Berlin,Germany
 10319,Berlin,Berlin,Germany
 10356,Jobcenter Geschäftsstelle Lichtenberg,Land Berlin,Germany
-10360,Bezirksamt Lichtenberg von Berlin,Land Berlin,Germany
-10361,Bundesverwaltungsamt Außenstelle Berlin- Lichtenberg,Land Berlin,Germany
 10365,Berlin,Berlin,Germany
 10367,Berlin,Berlin,Germany
 10369,Berlin,Berlin,Germany
@@ -2095,8 +2075,6 @@
 10629,Berlin,Berlin,Germany
 10702,Becker u. Kries,Land Berlin,Germany
 10702,Bundesarchiv,Land Berlin,Germany
-10702,Caritas-Krankenhilfe Berlin e. V.,Land Berlin,Germany
-10702,Fachgemeinschaft Bau Berlin e.V.,Land Berlin,Germany
 10702,IBB Investitionsbank Berlin,Land Berlin,Germany
 10702,Landesverwaltungsamt Berlin,Land Berlin,Germany
 10702,Senatsverwaltung für Stadtentwicklung,Land Berlin,Germany
@@ -2112,7 +2090,6 @@
 10719,Berlin,Berlin,Germany
 10768,Volksfürsorge Schadenzentrum,Land Berlin,Germany
 10772,DeGeWo,Land Berlin,Germany
-10773,IKK Brandenburg und Berlin,Land Berlin,Germany
 10773,Stiftung Warentest,Land Berlin,Germany
 10777,Berlin,Berlin,Germany
 10779,Berlin,Berlin,Germany
@@ -2133,7 +2110,6 @@
 10862,Amtsgericht Charlottenburg,Land Berlin,Germany
 10863,Amtsgericht Köpenick,Land Berlin,Germany
 10863,Amtsgericht Lichtenberg,Land Berlin,Germany
-10863,Amtsgericht Lichtenberg Zweigstelle Hohenschönhausen,Land Berlin,Germany
 10863,Amtsgericht Mitte,Land Berlin,Germany
 10863,Amtsgericht Pankow-Weißensee,Land Berlin,Germany
 10863,Amtsgericht Pankow-Weißensee -Familiengericht-,Land Berlin,Germany
@@ -2147,17 +2123,13 @@
 10863,Landesberufsgericht für Architekten,Land Berlin,Germany
 10863,Landessozialgericht Berlin,Land Berlin,Germany
 10863,Landgericht -Strafsachen-,Land Berlin,Germany
-10863,Landgericht Berlin 1,Land Berlin,Germany
-10863,Landgericht Berlin 2,Land Berlin,Germany
 10863,Staatsanwaltschaft Berlin,Land Berlin,Germany
-10863,Verfassungsgerichtshof des Landes Berlin,Land Berlin,Germany
 10863,Verwaltungsgericht,Land Berlin,Germany
 10865,EDW-Entschädigungseinrichtung der Wertpapierhandelsunternehmen,Land Berlin,Germany
 10865,FuB,Land Berlin,Germany
 10865,KfW Bankengruppe,Land Berlin,Germany
 10865,Kreditanstalt für Wiederaufbau,Land Berlin,Germany
 10867,Axel Springer SE,Land Berlin,Germany
-10873,Bundesverband Automatenunternehmer e.V. (BA),Land Berlin,Germany
 10873,Deutscher Schaustellerbund e.V.,Land Berlin,Germany
 10873,Handelsverband Deutschland (HDE),Land Berlin,Germany
 10873,Herbert Toenes Büroservice,Land Berlin,Germany
@@ -2167,19 +2139,19 @@
 10875,DaimlerChrysler Corporate Audit,Land Berlin,Germany
 10876,Pressestiftung Tagesspiegel,Land Berlin,Germany
 10876,Zitty Verlag,Land Berlin,Germany
-10882,TÜV Rheinland Group,Land Berlin,Germany
 10883,Frankfurter Hypothekenbank,Land Berlin,Germany
 10885,TeleColumbus Gruppe Logistikzentrum,Land Berlin,Germany
 10887,ZDF Hauptstadtstudio Berlin,Land Berlin,Germany
 10888,Axel Springer SE,Land Berlin,Germany
+10889,Landesbank Berlin,Land Berlin,Germany
 10893,Weberbank Actiengesellschaft,Land Berlin,Germany
 10898,BAHN-BKK-Regionalgeschäftsstelle Nord-Ost,Land Berlin,Germany
 10898,Deutsche Rentenversicherung Bund,Land Berlin,Germany
 10898,Kahrs & Partner,Land Berlin,Germany
 10907,Konrad-Adenauer-Stiftung,Land Berlin,Germany
 10912,OVAG,Land Berlin,Germany
-10958,Bezirksamt Kreuzberg von Berlin,Land Berlin,Germany
-10958,"Deutsches Patentamt, Dienststelle Berlin",Land Berlin,Germany
+10914,HUK-Coburg,Land Berlin,Germany
+10916,Postbank Niederlassung Berlin,Land Berlin,Germany
 10959,Amtsgericht Tempelhof-Kreuzberg -Familiengericht-,Land Berlin,Germany
 10961,Berlin Kreuzberg,Berlin,Germany
 10963,Berlin Kreuzberg,Berlin,Germany
@@ -2190,12 +2162,6 @@
 10999,Berlin Kreuzberg,Berlin,Germany
 11010,Bundespräsidialamt,Land Berlin,Germany
 11011,Berlin,Berlin,Germany
-11013,Auswärtiges Amt,Land Berlin,Germany
-11053,AKS - Arbeitskreis Kultursponsoring,Land Berlin,Germany
-11053,Deutsches NIAG/EDIG Büro,Land Berlin,Germany
-11053,Industrie-Initiative für Umweltschutz e.V.,Land Berlin,Germany
-11053,Kulturstiftung der Deutschen Wirtschaft,Land Berlin,Germany
-11054,Bundesvereinigung der Deutschen Arbeitgeberverbände,Land Berlin,Germany
 11055,Bundesministerium für Gesundheit,Land Berlin,Germany
 11055,Bundesverwaltungsamt,Land Berlin,Germany
 11056,Hessische Landesvertretung,Land Berlin,Germany
@@ -2203,7 +2169,6 @@
 11506,GEMA - Bezirksdirektion,Land Berlin,Germany
 11507,uni-assist e.V.,Land Berlin,Germany
 12028,Jobcenter Neukölln,Land Berlin,Germany
-12032,Senatsverwaltung für Finanzen Steuerabteilung,Land Berlin,Germany
 12038,Amtsgericht Neukölln,Land Berlin,Germany
 12040,Bezirksamt Neukölln,Land Berlin,Germany
 12043,Berlin,Berlin,Germany
@@ -2215,7 +2180,6 @@
 12055,Berlin,Berlin,Germany
 12057,Berlin,Berlin,Germany
 12059,Berlin,Berlin,Germany
-12096,Der Polizeipräsident in Berlin,Land Berlin,Germany
 12099,Berlin,Berlin,Germany
 12101,Berlin,Berlin,Germany
 12103,Berlin,Berlin,Germany
@@ -2231,7 +2195,6 @@
 12165,Berlin,Berlin,Germany
 12167,Berlin,Berlin,Germany
 12169,Berlin,Berlin,Germany
-12200,"Charite, Labor für Biofluidmechanik",Land Berlin,Germany
 12200,Jobcenter Steglitz-Zehlendorf,Land Berlin,Germany
 12203,Berlin,Berlin,Germany
 12205,Berlin,Berlin,Germany
@@ -2276,7 +2239,6 @@
 12623,Berlin,Berlin,Germany
 12627,Berlin,Berlin,Germany
 12629,Berlin,Berlin,Germany
-12671,Bezirksamt Marzahn von Berlin,Land Berlin,Germany
 12677,Gewerbekomplex,Land Berlin,Germany
 12677,Gewerbepark,Land Berlin,Germany
 12679,Berlin,Berlin,Germany
@@ -2286,7 +2248,6 @@
 12687,Berlin,Berlin,Germany
 12689,Berlin,Berlin,Germany
 13047,Berliner Pilsner Brauerei,Land Berlin,Germany
-13047,Bezirksamt Hohenschönhausen von Berlin,Land Berlin,Germany
 13047,Reinickendorf,Berlin,Germany
 13048,KSA Kommunaler Schadenausgleich,Land Berlin,Germany
 13051,Berlin,Berlin,Germany
@@ -2306,7 +2267,6 @@
 13159,Berlin,Berlin,Germany
 13187,Berlin,Berlin,Germany
 13189,Berlin,Berlin,Germany
-13341,Bezirksamt Mitte von Berlin,Land Berlin,Germany
 13343,Zentrales Mahngericht,Land Berlin,Germany
 13347,Berlin,Berlin,Germany
 13349,Berlin,Berlin,Germany
@@ -2331,7 +2291,6 @@
 13505,Berlin,Berlin,Germany
 13507,Berlin,Berlin,Germany
 13509,Berlin,Berlin,Germany
-13578,Bezirksamt Spandau von Berlin,Land Berlin,Germany
 13578,Dr. Mann Pharma,Land Berlin,Germany
 13578,IMS Internationaler Medienservice,Land Berlin,Germany
 13581,Berlin,Berlin,Germany
@@ -2347,6 +2306,7 @@
 13627,Berlin,Berlin,Germany
 13629,Berlin,Berlin,Germany
 14046,"RBB, ARD Textredaktion",Land Berlin,Germany
+14046,Rundfunk Berlin-Brandenburg,Land Berlin,Germany
 14047,Deutsche Rentenversicherung Berlin,Land Berlin,Germany
 14050,Berlin,Berlin,Germany
 14052,Berlin,Berlin,Germany
@@ -2358,25 +2318,22 @@
 14109,Berlin,Berlin,Germany
 14129,Berlin,Berlin,Germany
 14131,Berlin,Berlin,Germany
-14160,Bezirksamt Steglitz-Zehlendorf von Berlin,Land Berlin,Germany
 14163,Berlin,Berlin,Germany
 14165,Berlin,Berlin,Germany
 14167,Berlin,Berlin,Germany
 14169,Berlin,Berlin,Germany
 14191,Amerikanische Botschaft,Land Berlin,Germany
-14191,Deutsches Archäologisches Institut,Land Berlin,Germany
-14191,Deutsches Institut für Wirtschaftsforschung,Land Berlin,Germany
 14191,Martin-Luther-Krankenhaus Akademisches Lehrkrankenhaus,Land Berlin,Germany
 14191,Umweltbundesamt,Land Berlin,Germany
 14193,Berlin,Berlin,Germany
 14195,Berlin,Berlin,Germany
 14197,Berlin,Berlin,Germany
 14199,Berlin,Berlin,Germany
-14424,Max-Planck-Institut,Brandenburg,Germany
 14458,Ostdeutsche Sparkassenakademie,Brandenburg,Germany
 14461,Potsdam,Brandenburg,Germany
 14461,Stadtverwaltung Potsdam,Brandenburg,Germany
 14464,Zalando Lounge,Brandenburg,Germany
+14465,Familienkasse Berlin-Brandenburg,Brandenburg,Germany
 14467,Potsdam,Brandenburg,Germany
 14469,Potsdam,Brandenburg,Germany
 14471,Potsdam,Brandenburg,Germany
@@ -2494,11 +2451,6 @@
 14728,Rhinow,Brandenburg,Germany
 14767,Amtsgericht,Brandenburg,Germany
 14767,Brandenburgisches Oberlandesgericht,Brandenburg,Germany
-14767,Generalstaatsanwalt des Landes Brandenburg,Brandenburg,Germany
-14770,Brandenburg an der Havel,Brandenburg,Germany
-14772,Brandenburg an der Havel,Brandenburg,Germany
-14774,Brandenburg an der Havel,Brandenburg,Germany
-14776,Brandenburg an der Havel,Brandenburg,Germany
 14778,Beetzsee,Brandenburg,Germany
 14778,Beetzseeheide,Brandenburg,Germany
 14778,Gollwitz,Brandenburg,Germany
@@ -2569,7 +2521,6 @@
 15236,Frankfurt (Oder),Brandenburg,Germany
 15236,Jacobsdorf,Brandenburg,Germany
 15236,Jacobsdorf Jacobsdorf,Brandenburg,Germany
-15236,Jacobsdorf Petersdorf bei Briesen,Brandenburg,Germany
 15236,Jacobsdorf Pillgram,Brandenburg,Germany
 15236,Jacobsdorf Sieversdorf,Brandenburg,Germany
 15236,Treplin,Brandenburg,Germany
@@ -2613,7 +2564,6 @@
 15320,Neuhardenberg Altfriedland,Brandenburg,Germany
 15320,Neuhardenberg Neuhardenberg,Brandenburg,Germany
 15320,Neuhardenberg Quappendorf,Brandenburg,Germany
-15320,Neuhardenberg Wulkow bei Trebnitz,Brandenburg,Germany
 15320,Neutrebbin,Brandenburg,Germany
 15320,Neutrebbin Altbarnim,Brandenburg,Germany
 15320,Neutrebbin Alttrebbin,Brandenburg,Germany
@@ -2639,7 +2589,6 @@
 15326,Zeschdorf Döbberin,Brandenburg,Germany
 15326,Zeschdorf Petershagen,Brandenburg,Germany
 15328,Alt Tucheband,Brandenburg,Germany
-15328,Alt Tucheband Alt Tucheband,Brandenburg,Germany
 15328,Alt Tucheband Hathenow,Brandenburg,Germany
 15328,Alt Tucheband Ratstock,Brandenburg,Germany
 15328,Bleyen-Genschmar,Brandenburg,Germany
@@ -2710,7 +2659,6 @@
 15518,Berkenbrück,Brandenburg,Germany
 15518,Briesen (Mark),Brandenburg,Germany
 15518,Briesen (Mark) Biegen,Brandenburg,Germany
-15518,Briesen (Mark) Briesen (Mark),Brandenburg,Germany
 15518,Falkenberg,Brandenburg,Germany
 15518,Grünheide (Mark),Brandenburg,Germany
 15518,Grünheide (Mark) Hangelsberg,Brandenburg,Germany
@@ -2729,13 +2677,10 @@
 15518,Steinhöfel Hasenfelde,Brandenburg,Germany
 15518,Steinhöfel Heinersdorf,Brandenburg,Germany
 15518,Steinhöfel Jänickendorf,Brandenburg,Germany
-15518,Steinhöfel Neuendorf im Sande,Brandenburg,Germany
 15518,Steinhöfel Schönfelde,Brandenburg,Germany
 15518,Steinhöfel Steinhöfel,Brandenburg,Germany
 15518,Steinhöfel Tempelberg,Brandenburg,Germany
 15526,Bad Saarow,Brandenburg,Germany
-15526,Bad Saarow Bad Saarow,Brandenburg,Germany
-15526,Bad Saarow Neu Golm,Brandenburg,Germany
 15526,Bad Saarow Petersdorf,Brandenburg,Germany
 15526,Reichenwalde,Brandenburg,Germany
 15526,Reichenwalde Dahmsdorf,Brandenburg,Germany
@@ -2880,7 +2825,6 @@
 15848,Tauche Briescht,Brandenburg,Germany
 15848,Tauche Falkenberg,Brandenburg,Germany
 15848,Tauche Giesensdorf,Brandenburg,Germany
-15848,Tauche Görsdorf bei Beeskow,Brandenburg,Germany
 15848,Tauche Kossenblatt,Brandenburg,Germany
 15848,Tauche Lindenberg,Brandenburg,Germany
 15848,Tauche Mittweide,Brandenburg,Germany
@@ -2894,10 +2838,7 @@
 15859,Philadelphia,Brandenburg,Germany
 15859,Rieplos,Brandenburg,Germany
 15859,Storkow (Mark),Brandenburg,Germany
-15859,Storkow (Mark) Alt Stahnsdorf,Brandenburg,Germany
 15859,Storkow (Mark) Bugk,Brandenburg,Germany
-15859,Storkow (Mark) Groß Eichholz,Brandenburg,Germany
-15859,Storkow (Mark) Groß Schauen,Brandenburg,Germany
 15859,Storkow (Mark) Kummersdorf,Brandenburg,Germany
 15859,Storkow (Mark) Limsdorf,Brandenburg,Germany
 15859,Storkow (Mark) Schwerin,Brandenburg,Germany
@@ -3262,7 +3203,6 @@
 16835,Herzberg,Brandenburg,Germany
 16835,Lindow (Mark),Brandenburg,Germany
 16835,Lindow (Mark) Hindenberg,Brandenburg,Germany
-16835,Lindow (Mark) Schönberg (Mark),Brandenburg,Germany
 16835,Rheinsberg Dierberg,Brandenburg,Germany
 16835,Rüthnick,Brandenburg,Germany
 16835,Seebeck-Strubensee,Brandenburg,Germany
@@ -3311,7 +3251,6 @@
 16909,Heiligengrabe,Brandenburg,Germany
 16909,Heiligengrabe Blandikow,Brandenburg,Germany
 16909,Heiligengrabe Blesendorf,Brandenburg,Germany
-16909,Heiligengrabe Grabow bei Blumenthal,Brandenburg,Germany
 16909,Heiligengrabe Jabel,Brandenburg,Germany
 16909,Heiligengrabe Liebenthal,Brandenburg,Germany
 16909,Heiligengrabe Maulbeerwalde,Brandenburg,Germany
@@ -3834,6 +3773,7 @@
 17509,Rubenow,Mecklenburg-Vorpommern,Germany
 17509,Wusterhusen,Mecklenburg-Vorpommern,Germany
 18050,Hansestadt Rostock -Stadtverwaltung-,Mecklenburg-Vorpommern,Germany
+18052,HUK-Coburg,Mecklenburg-Vorpommern,Germany
 18055,Rostock,Mecklenburg-Vorpommern,Germany
 18057,Rostock,Mecklenburg-Vorpommern,Germany
 18059,Papendorf,Mecklenburg-Vorpommern,Germany
@@ -3935,7 +3875,6 @@
 18258,Schwaan,Mecklenburg-Vorpommern,Germany
 18258,Vorbeck,Mecklenburg-Vorpommern,Germany
 18258,Wiendorf,Mecklenburg-Vorpommern,Germany
-18271,Amt Güstrow-Land,Mecklenburg-Vorpommern,Germany
 18271,Amtsgericht Güstrow,Mecklenburg-Vorpommern,Germany
 18271,DAK Bezirksgeschäftsstelle Güstrow,Mecklenburg-Vorpommern,Germany
 18271,Stadtverwaltung Güstrow,Mecklenburg-Vorpommern,Germany
@@ -4271,7 +4210,6 @@
 19294,Malk Göhren Malk,Mecklenburg-Vorpommern,Germany
 19294,Malliß,Mecklenburg-Vorpommern,Germany
 19294,Neu Kaliß,Mecklenburg-Vorpommern,Germany
-19294,Niendorf an der Rögnitz,Mecklenburg-Vorpommern,Germany
 19300,Balow,Mecklenburg-Vorpommern,Germany
 19300,Grabow,Mecklenburg-Vorpommern,Germany
 19300,Kremmin,Mecklenburg-Vorpommern,Germany
@@ -4404,10 +4342,13 @@
 19417,Warin,Mecklenburg-Vorpommern,Germany
 20038,Hamburg,Hamburg,Germany
 20066,AdvoCard Rechtschutzversicherung Aktiengesellschaft,Hamburg,Germany
+20069,Familienkasse Nord,Hamburg,Germany
 20077,Heinrich Bauer Verlagsgruppe,Hamburg,Germany
 20079,Kravag,Hamburg,Germany
 20080,DPV Deutscher Pressevertrieb,Hamburg,Germany
 20088,Otto Versand,Hamburg,Germany
+20090,HUK - Coburg,Hamburg,Germany
+20091,Mobil Krankenkasse,Hamburg,Germany
 20095,Hamburg,Hamburg,Germany
 20095,Hamburg Altstadt,Hamburg,Germany
 20095,Hamburg Klostertor,Hamburg,Germany
@@ -4420,12 +4361,10 @@
 20099,Hamburg Hamburg-Altstadt,Hamburg,Germany
 20099,Hamburg Sankt Georg,Hamburg,Germany
 20139,Bezirksamt Eimsbüttel,Hamburg,Germany
-20139,Brown-Forman Beverages Europe Ltd.,Hamburg,Germany
 20139,GVL,Hamburg,Germany
-20139,Gerling u. Co.,Hamburg,Germany
-20139,Hoffmann & Campe Verlag,Hamburg,Germany
 20139,Kino-Verlag,Hamburg,Germany
 20140,GEZ,Hamburg,Germany
+20140,Norddeutscher Rundfunk,Hamburg,Germany
 20144,Hamburg,Hamburg,Germany
 20144,Hamburg Eimsbüttel,Hamburg,Germany
 20144,Hamburg Harvestehude,Hamburg,Germany
@@ -4444,7 +4383,6 @@
 20243,Bezirksamt Hamburg-Nord,Hamburg,Germany
 20243,Kahl Dr. Pinckernelle,Hamburg,Germany
 20243,Welt Report,Hamburg,Germany
-20244,Seniorenzentrum St. Markus Hoheluft,Hamburg,Germany
 20244,Stiftung Anscharhöhe,Hamburg,Germany
 20246,Universitätsklinikum Hamburg-Eppendorf,Hamburg,Germany
 20249,Hamburg,Hamburg,Germany
@@ -4481,7 +4419,6 @@
 20350,BILD Hamburg,Hamburg,Germany
 20350,BILD Hilft e.V.,Hamburg,Germany
 20350,WAMS,Hamburg,Germany
-20350,WELTN24,Hamburg,Germany
 20351,SIGNAL IDUNA Gruppe,Hamburg,Germany
 20354,Hamburg,Hamburg,Germany
 20354,Hamburg Neustadt,Hamburg,Germany
@@ -4501,7 +4438,6 @@
 20359,Hamburg Neustadt,Hamburg,Germany
 20359,Hamburg Sankt Pauli,Hamburg,Germany
 20446,Körber-Stiftung,Hamburg,Germany
-20449,Deutscher Ring Krankenversicherungsverein a.G,Hamburg,Germany
 20450,Greenpeace e.V.,Hamburg,Germany
 20454,Commerzbank Hamburg Aktiengesellschaft,Hamburg,Germany
 20457,Hamburg,Hamburg,Germany
@@ -4529,11 +4465,16 @@
 20539,Hamburg Rothenburgsort,Hamburg,Germany
 20539,Hamburg Veddel,Hamburg,Germany
 20539,Hamburg Wilhelmsburg,Hamburg,Germany
+20901,Techniker Krankenkasse,Hamburg,Germany
+20903,Techniker Krankenkasse,Hamburg,Germany
+20912,Techniker Krankenkasse,Hamburg,Germany
+20913,Techniker Krankenkasse,Hamburg,Germany
+20914,Techniker Krankenkasse,Hamburg,Germany
+20915,Techniker Krankenkasse,Hamburg,Germany
 21027,Bergedorfer Zeitung,Hamburg,Germany
 21027,Berufsgenossenschaftliches Unfallkrankenhaus Hamburg,Hamburg,Germany
 21027,Bezirksamt Bergedorf,Hamburg,Germany
 21027,Körber-Stiftung,Hamburg,Germany
-21027,Von Thünen - Institut,Hamburg,Germany
 21029,Hamburg,Hamburg,Germany
 21029,Hamburg Altengamme,Hamburg,Germany
 21029,Hamburg Bergedorf,Hamburg,Germany
@@ -4620,7 +4561,6 @@
 21224,Rosengarten,Niedersachsen,Germany
 21227,Bendestorf,Niedersachsen,Germany
 21228,Harmstorf,Niedersachsen,Germany
-21244,Buchholz in der Nordheide,Niedersachsen,Germany
 21255,Dohren,Niedersachsen,Germany
 21255,Kakenstorf,Niedersachsen,Germany
 21255,Königsmoor,Niedersachsen,Germany
@@ -4639,7 +4579,7 @@
 21279,Drestedt,Niedersachsen,Germany
 21279,Hollenstedt,Niedersachsen,Germany
 21279,Wenzendorf,Niedersachsen,Germany
-21332,Industrie- und Handelskammer Lüneburg-Wolfsburg,Niedersachsen,Germany
+21332,Die Sparkasse,Niedersachsen,Germany
 21332,Landeskrankenhilfe VVaG,Niedersachsen,Germany
 21332,Landgericht,Niedersachsen,Germany
 21332,Landkreis Lüneburg,Niedersachsen,Germany
@@ -4706,7 +4646,6 @@
 21447,Handorf,Niedersachsen,Germany
 21449,Radbruch,Niedersachsen,Germany
 21462,Amtsgericht Reinbek,Schleswig-Holstein,Germany
-21462,Krankenhaus Reinbek St. Adolf-Stift,Schleswig-Holstein,Germany
 21462,Stadt Reinbek,Schleswig-Holstein,Germany
 21465,Reinbek,Schleswig-Holstein,Germany
 21465,Wentorf bei Hamburg,Schleswig-Holstein,Germany
@@ -4834,14 +4773,14 @@
 21782,Bülkau,Niedersachsen,Germany
 21784,Geversdorf,Niedersachsen,Germany
 21785,Belum,Niedersachsen,Germany
-21785,Neuhaus an der Oste,Niedersachsen,Germany
 21787,Oberndorf,Niedersachsen,Germany
 21789,Wingst,Niedersachsen,Germany
+22032,Hanseatische Krankenkasse,Hamburg,Germany
+22034,Hanseatische Krankenkasse Beitragsabteilung,Hamburg,Germany
 22035,BOESCHE Staatliche Lotterieeinnahme,Hamburg,Germany
 22037,Deutsche Rentenversicherung Nord,Hamburg,Germany
 22039,Amtsgericht Hamburg-Wandsbek,Hamburg,Germany
 22039,Bundeswehrkrankenhaus,Hamburg,Germany
-22039,HZK - DIE PROFIKRANKENKASSE,Hamburg,Germany
 22041,Hamburg,Hamburg,Germany
 22041,Hamburg Marienthal,Hamburg,Germany
 22041,Hamburg Tonndorf,Hamburg,Germany
@@ -4929,7 +4868,8 @@
 22281,Verwaltungs-Berufsgenossenschaft Hauptverwaltung,Hamburg,Germany
 22288,Jahreszeiten-Verlag,Hamburg,Germany
 22290,Tchibo,Hamburg,Germany
-22294,Hansa Baugenossenschaft eG,Hamburg,Germany
+22291,Techniker Krankenkasse,Hamburg,Germany
+22292,Evangelische Stiftung Alsterdorf,Hamburg,Germany
 22294,Ortsamt Barmbek-Uhlenhorst,Hamburg,Germany
 22297,Hamburg,Hamburg,Germany
 22297,Hamburg Alsterdorf,Hamburg,Germany
@@ -5012,7 +4952,6 @@
 22451,Albertinen Krankenhaus,Hamburg,Germany
 22451,Altenzentrum -Elim-,Hamburg,Germany
 22451,Geo Poulson,Hamburg,Germany
-22451,"Hans Kogel, Honighaus Bienenfleiß",Hamburg,Germany
 22451,IKEA,Hamburg,Germany
 22453,Hamburg,Hamburg,Germany
 22453,Hamburg Fuhlsbüttel,Hamburg,Germany
@@ -5029,6 +4968,7 @@
 22459,Hamburg Niendorf,Hamburg,Germany
 22459,Hamburg Schnelsen,Hamburg,Germany
 22521,IKK classic,Hamburg,Germany
+22521,Norddeutscher Rundfunk Fernsehen,Hamburg,Germany
 22523,Hamburg,Hamburg,Germany
 22523,Hamburg Eidelstedt,Hamburg,Germany
 22525,Hamburg,Hamburg,Germany
@@ -5072,7 +5012,6 @@
 22589,Hamburg Iserbrook,Hamburg,Germany
 22589,Hamburg Osdorf,Hamburg,Germany
 22589,Hamburg Sülldorf,Hamburg,Germany
-22603,Deutsches Elektronen Synchroton DESY,Hamburg,Germany
 22605,Hamburg,Hamburg,Germany
 22605,Hamburg Bahrenfeld,Hamburg,Germany
 22605,Hamburg Groß Flottbek,Hamburg,Germany
@@ -5088,7 +5027,6 @@
 22609,Hamburg Osdorf,Hamburg,Germany
 22609,Hamburg Othmarschen,Hamburg,Germany
 22745,Greenpeace e.V.,Hamburg,Germany
-22747,Amtsgericht Hamburg Zweigstelle Altona,Hamburg,Germany
 22750,Verlagsgruppe Milchstraße,Hamburg,Germany
 22758,Amtsgericht Hamburg-Altona,Hamburg,Germany
 22761,Hamburg,Hamburg,Germany
@@ -5113,6 +5051,8 @@
 22769,Hamburg Stellingen,Hamburg,Germany
 22778,DAK-Gesundheit,Hamburg,Germany
 22779,DAK-Gesundheit,Hamburg,Germany
+22788,DAK-Deutsche Angestellten-Krankenkasse Hauptgeschäftsstelle,Hamburg,Germany
+22789,DAK-Deutsche Angestellten-Krankenkasse Hauptgeschäftsstelle,Hamburg,Germany
 22839,Tesa SE,Schleswig-Holstein,Germany
 22841,Stadt Norderstedt Stadtverwaltung,Schleswig-Holstein,Germany
 22842,Adlershorst Baugenossenschaft,Schleswig-Holstein,Germany
@@ -5125,7 +5065,6 @@
 22842,"Heidorn, Rechtsanwalt",Schleswig-Holstein,Germany
 22842,Horne/Tomadich,Schleswig-Holstein,Germany
 22842,Jürgen Wernicke,Schleswig-Holstein,Germany
-22842,RAe. Thun und Partner,Schleswig-Holstein,Germany
 22844,Norderstedt,Schleswig-Holstein,Germany
 22846,Norderstedt,Schleswig-Holstein,Germany
 22848,Norderstedt,Schleswig-Holstein,Germany
@@ -5168,13 +5107,16 @@
 22965,Todendorf,Schleswig-Holstein,Germany
 22967,Tremsbüttel,Schleswig-Holstein,Germany
 22969,Witzhave,Schleswig-Holstein,Germany
-23538,Universitätsklinikum Schleswig-Holstein Campus Lübeck,Schleswig-Holstein,Germany
 23539,Lübeck,Schleswig-Holstein,Germany
 23543,Lübecker Nachrichten Verlagsgruppe,Schleswig-Holstein,Germany
 23544,Deutsche Rentenversicherung Nord,Schleswig-Holstein,Germany
+23547,AOK NordWest,Schleswig-Holstein,Germany
 23547,BARMER,Schleswig-Holstein,Germany
 23547,DAK-Gesundheit,Schleswig-Holstein,Germany
 23547,Handwerkskammer Lübeck,Schleswig-Holstein,Germany
+23547,Justizvollzugsanstalt Lübeck,Schleswig-Holstein,Germany
+23547,Sparkasse zu Lübeck,Schleswig-Holstein,Germany
+23547,Volksbank Lübeck,Schleswig-Holstein,Germany
 23552,Lübeck,Schleswig-Holstein,Germany
 23554,Lübeck,Schleswig-Holstein,Germany
 23556,Lübeck,Schleswig-Holstein,Germany
@@ -5187,7 +5129,6 @@
 23569,Lübeck,Schleswig-Holstein,Germany
 23570,Lübeck,Schleswig-Holstein,Germany
 23611,Bad Schwartau,Schleswig-Holstein,Germany
-23616,Club Verwaltungs OHG,Schleswig-Holstein,Germany
 23617,Stockelsdorf,Schleswig-Holstein,Germany
 23619,Badendorf,Schleswig-Holstein,Germany
 23619,Hamberge,Schleswig-Holstein,Germany
@@ -5281,6 +5222,7 @@
 23829,Wittenborn,Schleswig-Holstein,Germany
 23840,Carl Bockwoldt,Schleswig-Holstein,Germany
 23840,Kreisverwaltung Stormarn,Schleswig-Holstein,Germany
+23840,Sparkasse Holstein,Schleswig-Holstein,Germany
 23843,Bad Oldesloe,Schleswig-Holstein,Germany
 23843,Neritz,Schleswig-Holstein,Germany
 23843,Rümpel,Schleswig-Holstein,Germany
@@ -5330,7 +5272,6 @@
 23881,Bälau,Schleswig-Holstein,Germany
 23881,Koberg,Schleswig-Holstein,Germany
 23881,Lankau,Schleswig-Holstein,Germany
-23881,Niendorf an der Stecknitz,Schleswig-Holstein,Germany
 23883,Brunsmark,Schleswig-Holstein,Germany
 23883,Grambek,Schleswig-Holstein,Germany
 23883,Hollenbek,Schleswig-Holstein,Germany
@@ -5440,12 +5381,11 @@
 23996,Groß Krankow,Mecklenburg-Vorpommern,Germany
 23996,Hohen Viecheln,Mecklenburg-Vorpommern,Germany
 23999,Insel Poel,Mecklenburg-Vorpommern,Germany
+24088,HUK-Coburg,Schleswig-Holstein,Germany
 24091,Investitionsbank Schleswig-Holstein,Schleswig-Holstein,Germany
-24097,Provinzial Versicherungsanstalten Schleswig Holstein,Schleswig-Holstein,Germany
 24099,Landeshauptstadt Kiel,Schleswig-Holstein,Germany
 24100,BKK Post-Betriebskrankenkasse,Schleswig-Holstein,Germany
 24100,Investitionsbank Schleswig-Holstein,Schleswig-Holstein,Germany
-24100,Kiel Institut für Weltwirtschaft,Schleswig-Holstein,Germany
 24100,Landeszentralbank Hauptstelle Kiel,Schleswig-Holstein,Germany
 24100,Studentenwerk,Schleswig-Holstein,Germany
 24100,Wehrbereichsgebührnisamt,Schleswig-Holstein,Germany
@@ -5553,6 +5493,7 @@
 24257,Köhn,Schleswig-Holstein,Germany
 24257,Schwartbuck,Schleswig-Holstein,Germany
 24259,Westensee,Schleswig-Holstein,Germany
+24300,AOK Schleswig-Holstein Direktion,Schleswig-Holstein,Germany
 24306,Bösdorf,Schleswig-Holstein,Germany
 24306,Lebrade,Schleswig-Holstein,Germany
 24306,Plön,Schleswig-Holstein,Germany
@@ -5641,7 +5582,8 @@
 24407,Oersberg,Schleswig-Holstein,Germany
 24407,Rabenkirchen-Faulück,Schleswig-Holstein,Germany
 24409,Stoltebüll,Schleswig-Holstein,Germany
-24531,Schwäbisch Gmünder Erzatzkasse (GEK),Schleswig-Holstein,Germany
+24531,Justizvollzugsanstalt Neumünster,Schleswig-Holstein,Germany
+24531,Sparkasse Südholstein,Schleswig-Holstein,Germany
 24531,Stadtverwaltung Neumünster,Schleswig-Holstein,Germany
 24534,Neumünster,Schleswig-Holstein,Germany
 24536,Neumünster,Schleswig-Holstein,Germany
@@ -5973,7 +5915,6 @@
 25495,Kummerfeld,Schleswig-Holstein,Germany
 25497,Prisdorf,Schleswig-Holstein,Germany
 25499,Tangstedt,Schleswig-Holstein,Germany
-25518,PROKON Regenerative Energien eG,Schleswig-Holstein,Germany
 25522,Novitas BKK,Schleswig-Holstein,Germany
 25524,Bekmünde,Schleswig-Holstein,Germany
 25524,Breitenburg,Schleswig-Holstein,Germany
@@ -6004,7 +5945,6 @@
 25554,Landrecht,Schleswig-Holstein,Germany
 25554,Moorhusen,Schleswig-Holstein,Germany
 25554,Neuendorf-Sachsenbande,Schleswig-Holstein,Germany
-25554,Neuendorf-Sachsenbande Neuendorf bei Wilster,Schleswig-Holstein,Germany
 25554,Neuendorf-Sachsenbande Sachsenbande,Schleswig-Holstein,Germany
 25554,Nortorf,Schleswig-Holstein,Germany
 25554,Stördorf,Schleswig-Holstein,Germany
@@ -6341,6 +6281,7 @@
 26101,OFFIS Team,Niedersachsen,Germany
 26105,Stadt Oldenburg (Oldb),Niedersachsen,Germany
 26119,BARMER,Niedersachsen,Germany
+26119,Deutsche Angestellten Krankenkasse,Niedersachsen,Germany
 26121,Oldenburg,Niedersachsen,Germany
 26122,Oldenburg,Niedersachsen,Germany
 26123,Oldenburg,Niedersachsen,Germany
@@ -6402,16 +6343,14 @@
 26345,Bockhorn Steinhausen,Niedersachsen,Germany
 26349,Jade,Niedersachsen,Germany
 26379,Berufsförderungsdienst,Niedersachsen,Germany
+26379,Logistikzentrum der Bundeswehr,Niedersachsen,Germany
 26379,Marinearsenal,Niedersachsen,Germany
 26379,Standortverwaltung Wilhelmshaven,Niedersachsen,Germany
-26379,Zentrum für Nachwuchsgewinnung,Niedersachsen,Germany
-26380,Unfallversicherung Bund und Bahn,Niedersachsen,Germany
 26382,Wilhelmshaven,Niedersachsen,Germany
 26384,Wilhelmshaven,Niedersachsen,Germany
 26386,Wilhelmshaven,Niedersachsen,Germany
 26388,Wilhelmshaven,Niedersachsen,Germany
 26389,Wilhelmshaven,Niedersachsen,Germany
-26392,Unfallversicherung Bund und Bahn,Niedersachsen,Germany
 26409,Wittmund,Niedersachsen,Germany
 26409,Wittmund Ardorf,Niedersachsen,Germany
 26409,Wittmund Asel,Niedersachsen,Germany
@@ -6626,6 +6565,7 @@
 26759,Hinte Osterhusen,Niedersachsen,Germany
 26759,Hinte Suurhusen,Niedersachsen,Germany
 26759,Hinte Westerhusen,Niedersachsen,Germany
+26787,AOK Die Gesundheitskasse,Niedersachsen,Germany
 26787,Landkreis Leer,Niedersachsen,Germany
 26787,Stadtverwaltung,Niedersachsen,Germany
 26789,Leer (Ostfriesland),Niedersachsen,Germany
@@ -6651,7 +6591,6 @@
 26849,Filsum,Niedersachsen,Germany
 26869,Allgemeine Ortskrankenkasse,Niedersachsen,Germany
 26869,Amtsgericht,Niedersachsen,Germany
-26869,"Kreissparkasse, Aschendorf-Hümmling zu Papenburg",Niedersachsen,Germany
 26869,Stadtverwaltung,Niedersachsen,Germany
 26871,Papenburg,Niedersachsen,Germany
 26892,Dörpen,Niedersachsen,Germany
@@ -6708,13 +6647,11 @@
 27259,Freistatt,Niedersachsen,Germany
 27259,Varrel,Niedersachsen,Germany
 27259,Wehrbleck,Niedersachsen,Germany
-27280,Vereinigte Informationssysteme Tierhaltung (VIT),Niedersachsen,Germany
 27281,Amtsgericht Verden,Niedersachsen,Germany
 27281,Kreissparkasse Verden,Niedersachsen,Germany
 27281,Landgericht Verden,Niedersachsen,Germany
 27281,Landkreis Verden,Niedersachsen,Germany
 27281,Staatsanwaltschaft Verden,Niedersachsen,Germany
-27281,Vereinigte Informationssysteme Tierhaltung (VIT),Niedersachsen,Germany
 27283,Verden (Aller),Niedersachsen,Germany
 27299,Langwedel,Niedersachsen,Germany
 27305,Bruchhausen-Vilsen,Niedersachsen,Germany
@@ -6808,6 +6745,7 @@
 27478,Cuxhaven,Niedersachsen,Germany
 27498,Helgoland,Schleswig-Holstein,Germany
 27499,Hamburg Neuwerk,Hamburg,Germany
+27554,Weser-Elbe Sparkasse,Bremen,Germany
 27568,Bremerhaven,Bremen,Germany
 27570,Bremerhaven,Bremen,Germany
 27572,Bremerhaven,Bremen,Germany
@@ -6860,6 +6798,7 @@
 27729,Lübberstedt,Niedersachsen,Germany
 27729,Vollersode,Niedersachsen,Germany
 27747,Amtsgericht,Niedersachsen,Germany
+27747,Bundeswehr Adelheide,Niedersachsen,Germany
 27747,Stadtverwaltung,Niedersachsen,Germany
 27749,Delmenhorst,Niedersachsen,Germany
 27751,Delmenhorst,Niedersachsen,Germany
@@ -6872,13 +6811,11 @@
 27804,Berne,Niedersachsen,Germany
 27809,Lemwerder,Niedersachsen,Germany
 28100,Radio Bremen,Bremen,Germany
-28102,Gesundheit - Nord gGmbH,Bremen,Germany
 28177,Klinikum Bremen-Mitte gGmbH,Bremen,Germany
 28181,Mondelez Deutschland,Bremen,Germany
 28184,Amtsgericht Bremen,Bremen,Germany
 28185,hkk,Bremen,Germany
 28187,Anwaltskanzlei Ehlers-Godron,Bremen,Germany
-28189,"Bürgeramt, Ordnungsamt und Migrationsamt",Bremen,Germany
 28189,Landgericht Bremen,Bremen,Germany
 28192,BKK firmus,Bremen,Germany
 28195,Bremen,Bremen,Germany
@@ -6912,8 +6849,7 @@
 28355,Bremen,Bremen,Germany
 28357,Bremen,Bremen,Germany
 28359,Bremen,Bremen,Germany
-28365,British Airways Executive Club,Bremen,Germany
-28365,Nordmilch eG,Bremen,Germany
+28366,HUK-Coburg,Bremen,Germany
 28717,Bremen,Bremen,Germany
 28719,Bremen,Bremen,Germany
 28755,Bremen,Bremen,Germany
@@ -6921,7 +6857,6 @@
 28759,Bremen,Bremen,Germany
 28777,Bremen,Bremen,Germany
 28779,Bremen,Bremen,Germany
-28788,Panzergrenadierbataillon 323 (PzGrenBtl 323),Niedersachsen,Germany
 28788,Standortverwaltung Schwanewede,Niedersachsen,Germany
 28790,Schwanewede,Niedersachsen,Germany
 28816,Stuhr,Niedersachsen,Germany
@@ -6936,6 +6871,7 @@
 28870,Ottersberg,Niedersachsen,Germany
 28876,Oyten,Niedersachsen,Germany
 28879,Grasberg,Niedersachsen,Germany
+29218,Mobil Krankenkasse,Niedersachsen,Germany
 29220,Stadt Celle,Niedersachsen,Germany
 29221,Celle,Niedersachsen,Germany
 29223,Celle,Niedersachsen,Germany
@@ -7027,13 +6963,10 @@
 29451,Dannenberg (Elbe) Bückau,Niedersachsen,Germany
 29451,Dannenberg (Elbe) Dambeck,Niedersachsen,Germany
 29451,Dannenberg (Elbe) Dannenberg,Niedersachsen,Germany
-29451,Dannenberg (Elbe) Groß Heide,Niedersachsen,Germany
 29451,Dannenberg (Elbe) Gümse,Niedersachsen,Germany
-29451,Dannenberg (Elbe) Klein Heide,Niedersachsen,Germany
 29451,Dannenberg (Elbe) Liepehöfen,Niedersachsen,Germany
 29451,Dannenberg (Elbe) Lüggau,Niedersachsen,Germany
 29451,Dannenberg (Elbe) Nebenstedt,Niedersachsen,Germany
-29451,Dannenberg (Elbe) Neu Tramm,Niedersachsen,Germany
 29451,Dannenberg (Elbe) Niestedt,Niedersachsen,Germany
 29451,Dannenberg (Elbe) Penkefitz,Niedersachsen,Germany
 29451,Dannenberg (Elbe) Pisselberg,Niedersachsen,Germany
@@ -7062,7 +6995,6 @@
 29456,Hitzacker Leitstade,Niedersachsen,Germany
 29456,Hitzacker Meudelfitz,Niedersachsen,Germany
 29456,"Hitzacker Meudelfitz, Eichengrund",Niedersachsen,Germany
-29456,"Hitzacker Meudelfitz, Gut Meudelfitz",Niedersachsen,Germany
 29456,Hitzacker Nienwedel,Niedersachsen,Germany
 29456,Hitzacker Posade,Niedersachsen,Germany
 29456,Hitzacker Pussade,Niedersachsen,Germany
@@ -7070,7 +7002,6 @@
 29456,Hitzacker Seerau,Niedersachsen,Germany
 29456,Hitzacker Tiesmesland,Niedersachsen,Germany
 29456,Hitzacker Tießau,Niedersachsen,Germany
-29456,Hitzacker Wietzetze bei Hitzacker,Niedersachsen,Germany
 29456,Hitzacker Wussegel,Niedersachsen,Germany
 29459,Clenze,Niedersachsen,Germany
 29459,Clenze Bausen,Niedersachsen,Germany
@@ -7132,7 +7063,6 @@
 29468,Bergen (Dumme) Banzau,Niedersachsen,Germany
 29468,Bergen (Dumme) Belau,Niedersachsen,Germany
 29468,Bergen (Dumme) Bergen,Niedersachsen,Germany
-29468,Bergen (Dumme) Brüchauer Mühle,Niedersachsen,Germany
 29468,Bergen (Dumme) Jiggel,Niedersachsen,Germany
 29468,Bergen (Dumme) Malsleben,Niedersachsen,Germany
 29468,Bergen (Dumme) Nienbergen,Niedersachsen,Germany
@@ -7185,7 +7115,6 @@
 29478,Höhbeck Schwedenschanze,Niedersachsen,Germany
 29478,Höhbeck Vietze,Niedersachsen,Germany
 29479,Jameln,Niedersachsen,Germany
-29479,Jameln Breese im Bruche,Niedersachsen,Germany
 29479,Jameln Breselenz,Niedersachsen,Germany
 29479,Jameln Breustian,Niedersachsen,Germany
 29479,Jameln Hoheluft,Niedersachsen,Germany
@@ -7243,16 +7172,15 @@
 29496,Waddeweitz Schlanze,Niedersachsen,Germany
 29496,Waddeweitz Waddeweitz,Niedersachsen,Germany
 29496,Waddeweitz Wittfeitzen,Niedersachsen,Germany
-29496,"Waddeweitz Wittfeitzen, Groß Wittfeitzen",Niedersachsen,Germany
-29496,"Waddeweitz Wittfeitzen, Klein Wittfeitzen",Niedersachsen,Germany
 29496,Waddeweitz Zebelin,Niedersachsen,Germany
 29497,Woltersdorf,Niedersachsen,Germany
 29499,Zernien,Niedersachsen,Germany
 29523,Allgemeine Zeitung,Niedersachsen,Germany
 29523,Amtsgericht,Niedersachsen,Germany
 29523,Hansestadt Uelzen,Niedersachsen,Germany
+29523,Justizvollzugsanstalt,Niedersachsen,Germany
 29523,Landkreis Uelzen,Niedersachsen,Germany
-29523,Uelzena eG,Niedersachsen,Germany
+29523,Sparkasse Uelzen,Niedersachsen,Germany
 29525,Uelzen,Niedersachsen,Germany
 29549,Bad Bevensen,Niedersachsen,Germany
 29553,Bienenbüttel,Niedersachsen,Germany
@@ -7300,13 +7228,9 @@
 29693,Hademstorf,Niedersachsen,Germany
 29693,Hodenhagen,Niedersachsen,Germany
 29699,Bomlitz,Niedersachsen,Germany
-30132,"Berufsgenossenschaft Verkehrswirtschaft Post-Logistik, Telekommunikation",Niedersachsen,Germany
+30131,Familienkasse Niedersachsen-Bremen,Niedersachsen,Germany
 30133,VHV Allgemeine Kautionsversicherung,Niedersachsen,Germany
 30134,Energie-BKK,Niedersachsen,Germany
-30142,BMGMT-603,Niedersachsen,Germany
-30142,FAM-403,Niedersachsen,Germany
-30142,KS-542,Niedersachsen,Germany
-30142,PFLE-703,Niedersachsen,Germany
 30151,NORD/LB,Niedersachsen,Germany
 30159,Hannover,Niedersachsen,Germany
 30161,Hannover,Niedersachsen,Germany
@@ -7340,6 +7264,7 @@
 30657,Hannover,Niedersachsen,Germany
 30659,Hannover,Niedersachsen,Germany
 30669,Hannover,Niedersachsen,Germany
+30691,HUK-Coburg,Niedersachsen,Germany
 30820,Heycom,Niedersachsen,Germany
 30823,Garbsen,Niedersachsen,Germany
 30826,Garbsen,Niedersachsen,Germany
@@ -7388,13 +7313,8 @@
 31099,Woltershausen,Niedersachsen,Germany
 31131,BAG Belegmanagement,Niedersachsen,Germany
 31131,Expert SE,Niedersachsen,Germany
-31131,GFT Gemeinschaft Fernmeldetechnik eG,Niedersachsen,Germany
 31131,Gate Gourmet,Niedersachsen,Germany
-31131,LSG France S.A.S France,Niedersachsen,Germany
-31131,LSG Linearis SAS Belegmanagement,Niedersachsen,Germany
 31131,LSG Sky Chefs,Niedersachsen,Germany
-31131,NOWEDA eG,Niedersachsen,Germany
-31131,SOENNECKEN eG Belegmanagement,Niedersachsen,Germany
 31131,STARFOOD SRL Italy,Niedersachsen,Germany
 31131,Supply Chain S.a.r.l.,Niedersachsen,Germany
 31131,Unternehmensgruppe IDEN,Niedersachsen,Germany
@@ -7426,7 +7346,6 @@
 31241,Ilsede,Niedersachsen,Germany
 31246,Lahstedt,Niedersachsen,Germany
 31249,Hohenhameln,Niedersachsen,Germany
-31272,REWE & Co. OHG,Niedersachsen,Germany
 31273,BKK exklusiv,Niedersachsen,Germany
 31275,Lehrte,Niedersachsen,Germany
 31300,Amtsgericht Burgdorf,Niedersachsen,Germany
@@ -7436,10 +7355,8 @@
 31319,Sehnde,Niedersachsen,Germany
 31513,Stadt Wunstorf,Niedersachsen,Germany
 31515,Wunstorf,Niedersachsen,Germany
-31533,Amtsgericht Neustadt am Rübenberge,Niedersachsen,Germany
 31535,Neustadt am Rübenberge,Niedersachsen,Germany
 31542,Bad Nenndorf,Niedersachsen,Germany
-31542,Bad Nenndorf Bad Nenndorf,Niedersachsen,Germany
 31542,Bad Nenndorf Horsten,Niedersachsen,Germany
 31542,Bad Nenndorf Riepen,Niedersachsen,Germany
 31542,Bad Nenndorf Waltringhausen,Niedersachsen,Germany
@@ -7487,7 +7404,6 @@
 31582,Nienburg (Weser) Erichshagen,Niedersachsen,Germany
 31582,Nienburg (Weser) Holtorf,Niedersachsen,Germany
 31582,Nienburg (Weser) Langendamm,Niedersachsen,Germany
-31582,Nienburg (Weser) Nienburg (Weser),Niedersachsen,Germany
 31592,Stolzenau,Niedersachsen,Germany
 31592,Stolzenau Anemolter-Schinna,Niedersachsen,Germany
 31592,"Stolzenau Anemolter-Schinna, Anemolter",Niedersachsen,Germany
@@ -7571,7 +7487,6 @@
 31675,Bückeburg Rusbend,Niedersachsen,Germany
 31675,Bückeburg Scheie,Niedersachsen,Germany
 31675,Bückeburg Warber,Niedersachsen,Germany
-31681,BKK 24,Niedersachsen,Germany
 31683,Obernkirchen,Niedersachsen,Germany
 31683,Obernkirchen Gelldorf,Niedersachsen,Germany
 31683,Obernkirchen Krainhagen,Niedersachsen,Germany
@@ -7676,7 +7591,6 @@
 31830,Deutsches Rotes Kreuz,Niedersachsen,Germany
 31832,Springe,Niedersachsen,Germany
 31840,Hessisch Oldendorf,Niedersachsen,Germany
-31848,Bad Münder am Deister,Niedersachsen,Germany
 31855,Aerzen,Niedersachsen,Germany
 31860,Emmerthal,Niedersachsen,Germany
 31863,Coppenbrügge,Niedersachsen,Germany
@@ -7694,16 +7608,18 @@
 31868,Ottenstein,Niedersachsen,Germany
 32044,Amtsgericht Herford,Nordrhein-Westfalen,Germany
 32045,IKK classic,Nordrhein-Westfalen,Germany
+32045,Justizvollzugsanstalt,Nordrhein-Westfalen,Germany
 32045,Kirchenkreis Herford,Nordrhein-Westfalen,Germany
 32045,Klinikum Herford,Nordrhein-Westfalen,Germany
 32045,Kreis Herford,Nordrhein-Westfalen,Germany
-32046,Humana Milchunion eG,Nordrhein-Westfalen,Germany
+32045,Sparkasse Herford,Nordrhein-Westfalen,Germany
 32046,Kreispolizeibehörde,Nordrhein-Westfalen,Germany
 32046,Stadt Herford,Nordrhein-Westfalen,Germany
 32049,Herford,Nordrhein-Westfalen,Germany
 32051,Herford,Nordrhein-Westfalen,Germany
 32052,Herford,Nordrhein-Westfalen,Germany
 32102,BfA Kurklinik Lipperland,Nordrhein-Westfalen,Germany
+32102,Sparkasse Bad Salzuflen,Nordrhein-Westfalen,Germany
 32102,Stadt Bad Salzuflen,Nordrhein-Westfalen,Germany
 32105,Bad Salzuflen,Nordrhein-Westfalen,Germany
 32107,Bad Salzuflen,Nordrhein-Westfalen,Germany
@@ -7712,14 +7628,12 @@
 32130,Enger,Nordrhein-Westfalen,Germany
 32139,Spenge,Nordrhein-Westfalen,Germany
 32255,Amtsgericht Bünde,Nordrhein-Westfalen,Germany
-32255,Imperial-Werke oHG,Nordrhein-Westfalen,Germany
 32255,Kreiskliniken Herford-Bünde AöR,Nordrhein-Westfalen,Germany
 32257,Bünde,Nordrhein-Westfalen,Germany
 32278,Kirchlengern,Nordrhein-Westfalen,Germany
 32289,Rödinghausen,Nordrhein-Westfalen,Germany
 32310,Amtsgericht Lübbecke,Nordrhein-Westfalen,Germany
 32310,IKK classic,Nordrhein-Westfalen,Germany
-32310,Kreiskrankenhäuser Lübbecke und Rahden,Nordrhein-Westfalen,Germany
 32310,Ravens Bekleidungsindustrie,Nordrhein-Westfalen,Germany
 32310,Stadt Lübbecke,Nordrhein-Westfalen,Germany
 32312,Lübbecke,Nordrhein-Westfalen,Germany
@@ -7743,8 +7657,6 @@
 32469,Petershagen,Nordrhein-Westfalen,Germany
 32479,Hille,Nordrhein-Westfalen,Germany
 32543,Amtsgericht,Nordrhein-Westfalen,Germany
-32543,Verkehrsverein Bad Oeynhausen e.V.,Nordrhein-Westfalen,Germany
-32543,Zweckverband Krankenhaus B.O. Mühlenkreisklinik,Nordrhein-Westfalen,Germany
 32545,Bad Oeynhausen,Nordrhein-Westfalen,Germany
 32547,Bad Oeynhausen,Nordrhein-Westfalen,Germany
 32549,Bad Oeynhausen,Nordrhein-Westfalen,Germany
@@ -7753,15 +7665,14 @@
 32602,Vlotho,Nordrhein-Westfalen,Germany
 32609,Hüllhorst,Nordrhein-Westfalen,Germany
 32655,Amtsgericht,Nordrhein-Westfalen,Germany
+32655,Sparkasse Lemgo,Nordrhein-Westfalen,Germany
 32657,Lemgo,Nordrhein-Westfalen,Germany
 32676,Lügde,Nordrhein-Westfalen,Germany
 32683,Barntrup,Nordrhein-Westfalen,Germany
 32689,Kalletal,Nordrhein-Westfalen,Germany
 32694,Dörentrup,Nordrhein-Westfalen,Germany
 32699,Extertal,Nordrhein-Westfalen,Germany
-32750,Landesamt für Finanzen Scanstelle,Nordrhein-Westfalen,Germany
 32754,Bezirksregierung Detmold,Nordrhein-Westfalen,Germany
-32754,Kreis Lippe Der Landrat,Nordrhein-Westfalen,Germany
 32756,Detmold,Nordrhein-Westfalen,Germany
 32758,Detmold,Nordrhein-Westfalen,Germany
 32760,Detmold,Nordrhein-Westfalen,Germany
@@ -7775,7 +7686,6 @@
 33034,Brakel,Nordrhein-Westfalen,Germany
 33039,Nieheim,Nordrhein-Westfalen,Germany
 33093,Stadt Paderborn,Nordrhein-Westfalen,Germany
-33094,COGNITAS Gesellschaft für Technik-Dokumentation,Nordrhein-Westfalen,Germany
 33094,Husemann Assecuranz,Nordrhein-Westfalen,Germany
 33095,Amtsgericht Paderborn,Nordrhein-Westfalen,Germany
 33095,Kreis Paderborn,Nordrhein-Westfalen,Germany
@@ -7801,7 +7711,6 @@
 33325,Miele,Nordrhein-Westfalen,Germany
 33326,Amtsgericht,Nordrhein-Westfalen,Germany
 33326,IKK classic,Nordrhein-Westfalen,Germany
-33326,LWL - Klinikum Gütersloh,Nordrhein-Westfalen,Germany
 33326,Stadt Gütersloh/Rathaus,Nordrhein-Westfalen,Germany
 33330,Gütersloh,Nordrhein-Westfalen,Germany
 33332,Gütersloh,Nordrhein-Westfalen,Germany
@@ -7818,7 +7727,6 @@
 33411,Anwaltskanzlei Andreas Schneider,Nordrhein-Westfalen,Germany
 33413,Center Parcs,Nordrhein-Westfalen,Germany
 33413,Compuserve,Nordrhein-Westfalen,Germany
-33413,Compuserve 2000,Nordrhein-Westfalen,Germany
 33413,Frau Antjes Feinschmecker-Studio,Nordrhein-Westfalen,Germany
 33413,Maggi Kochstudio Club,Nordrhein-Westfalen,Germany
 33413,Mannesmann Mobilfunk,Nordrhein-Westfalen,Germany
@@ -7828,9 +7736,7 @@
 33414,Deichmann Victory Mailing,Nordrhein-Westfalen,Germany
 33414,Gesundheitsinitiative DAK,Nordrhein-Westfalen,Germany
 33414,Lufthansa WorldShop,Nordrhein-Westfalen,Germany
-33414,Mc Donalds Stichwort:neue Geschmackswelt,Nordrhein-Westfalen,Germany
 33414,Mc Donalds happybirthday.de,Nordrhein-Westfalen,Germany
-33414,Sky Shop by Lufthansa,Nordrhein-Westfalen,Germany
 33415,Verl,Nordrhein-Westfalen,Germany
 33426,Eberhard Warzecha Rechtsanwalt,Nordrhein-Westfalen,Germany
 33428,Harsewinkel,Nordrhein-Westfalen,Germany
@@ -7842,22 +7748,21 @@
 33547,Dt. Kinderschutzbund,Nordrhein-Westfalen,Germany
 33547,Handelsgesellschaft Sparrenberg,Nordrhein-Westfalen,Germany
 33547,OEDIV,Nordrhein-Westfalen,Germany
+33583,HUK-Coburg,Nordrhein-Westfalen,Germany
 33594,Hauptzollamt,Nordrhein-Westfalen,Germany
+33594,Heimat Krankenkasse,Nordrhein-Westfalen,Germany
 33595,Amtsgericht Bielefeld,Nordrhein-Westfalen,Germany
 33595,Arbeitsgericht,Nordrhein-Westfalen,Germany
-33595,EK Großeinkauf eG,Nordrhein-Westfalen,Germany
 33595,Justizbehörden Bielefeld,Nordrhein-Westfalen,Germany
 33595,Landgericht Bielefeld,Nordrhein-Westfalen,Germany
 33595,Staatsanwaltschaft Bielefeld,Nordrhein-Westfalen,Germany
 33595,Universitätsbibliothek Bielefeld,Nordrhein-Westfalen,Germany
-33596,Bezirksregierung Detmold Dezernat 69,Nordrhein-Westfalen,Germany
 33596,Polizeipräsidium,Nordrhein-Westfalen,Germany
 33596,Polizeipräsidium Fotozentrallabor,Nordrhein-Westfalen,Germany
 33596,Staatliches Gewerbeaufsichtsamt,Nordrhein-Westfalen,Germany
 33596,Städtische Bühnen,Nordrhein-Westfalen,Germany
 33597,Stadt Bielefeld,Nordrhein-Westfalen,Germany
 33600,BKK Diakonie,Nordrhein-Westfalen,Germany
-33600,Evangelisches Klinikum Bethel gGmbH,Nordrhein-Westfalen,Germany
 33600,Krankenhaus Mara gGmbH,Nordrhein-Westfalen,Germany
 33600,Stiftung Bethel Dankort,Nordrhein-Westfalen,Germany
 33600,Stiftung Bethel Immobilienmanagement,Nordrhein-Westfalen,Germany
@@ -7873,6 +7778,8 @@
 33617,Bielefeld,Nordrhein-Westfalen,Germany
 33619,Bielefeld,Nordrhein-Westfalen,Germany
 33644,BKK Gildemeister Seidensticker,Nordrhein-Westfalen,Germany
+33645,Justizvollzugsanstalt Bielefeld-Brackwede I,Nordrhein-Westfalen,Germany
+33645,Justizvollzugsanstalt Bielefeld-Senne,Nordrhein-Westfalen,Germany
 33647,Bielefeld,Nordrhein-Westfalen,Germany
 33649,Bielefeld,Nordrhein-Westfalen,Germany
 33659,Bielefeld,Nordrhein-Westfalen,Germany
@@ -7886,6 +7793,7 @@
 33758,Schloß Holte-Stukenbrock,Nordrhein-Westfalen,Germany
 33769,Jugenddorf-Christophorusschule,Nordrhein-Westfalen,Germany
 33769,Nagel-Group Logistics SE,Nordrhein-Westfalen,Germany
+33769,Sparkasse Stadt Versmold,Nordrhein-Westfalen,Germany
 33769,Stadt Versmold,Nordrhein-Westfalen,Germany
 33775,Versmold,Nordrhein-Westfalen,Germany
 33788,Amtsgericht Halle,Nordrhein-Westfalen,Germany
@@ -7904,24 +7812,20 @@
 34111,Deutscher Gewerkschaftsbund,Hessen,Germany
 34111,EAM-Geschäftsstelle Kassel,Hessen,Germany
 34111,Elisabeth-Krankenhaus gGmbH,Hessen,Germany
-34111,Industrie- und Handelskammer Kassel-Marburg,Hessen,Germany
-34111,K + S Aktiengesellschaft,Hessen,Germany
+34111,Justizvollzugsanstalt Kassel I,Hessen,Germany
+34111,Kasseler Sparkasse,Hessen,Germany
 34111,Landesbetrieb Landwirtschaft Hessen,Hessen,Germany
 34111,Landgericht Kassel,Hessen,Germany
 34111,Staatsanwaltschaft Kassel,Hessen,Germany
 34111,Zivilsenate des Oberlandesgerichts,Hessen,Germany
-34112,Deutsche Bundesbank Filiale Kassel,Hessen,Germany
 34112,HBS Hessische Bezügestelle,Hessen,Germany
-34112,LWV Landeswohlfahrtsverband Hessen Hauptverwaltung,Hessen,Germany
-34112,Landesbausparkasse Hessen-Thüringen Niederlassung Kassel,Hessen,Germany
 34112,Landeskreditkasse zu Kassel,Hessen,Germany
-34112,Landkreis Kassel -Der Kreisausschuß-,Hessen,Germany
 34112,Polizeipräsidium Nordhessen,Hessen,Germany
 34112,Regierungspräsidium Kassel,Hessen,Germany
 34112,Stadt Kassel,Hessen,Germany
 34112,Volksbund Deutsche Kriegsgräberfürsorge,Hessen,Germany
 34114,Bundessozialgericht,Hessen,Germany
-34114,Ev. Landeskirchenamt,Hessen,Germany
+34114,Techniker Krankenkasse TKK,Hessen,Germany
 34117,Kassel,Hessen,Germany
 34119,Kassel,Hessen,Germany
 34121,Kassel,Hessen,Germany
@@ -7933,6 +7837,8 @@
 34131,Kassel,Hessen,Germany
 34132,Kassel,Hessen,Germany
 34134,Kassel,Hessen,Germany
+34196,Familienkasse Hessen,Hessen,Germany
+34197,HUK-Coburg,Hessen,Germany
 34212,Melsungen,Hessen,Germany
 34225,Baunatal,Hessen,Germany
 34233,Fuldatal,Hessen,Germany
@@ -7982,6 +7888,7 @@
 34479,Breuna,Hessen,Germany
 34495,Amtsgericht,Hessen,Germany
 34495,Landkreis Waldeck-Frankenberg,Hessen,Germany
+34495,Sparkasse Waldeck-Frankenberg,Hessen,Germany
 34495,Stadtverwaltung Korbach,Hessen,Germany
 34497,Korbach,Hessen,Germany
 34508,Willingen (Upland),Hessen,Germany
@@ -7989,7 +7896,6 @@
 34516,Vöhl,Hessen,Germany
 34519,Diemelsee,Hessen,Germany
 34535,"Der Fürstenhof, Fachklinik",Hessen,Germany
-34535,Rheumaklinik der LVA Oldenburg-Bremen,Hessen,Germany
 34535,Stadtverwaltung Bad Wildungen,Hessen,Germany
 34537,Bad Wildungen,Hessen,Germany
 34549,Edertal,Hessen,Germany
@@ -8062,12 +7968,11 @@
 35385,Klinikum der JLU,Hessen,Germany
 35386,Universitätsbibliothek,Hessen,Germany
 35387,Amtsgericht Gießen,Hessen,Germany
-35387,Industrie- und Handelskammer Gießen,Hessen,Germany
 35387,Kassenärztliche Vereinigung Hessen,Hessen,Germany
 35387,Landgericht Gießen,Hessen,Germany
-35387,Staatsanwaltschaft bei dem Landgericht,Hessen,Germany
-35387,Universitätsstadt Gießen -Der Magistrat-,Hessen,Germany
+35387,Sparkasse Gießen,Hessen,Germany
 35387,Ärztliche Verrechnungsstelle Büdingen,Hessen,Germany
+35388,HUK-Coburg,Hessen,Germany
 35390,Gießen,Hessen,Germany
 35392,Gießen,Hessen,Germany
 35394,Gießen,Hessen,Germany
@@ -8092,8 +7997,9 @@
 35516,Münzenberg,Hessen,Germany
 35519,Rockenberg,Hessen,Germany
 35573,Barmer GEK,Hessen,Germany
-35573,Der Landrat des Lahn-Dill-Kreises,Hessen,Germany
+35573,Deutsche Angestellten Krankenkasse,Hessen,Germany
 35573,ERF Medien e.V.,Hessen,Germany
+35573,Sparkasse Wetzlar,Hessen,Germany
 35573,Stadt Wetzlar,Hessen,Germany
 35574,DAK-Gesundheit,Hessen,Germany
 35576,Wetzlar,Hessen,Germany
@@ -8144,7 +8050,6 @@
 35768,Siegbach,Hessen,Germany
 35779,Bundesknappschaft,Hessen,Germany
 35779,Landratsamt und Kreisverwaltung,Hessen,Germany
-35779,Rosenkranz & Cie Metallwarenfabrik,Hessen,Germany
 35779,Stadtverwaltung,Hessen,Germany
 35781,Weilburg,Hessen,Germany
 35789,Weilmünster,Hessen,Germany
@@ -8152,6 +8057,7 @@
 35794,Mengerskirchen,Hessen,Germany
 35796,Weinbach,Hessen,Germany
 35799,Merenberg,Hessen,Germany
+36035,Sparkasse Fulda,Hessen,Germany
 36035,Städtisches Klinikum Fulda,Hessen,Germany
 36035,Versorgungsamt Fulda,Hessen,Germany
 36036,Schwenninger BKK,Hessen,Germany
@@ -8161,8 +8067,6 @@
 36043,Fulda,Hessen,Germany
 36084,Amtsgericht,Hessen,Germany
 36085,Bundesgrenzschutz,Hessen,Germany
-36085,Landkreis Fulda Verwaltungsstelle Hünfeld,Hessen,Germany
-36085,Magistrat der Stadt Hünfeld,Hessen,Germany
 36088,Hünfeld,Hessen,Germany
 36093,Künzell,Hessen,Germany
 36100,Petersberg,Hessen,Germany
@@ -8187,7 +8091,6 @@
 36167,Nüsttal,Hessen,Germany
 36169,Rasdorf,Hessen,Germany
 36179,Bebra,Hessen,Germany
-36199,Rotenburg an der Fulda,Hessen,Germany
 36205,Sontra,Hessen,Germany
 36208,Wildeck,Hessen,Germany
 36211,Alheim,Hessen,Germany
@@ -8195,7 +8098,6 @@
 36217,Ronshausen,Hessen,Germany
 36219,Cornberg,Hessen,Germany
 36247,Amtsgericht,Hessen,Germany
-36247,Landrat des Landkreises Hersfeld-Rotenburg,Hessen,Germany
 36251,Bad Hersfeld,Hessen,Germany
 36251,Ludwigsau,Hessen,Germany
 36266,Heringen (Werra),Hessen,Germany
@@ -8220,6 +8122,7 @@
 36339,Amtsgericht,Hessen,Germany
 36339,Krankenhaus Eichhof,Hessen,Germany
 36339,Kreisausschuß des Vogelsbergkreises,Hessen,Germany
+36339,Sparkasse Oberhessen,Hessen,Germany
 36339,Stadtverwaltung,Hessen,Germany
 36341,Lauterbach,Hessen,Germany
 36355,Grebenhain,Hessen,Germany
@@ -8229,7 +8132,6 @@
 36369,Lautertal,Hessen,Germany
 36381,Schlüchtern,Hessen,Germany
 36391,Sinntal,Hessen,Germany
-36396,Steinau an der Straße,Hessen,Germany
 36399,Freiensteinau,Hessen,Germany
 36404,Martinroda,Thüringen,Germany
 36404,Oechsen,Thüringen,Germany
@@ -8273,8 +8175,6 @@
 37070,Amtsgericht,Niedersachsen,Germany
 37070,DAK Gesundheit,Niedersachsen,Germany
 37070,GDA Wohnstift Göttingen,Niedersachsen,Germany
-37070,Landkreis Göttingen FD 10.1,Niedersachsen,Germany
-37070,Max-Planck-Institut für Multidisziplinäre Naturwissenschaften,Niedersachsen,Germany
 37070,Niedersächsische Staats-und Universitätsbibliothek,Niedersachsen,Germany
 37070,Stadt Göttingen,Niedersachsen,Germany
 37073,Göttingen,Niedersachsen,Germany
@@ -8320,6 +8220,7 @@
 37242,Bad Sooden-Allendorf,Hessen,Germany
 37247,Großalmerode,Hessen,Germany
 37249,Neu-Eichenberg,Hessen,Germany
+37267,Sparkasse Werra-Meißner,Hessen,Germany
 37267,Werra-Meißner-Kreis Der Kreisausschuß,Hessen,Germany
 37269,Eschwege,Hessen,Germany
 37276,Meinhard,Hessen,Germany
@@ -8350,7 +8251,6 @@
 37308,Wingerode,Thüringen,Germany
 37318,Arenshausen,Thüringen,Germany
 37318,Asbach-Sickenberg,Thüringen,Germany
-37318,Bernterode (bei Heilbad Heiligenstadt),Thüringen,Germany
 37318,Birkenfelde,Thüringen,Germany
 37318,Bornhagen,Thüringen,Germany
 37318,Burgwalde,Thüringen,Germany
@@ -8427,7 +8327,6 @@
 37412,Elbingerode,Niedersachsen,Germany
 37412,Herzberg am Harz,Niedersachsen,Germany
 37412,Hörden,Niedersachsen,Germany
-37431,Bad Lauterberg im Harz,Niedersachsen,Germany
 37434,Bilshausen,Niedersachsen,Germany
 37434,Bodensee,Niedersachsen,Germany
 37434,Gieboldehausen,Niedersachsen,Germany
@@ -8577,8 +8476,10 @@
 38279,Sehlde,Niedersachsen,Germany
 38281,Wolfenbüttel,Niedersachsen,Germany
 38296,Mast-Jägermeister SE,Niedersachsen,Germany
+38299,AOK Wolfenbüttel,Niedersachsen,Germany
 38299,Amtsgericht,Niedersachsen,Germany
 38299,Herzog August Bibliothek,Niedersachsen,Germany
+38299,Justizvollzugsanstalt Wolfenbüttel,Niedersachsen,Germany
 38299,Stadtverwaltung,Niedersachsen,Germany
 38299,Städt. Krankenhaus,Niedersachsen,Germany
 38300,Wolfenbüttel,Niedersachsen,Germany
@@ -8671,6 +8572,7 @@
 38516,Amtsgericht,Niedersachsen,Germany
 38516,Kreiskrankenhaus,Niedersachsen,Germany
 38516,Landkreis Gifhorn,Niedersachsen,Germany
+38516,Sparkasse Gifhorn-Wolfsburg,Niedersachsen,Germany
 38516,Stadt Gifhorn,Niedersachsen,Germany
 38518,Gifhorn,Niedersachsen,Germany
 38524,Sassenburg,Niedersachsen,Germany
@@ -8701,11 +8603,8 @@
 38644,Goslar Hahnenklee-Bockswiese,Niedersachsen,Germany
 38644,Goslar Jerstedt,Niedersachsen,Germany
 38667,Bad Harzburg,Niedersachsen,Germany
-38667,Bad Harzburg Bad Harzburg,Niedersachsen,Germany
 38667,Bad Harzburg Bettingerode,Niedersachsen,Germany
 38667,Bad Harzburg Bündheim/Schlewecke,Niedersachsen,Germany
-38667,"Bad Harzburg Bündheim/Schlewecke, Bündheim",Niedersachsen,Germany
-38667,"Bad Harzburg Bündheim/Schlewecke, Schlewecke",Niedersachsen,Germany
 38667,Bad Harzburg Eckertal,Niedersachsen,Germany
 38667,Bad Harzburg Göttingerode,Niedersachsen,Germany
 38667,Bad Harzburg Harlingerode,Niedersachsen,Germany
@@ -8718,7 +8617,6 @@
 38707,Altenau,Niedersachsen,Germany
 38707,Schulenberg im Oberharz,Niedersachsen,Germany
 38709,Wildemann,Niedersachsen,Germany
-38717,DVD-Logistik Center,Niedersachsen,Germany
 38723,Seesen,Niedersachsen,Germany
 38729,Hahausen,Niedersachsen,Germany
 38729,Lutter am Barenberge,Niedersachsen,Germany
@@ -8790,7 +8688,9 @@
 38899,Stiege,Sachsen-Anhalt,Germany
 38899,Trautenstein,Sachsen-Anhalt,Germany
 39014,Magdeburg,Sachsen-Anhalt,Germany
+39082,HUK-Coburg,Sachsen-Anhalt,Germany
 39083,Amtsgericht,Sachsen-Anhalt,Germany
+39084,AOK Sachsen-Anhalt,Sachsen-Anhalt,Germany
 39087,Städtisches Klinikum Magdeburg,Sachsen-Anhalt,Germany
 39088,Regierungspräsidium Sachsen-Anhalt,Sachsen-Anhalt,Germany
 39092,IKK gesund plus,Sachsen-Anhalt,Germany
@@ -9043,15 +8943,12 @@
 39365,Wormsdorf,Sachsen-Anhalt,Germany
 39387,Altbrandsleben,Sachsen-Anhalt,Germany
 39387,Am Großen Bruch,Sachsen-Anhalt,Germany
-39387,Am Großen Bruch Neuwegersleben,Sachsen-Anhalt,Germany
 39387,Ampfurth,Sachsen-Anhalt,Germany
 39387,Hornhausen,Sachsen-Anhalt,Germany
 39387,Oschersleben,Sachsen-Anhalt,Germany
 39387,Schermcke,Sachsen-Anhalt,Germany
 39387,Wulferstedt,Sachsen-Anhalt,Germany
 39393,Am Großen Bruch,Sachsen-Anhalt,Germany
-39393,Am Großen Bruch Gunsleben,Sachsen-Anhalt,Germany
-39393,Am Großen Bruch Hamersleben,Sachsen-Anhalt,Germany
 39393,Ausleben,Sachsen-Anhalt,Germany
 39393,Barneberg,Sachsen-Anhalt,Germany
 39393,Hötensleben,Sachsen-Anhalt,Germany
@@ -9288,14 +9185,12 @@
 39649,Sachau,Sachsen-Anhalt,Germany
 39649,Sichau,Sachsen-Anhalt,Germany
 40181,Kassenzahnärztliche Vereinigung Nordrhein,Nordrhein-Westfalen,Germany
-40182,Kassenärztliche Vereinigung Nordrhein Hauptstelle,Nordrhein-Westfalen,Germany
 40187,Deutsche Rentenversicherung Rheinland,Nordrhein-Westfalen,Germany
-40190,Landespresse- und Informationsamt Nordrhein-Westfalen,Nordrhein-Westfalen,Germany
 40190,Landesregierung NRW,Nordrhein-Westfalen,Germany
-40190,Staatskanzlei des Landes NRW,Nordrhein-Westfalen,Germany
 40193,IT. NRW,Nordrhein-Westfalen,Germany
 40194,Deutsche Rentenversicherung Rheinland,Nordrhein-Westfalen,Germany
 40196,Rheinische Post,Nordrhein-Westfalen,Germany
+40202,HUK-Coburg,Nordrhein-Westfalen,Germany
 40210,Düsseldorf,Nordrhein-Westfalen,Germany
 40211,Düsseldorf,Nordrhein-Westfalen,Germany
 40212,Düsseldorf,Nordrhein-Westfalen,Germany
@@ -9345,8 +9240,6 @@
 40724,Hilden,Nordrhein-Westfalen,Germany
 40764,Langenfeld,Nordrhein-Westfalen,Germany
 40789,Monheim am Rhein,Nordrhein-Westfalen,Germany
-40789,Monheim am Rhein Baumberg,Nordrhein-Westfalen,Germany
-40789,Monheim am Rhein Monheim,Nordrhein-Westfalen,Germany
 40822,Mettmann,Nordrhein-Westfalen,Germany
 40832,Ratingen,Nordrhein-Westfalen,Germany
 40878,Ratingen,Nordrhein-Westfalen,Germany
@@ -9354,7 +9247,6 @@
 40882,Ratingen,Nordrhein-Westfalen,Germany
 40883,Ratingen,Nordrhein-Westfalen,Germany
 40885,Ratingen,Nordrhein-Westfalen,Germany
-41050,Stadt Mönchengladbach Der Oberbürgermeister,Nordrhein-Westfalen,Germany
 41061,Mönchengladbach,Nordrhein-Westfalen,Germany
 41063,Mönchengladbach,Nordrhein-Westfalen,Germany
 41065,Mönchengladbach,Nordrhein-Westfalen,Germany
@@ -9376,8 +9268,8 @@
 41379,Brüggen,Nordrhein-Westfalen,Germany
 41456,Amtsgericht Neuss,Nordrhein-Westfalen,Germany
 41456,Kreisverwaltung Neuss,Nordrhein-Westfalen,Germany
+41456,Sparkasse Neuss Hauptstelle,Nordrhein-Westfalen,Germany
 41456,Stadt Neuss,Nordrhein-Westfalen,Germany
-41456,Verband der Vereine Creditreform,Nordrhein-Westfalen,Germany
 41460,Neuss,Nordrhein-Westfalen,Germany
 41462,Neuss,Nordrhein-Westfalen,Germany
 41464,Neuss,Nordrhein-Westfalen,Germany
@@ -9387,7 +9279,6 @@
 41470,Neuss,Nordrhein-Westfalen,Germany
 41472,Neuss,Nordrhein-Westfalen,Germany
 41513,Amtsgericht Grevenbroich,Nordrhein-Westfalen,Germany
-41513,Kreis Neuss Der Landrat,Nordrhein-Westfalen,Germany
 41513,Kreiskrankenhaus Grevenbroich,Nordrhein-Westfalen,Germany
 41513,Stadtverwaltung Grevenbroich,Nordrhein-Westfalen,Germany
 41515,Grevenbroich,Nordrhein-Westfalen,Germany
@@ -9409,14 +9300,12 @@
 41836,Hückelhoven,Nordrhein-Westfalen,Germany
 41844,Wegberg,Nordrhein-Westfalen,Germany
 41849,Wassenberg,Nordrhein-Westfalen,Germany
-42093,Zentrale Paketermittlung,Nordrhein-Westfalen,Germany
 42095,Bau-Berufsgenossenschaft Wuppertal,Nordrhein-Westfalen,Germany
 42097,Amtsgericht,Nordrhein-Westfalen,Germany
 42097,Gerichtskasse im Amtsgericht,Nordrhein-Westfalen,Germany
 42097,Landgericht,Nordrhein-Westfalen,Germany
 42097,Staatsanwaltschaft Wuppertal,Nordrhein-Westfalen,Germany
 42097,Stadtsparkasse Wuppertal,Nordrhein-Westfalen,Germany
-42097,Technische Akademie Wuppertal e.V.,Nordrhein-Westfalen,Germany
 42098,Krankenversorgung der Bundesbahnbeamten,Nordrhein-Westfalen,Germany
 42099,Krankenversorgung der Bundesbahnbeamten,Nordrhein-Westfalen,Germany
 42101,DEVK Deutsche Eisenbahnversicherung,Nordrhein-Westfalen,Germany
@@ -9433,7 +9322,6 @@
 42269,Stadtverwaltung Wuppertal,Nordrhein-Westfalen,Germany
 42271,BARMER Vertriebspartnerteam,Nordrhein-Westfalen,Germany
 42271,Versorgungsamt Wuppertal,Nordrhein-Westfalen,Germany
-42271,Vorwerk & Co. (grün),Nordrhein-Westfalen,Germany
 42275,Wuppertal,Nordrhein-Westfalen,Germany
 42277,Wuppertal,Nordrhein-Westfalen,Germany
 42279,Wuppertal,Nordrhein-Westfalen,Germany
@@ -9459,6 +9347,7 @@
 42579,Heiligenhaus,Nordrhein-Westfalen,Germany
 42648,Amtsgericht Solingen,Nordrhein-Westfalen,Germany
 42648,Stadt Solingen,Nordrhein-Westfalen,Germany
+42648,Stadt-Sparkasse Solingen,Nordrhein-Westfalen,Germany
 42648,Stadtbücherei Solingen,Nordrhein-Westfalen,Germany
 42651,Solingen,Nordrhein-Westfalen,Germany
 42653,Solingen,Nordrhein-Westfalen,Germany
@@ -9467,6 +9356,7 @@
 42659,Solingen,Nordrhein-Westfalen,Germany
 42697,Solingen,Nordrhein-Westfalen,Germany
 42699,Solingen,Nordrhein-Westfalen,Germany
+42715,Die BERGISCHE Krankenkasse,Nordrhein-Westfalen,Germany
 42719,Solingen,Nordrhein-Westfalen,Germany
 42781,Haan,Nordrhein-Westfalen,Germany
 42799,Leichlingen,Nordrhein-Westfalen,Germany
@@ -9484,6 +9374,7 @@
 42926,Stadtverwaltung Wermelskirchen,Nordrhein-Westfalen,Germany
 42929,Wermelskirchen,Nordrhein-Westfalen,Germany
 44115,Amtsgericht,Nordrhein-Westfalen,Germany
+44117,Familienkasse Nordrhein-Westfalen-Ost,Nordrhein-Westfalen,Germany
 44118,Continentale Krankenversicherung,Nordrhein-Westfalen,Germany
 44119,Continentale Sachversicherung,Nordrhein-Westfalen,Germany
 44120,JobCenter Dortmund Wendepunkt,Nordrhein-Westfalen,Germany
@@ -9492,17 +9383,16 @@
 44123,Städtische Kliniken Dortmund,Nordrhein-Westfalen,Germany
 44125,Versorgungsamt,Nordrhein-Westfalen,Germany
 44126,Arbeitsgericht,Nordrhein-Westfalen,Germany
-44126,Berufsgenossenschaft Nahrungsmittel und Gastgewerbe,Nordrhein-Westfalen,Germany
+44126,Deutsche Angestellten Krankenkasse,Nordrhein-Westfalen,Germany
 44126,Handwerkskammer Dortmund,Nordrhein-Westfalen,Germany
 44126,Sozialgericht,Nordrhein-Westfalen,Germany
-44127,BARMER Zentrum Häusliche Krankenpflege,Nordrhein-Westfalen,Germany
 44127,Kassenärztliche Vereinigung Westf.-Lippe,Nordrhein-Westfalen,Germany
 44127,Landgericht Dortmund,Nordrhein-Westfalen,Germany
 44127,Polizeipräsidium Dortmund,Nordrhein-Westfalen,Germany
 44128,Hochschulstart,Nordrhein-Westfalen,Germany
 44128,Stadtsparkasse Dortmund Hauptstelle,Nordrhein-Westfalen,Germany
-44128,Stiftung für Hochschulzulassung SfH,Nordrhein-Westfalen,Germany
 44128,Volkswohl Bund Lebensversicherungen,Nordrhein-Westfalen,Germany
+44133,HUK-Coburg,Nordrhein-Westfalen,Germany
 44135,Dortmund,Nordrhein-Westfalen,Germany
 44137,Dortmund,Nordrhein-Westfalen,Germany
 44139,Dortmund,Nordrhein-Westfalen,Germany
@@ -9515,7 +9405,6 @@
 44225,Dortmund,Nordrhein-Westfalen,Germany
 44227,Dortmund,Nordrhein-Westfalen,Germany
 44229,Dortmund,Nordrhein-Westfalen,Germany
-44261,Hütten- und Walzwerk- Berufsgenossenschaft,Nordrhein-Westfalen,Germany
 44261,LEG Landesentwicklungsgesellschaft NRW,Nordrhein-Westfalen,Germany
 44261,Maschinenbau- und Metallberufsgenossenschaft,Nordrhein-Westfalen,Germany
 44261,WILO SE,Nordrhein-Westfalen,Germany
@@ -9552,6 +9441,7 @@
 44577,Castrop-Rauxel,Nordrhein-Westfalen,Germany
 44579,Castrop-Rauxel,Nordrhein-Westfalen,Germany
 44581,Castrop-Rauxel,Nordrhein-Westfalen,Germany
+44621,Herner Sparkasse,Nordrhein-Westfalen,Germany
 44621,Marienhospital-Universitätsklinik I,Nordrhein-Westfalen,Germany
 44621,Marienhospital-Universitätsklinik II,Nordrhein-Westfalen,Germany
 44621,Stadt Herne,Nordrhein-Westfalen,Germany
@@ -9564,21 +9454,23 @@
 44651,Herne,Nordrhein-Westfalen,Germany
 44652,Herne,Nordrhein-Westfalen,Germany
 44653,Herne,Nordrhein-Westfalen,Germany
-44774,GLS Gemeinschaftsbank eG,Nordrhein-Westfalen,Germany
+44775,VIACTIV Krankenkasse,Nordrhein-Westfalen,Germany
 44776,ARAL Aktiengesellschaft,Nordrhein-Westfalen,Germany
 44781,Deutsche Rentenversicherung Knappschaft-Bahn-See,Nordrhein-Westfalen,Germany
 44782,Amtsgericht Bochum,Nordrhein-Westfalen,Germany
 44782,Arbeitsgemeinschaft für Krebsbekämpfung,Nordrhein-Westfalen,Germany
 44782,Augusta Kranken Anstalt,Nordrhein-Westfalen,Germany
 44782,BARMER,Nordrhein-Westfalen,Germany
-44782,Berufsgenossenschaftliche Kliniken BERGMANNSHEIL Universitätsklinik,Nordrhein-Westfalen,Germany
 44782,Eickhoff Maschinenfabrik,Nordrhein-Westfalen,Germany
 44782,IG Bergbau,Nordrhein-Westfalen,Germany
+44782,Justizvollzugsanstalt (JVA),Nordrhein-Westfalen,Germany
 44782,Landgericht Bochum,Nordrhein-Westfalen,Germany
 44782,Polizei,Nordrhein-Westfalen,Germany
 44782,RWE Kundenservice,Nordrhein-Westfalen,Germany
+44782,Sparkasse,Nordrhein-Westfalen,Germany
 44782,Staatsanwaltschaft Bochum,Nordrhein-Westfalen,Germany
 44784,Vonovia SE,Nordrhein-Westfalen,Germany
+44785,Familienkasse Nordrhein-Westfalen-Nord,Nordrhein-Westfalen,Germany
 44787,Bochum,Nordrhein-Westfalen,Germany
 44789,Bochum,Nordrhein-Westfalen,Germany
 44791,Bochum,Nordrhein-Westfalen,Germany
@@ -9600,39 +9492,35 @@
 45058,RAG Aktiengesellschaft,Nordrhein-Westfalen,Germany
 45060,Deutsche Rentenversicherung Rentenversicherung,Nordrhein-Westfalen,Germany
 45061,Deichmann SE,Nordrhein-Westfalen,Germany
+45064,VIACTIV Krankenkasse,Nordrhein-Westfalen,Germany
 45091,Deutsche Rentenversicherung Knappschaft-Bahn-See,Nordrhein-Westfalen,Germany
-45095,Knappschaft Kranken- und Pflegeversicherung,Nordrhein-Westfalen,Germany
 45099,DAK DigiZ Essen,Nordrhein-Westfalen,Germany
 45102,Deutsche Rentenversicherung Knappschaft-Bahn-See,Nordrhein-Westfalen,Germany
+45113,HUK-Coburg,Nordrhein-Westfalen,Germany
 45115,Deutsche Rentenversicherung Knappschaft-Bahn-See,Nordrhein-Westfalen,Germany
 45116,ASmediaSystems/DCS,Nordrhein-Westfalen,Germany
 45116,Amtsgericht Essen,Nordrhein-Westfalen,Germany
 45116,Axel Springer SE,Nordrhein-Westfalen,Germany
-45116,Berufsgenossenschaft Handel und Warendistribution,Nordrhein-Westfalen,Germany
 45116,Bischöfliches Generalvikariat,Nordrhein-Westfalen,Germany
 45116,Bundesknappschaft,Nordrhein-Westfalen,Germany
 45116,Bundesverband der Betriebskrankenkassen,Nordrhein-Westfalen,Germany
 45116,Die Welt Verlagsgesellschaft,Nordrhein-Westfalen,Germany
-45116,Ev. Kirchenkreis Essen,Nordrhein-Westfalen,Germany
 45116,Fotoredaktion Bild Ruhrgebiet,Nordrhein-Westfalen,Germany
 45116,Logistik Bild,Nordrhein-Westfalen,Germany
 45116,Medizinische Dienst Bund,Nordrhein-Westfalen,Germany
 45116,Produktion/Layout Bild Ruhrgebiet,Nordrhein-Westfalen,Germany
 45116,Redaktion Bild Ruhrgebiet,Nordrhein-Westfalen,Germany
 45116,Sportredaktion Bild Ruhrgebiet,Nordrhein-Westfalen,Germany
-45117,BKK - Landesverband Nordwest,Nordrhein-Westfalen,Germany
 45117,HOCHTIEF Aktiengesellschaft,Nordrhein-Westfalen,Germany
-45117,Haus der Technik e.V.,Nordrhein-Westfalen,Germany
-45117,IKK classic Regionaldirektion Essen,Nordrhein-Westfalen,Germany
 45117,Job-Center Essen,Nordrhein-Westfalen,Germany
 45117,Job-Center Mitte,Nordrhein-Westfalen,Germany
 45117,Job-Center Nord,Nordrhein-Westfalen,Germany
 45117,Job-Center Süd,Nordrhein-Westfalen,Germany
-45117,Job-Center U25,Nordrhein-Westfalen,Germany
+45117,Justizvollzugsanstalt Essen,Nordrhein-Westfalen,Germany
 45117,Landgericht,Nordrhein-Westfalen,Germany
-45117,Ohletz Rechtsanwälte Notare Steuerberater,Nordrhein-Westfalen,Germany
 45117,Polizeipräsident Essen,Nordrhein-Westfalen,Germany
 45117,Ruhrverband,Nordrhein-Westfalen,Germany
+45117,Sparkasse Essen,Nordrhein-Westfalen,Germany
 45117,Staatsanwaltschaft Essen,Nordrhein-Westfalen,Germany
 45117,Verlag Happy Weekend,Nordrhein-Westfalen,Germany
 45121,Stadtverwaltung,Nordrhein-Westfalen,Germany
@@ -9670,20 +9558,9 @@
 45356,Essen,Nordrhein-Westfalen,Germany
 45357,Essen,Nordrhein-Westfalen,Germany
 45359,Essen,Nordrhein-Westfalen,Germany
-45403,Mülheim an der Ruhr,Nordrhein-Westfalen,Germany
 45466,Amtsgericht,Nordrhein-Westfalen,Germany
 45466,Jauch und Hübener,Nordrhein-Westfalen,Germany
-45466,Max-Planck-Institut für Kohlenforschung,Nordrhein-Westfalen,Germany
 45466,Wissoll,Nordrhein-Westfalen,Germany
-45468,Mülheim an der Ruhr,Nordrhein-Westfalen,Germany
-45470,Mülheim an der Ruhr,Nordrhein-Westfalen,Germany
-45472,Mülheim an der Ruhr,Nordrhein-Westfalen,Germany
-45473,Mülheim an der Ruhr,Nordrhein-Westfalen,Germany
-45475,Mülheim an der Ruhr,Nordrhein-Westfalen,Germany
-45476,Mülheim an der Ruhr,Nordrhein-Westfalen,Germany
-45478,Mülheim an der Ruhr,Nordrhein-Westfalen,Germany
-45479,Mülheim an der Ruhr,Nordrhein-Westfalen,Germany
-45481,Mülheim an der Ruhr,Nordrhein-Westfalen,Germany
 45523,Amtsgericht,Nordrhein-Westfalen,Germany
 45523,Stadt Hattingen,Nordrhein-Westfalen,Germany
 45525,Hattingen,Nordrhein-Westfalen,Germany
@@ -9693,13 +9570,13 @@
 45655,Amtsgericht,Nordrhein-Westfalen,Germany
 45655,IKK classic,Nordrhein-Westfalen,Germany
 45655,Kreisverwaltung,Nordrhein-Westfalen,Germany
+45655,Sparkasse Vest Recklinghausen,Nordrhein-Westfalen,Germany
 45655,Stadtverwaltung Recklinghausen,Nordrhein-Westfalen,Germany
 45657,Recklinghausen,Nordrhein-Westfalen,Germany
 45659,Recklinghausen,Nordrhein-Westfalen,Germany
 45661,Recklinghausen,Nordrhein-Westfalen,Germany
 45663,Recklinghausen,Nordrhein-Westfalen,Germany
 45665,Recklinghausen,Nordrhein-Westfalen,Germany
-45697,C C Erfrischungsgetränke Ruhr-West,Nordrhein-Westfalen,Germany
 45697,Knappschaft,Nordrhein-Westfalen,Germany
 45699,Herten,Nordrhein-Westfalen,Germany
 45701,Herten,Nordrhein-Westfalen,Germany
@@ -9717,6 +9594,8 @@
 45801,IKK classic,Nordrhein-Westfalen,Germany
 45801,Marienhospital Ückendorf,Nordrhein-Westfalen,Germany
 45801,Sozialgericht,Nordrhein-Westfalen,Germany
+45801,Sparkasse,Nordrhein-Westfalen,Germany
+45801,Techniker Krankenkasse,Nordrhein-Westfalen,Germany
 45801,Verkehrsverbund Rhein-Ruhr AöR,Nordrhein-Westfalen,Germany
 45801,Verwaltungsgericht,Nordrhein-Westfalen,Germany
 45875,Stadtverwaltung,Nordrhein-Westfalen,Germany
@@ -9801,7 +9680,6 @@
 47058,Duisburg,Nordrhein-Westfalen,Germany
 47059,Duisburg,Nordrhein-Westfalen,Germany
 47118,Amtsgericht Duisburg-Ruhrort,Nordrhein-Westfalen,Germany
-47118,Bundesverband der Deutschen Binnenschiffahrt,Nordrhein-Westfalen,Germany
 47119,Duisburg,Nordrhein-Westfalen,Germany
 47137,Duisburg,Nordrhein-Westfalen,Germany
 47138,Duisburg,Nordrhein-Westfalen,Germany
@@ -9821,7 +9699,9 @@
 47259,Duisburg,Nordrhein-Westfalen,Germany
 47269,Duisburg,Nordrhein-Westfalen,Germany
 47279,Duisburg,Nordrhein-Westfalen,Germany
+47303,HUK-Coburg,Nordrhein-Westfalen,Germany
 47439,Bundesknappschaft Geschäftsstelle Moers,Nordrhein-Westfalen,Germany
+47439,Sparkasse am Niederrhein,Nordrhein-Westfalen,Germany
 47439,Stadt Moers,Nordrhein-Westfalen,Germany
 47441,Moers,Nordrhein-Westfalen,Germany
 47443,Moers,Nordrhein-Westfalen,Germany
@@ -9829,12 +9709,12 @@
 47447,Moers,Nordrhein-Westfalen,Germany
 47475,Kamp-Lintfort,Nordrhein-Westfalen,Germany
 47493,Amtsgericht Rheinberg,Nordrhein-Westfalen,Germany
+47493,Sparkasse Rheinberg,Nordrhein-Westfalen,Germany
 47493,Stadt Rheinberg,Nordrhein-Westfalen,Germany
 47495,Rheinberg,Nordrhein-Westfalen,Germany
 47504,Stadt Neukirchen-Vluyn,Nordrhein-Westfalen,Germany
 47506,Neukirchen-Vluyn,Nordrhein-Westfalen,Germany
 47509,Rheurdt,Nordrhein-Westfalen,Germany
-47526,Bau-und Liegenschaftsbetrieb NRW Zentrale,Nordrhein-Westfalen,Germany
 47533,Kleve,Nordrhein-Westfalen,Germany
 47546,Kalkar,Nordrhein-Westfalen,Germany
 47551,Bedburg-Hau,Nordrhein-Westfalen,Germany
@@ -9853,7 +9733,6 @@
 47661,Issum,Nordrhein-Westfalen,Germany
 47665,Sonsbeck,Nordrhein-Westfalen,Germany
 47669,Wachtendonk,Nordrhein-Westfalen,Germany
-47791,Reklame Center,Nordrhein-Westfalen,Germany
 47792,Amtsgericht Krefeld,Nordrhein-Westfalen,Germany
 47792,Landgericht Krefeld,Nordrhein-Westfalen,Germany
 47792,Staatsanwaltschaft Krefeld,Nordrhein-Westfalen,Germany
@@ -9878,6 +9757,7 @@
 48079,Münster,Nordrhein-Westfalen,Germany
 48108,Landwirtschaftskammer Westfalen-Lippe Institutszentrum,Nordrhein-Westfalen,Germany
 48121,innogy SE,Nordrhein-Westfalen,Germany
+48122,HUK-Coburg,Nordrhein-Westfalen,Germany
 48123,Bahn-BKK PostCenter,Nordrhein-Westfalen,Germany
 48124,Oberfinanzdirektion,Nordrhein-Westfalen,Germany
 48125,Deutsche Rentenversicherung Westfalen,Nordrhein-Westfalen,Germany
@@ -9888,23 +9768,20 @@
 48130,Westdeutsche Landesbausparkasse,Nordrhein-Westfalen,Germany
 48132,Westdeutsche Blindenhörbücherei e.V.,Nordrhein-Westfalen,Germany
 48133,Landschaftsverband Westfalen-Lippe,Nordrhein-Westfalen,Germany
+48135,AOK NordWest,Nordrhein-Westfalen,Germany
 48135,Arbeitsgericht Münster,Nordrhein-Westfalen,Germany
 48135,BARMER,Nordrhein-Westfalen,Germany
-48135,Barmherzige Schwestern (Clemensschwestern) e.V.,Nordrhein-Westfalen,Germany
 48135,Bischöfliches Generalvikariat,Nordrhein-Westfalen,Germany
-48135,Generaldirektion Wasserstraßen und Schifffahrt,Nordrhein-Westfalen,Germany
 48135,Landwirtschaftskammer Westfalen-Lippe Institutszentrum,Nordrhein-Westfalen,Germany
-48135,Schwenninger BKK Geschäftsstelle Münster,Nordrhein-Westfalen,Germany
+48135,Sparkasse Münsterland Ost,Nordrhein-Westfalen,Germany
 48135,Staatsanwaltschaft,Nordrhein-Westfalen,Germany
 48135,Stadtbücherei Münster,Nordrhein-Westfalen,Germany
-48135,Unfallkasse Nordrhein-Westfalen Regionaldirektion Münster,Nordrhein-Westfalen,Germany
 48135,Unfallkasse des Bundes,Nordrhein-Westfalen,Germany
 48135,Westfälische Nachrichten,Nordrhein-Westfalen,Germany
 48135,Wohnungsbauförderungsanstalt NRW,Nordrhein-Westfalen,Germany
 48135,Ärzteversorgung Westfalen-Lippe,Nordrhein-Westfalen,Germany
 48136,Amtsgericht Münster,Nordrhein-Westfalen,Germany
-48136,DEBEKA Versicherungen und Bausparkasse,Nordrhein-Westfalen,Germany
-48136,Westdeutsche Genossenschafts- Zentralbank eG,Nordrhein-Westfalen,Germany
+48136,Justizvollzugsanstalt Münster,Nordrhein-Westfalen,Germany
 48143,Münster,Nordrhein-Westfalen,Germany
 48145,Münster,Nordrhein-Westfalen,Germany
 48147,Münster,Nordrhein-Westfalen,Germany
@@ -9918,7 +9795,6 @@
 48163,Münster,Nordrhein-Westfalen,Germany
 48165,Münster,Nordrhein-Westfalen,Germany
 48167,Münster,Nordrhein-Westfalen,Germany
-48229,Deutsche Reiterliche Vereinigung e.V.,Nordrhein-Westfalen,Germany
 48231,Warendorf,Nordrhein-Westfalen,Germany
 48249,Dülmen,Nordrhein-Westfalen,Germany
 48268,Greven,Nordrhein-Westfalen,Germany
@@ -9962,12 +9838,12 @@
 48496,Hopsten,Nordrhein-Westfalen,Germany
 48499,Salzbergen,Niedersachsen,Germany
 48522,Landkreis Grafschaft Bentheim,Niedersachsen,Germany
-48522,Stadt Nordhorn Der Bürgermeister,Niedersachsen,Germany
 48527,Nordhorn,Niedersachsen,Germany
 48529,Nordhorn,Niedersachsen,Germany
 48531,Nordhorn,Niedersachsen,Germany
 48563,Amtsgericht,Nordrhein-Westfalen,Germany
 48563,Kreis Steinfurt,Nordrhein-Westfalen,Germany
+48563,Sparkasse,Nordrhein-Westfalen,Germany
 48565,Steinfurt,Nordrhein-Westfalen,Germany
 48596,Amtsgericht,Nordrhein-Westfalen,Germany
 48596,EUREGIO,Nordrhein-Westfalen,Germany
@@ -9985,10 +9861,12 @@
 48651,Stadtverwaltung Coesfeld,Nordrhein-Westfalen,Germany
 48653,Coesfeld,Nordrhein-Westfalen,Germany
 48681,Amtsgericht,Nordrhein-Westfalen,Germany
+48681,Sparkasse Westmünsterland,Nordrhein-Westfalen,Germany
 48681,Stadtverwaltung,Nordrhein-Westfalen,Germany
 48683,Ahaus,Nordrhein-Westfalen,Germany
 48691,Vreden,Nordrhein-Westfalen,Germany
 48702,Krankenhaus Maria-Hilf,Nordrhein-Westfalen,Germany
+48702,Sparkasse Stadtlohn,Nordrhein-Westfalen,Germany
 48703,Stadtlohn,Nordrhein-Westfalen,Germany
 48712,Gescher,Nordrhein-Westfalen,Germany
 48720,Rosendahl,Nordrhein-Westfalen,Germany
@@ -10009,14 +9887,10 @@
 49143,Bissendorf,Niedersachsen,Germany
 49152,Bad Essen,Niedersachsen,Germany
 49163,Bohmte,Niedersachsen,Germany
-49170,Hagen am Teutoburger Wald,Niedersachsen,Germany
-49176,Hilter am Teutoburger Wald,Niedersachsen,Germany
 49179,Ostercappeln,Niedersachsen,Germany
 49186,Bad Iburg,Niedersachsen,Germany
 49191,Belm,Niedersachsen,Germany
-49195,Sanicare-Apotheke BS-Apotheken OHG,Niedersachsen,Germany
 49196,Bad Laer,Niedersachsen,Germany
-49201,Dissen am Teutoburger Wald,Niedersachsen,Germany
 49205,Hasbergen,Niedersachsen,Germany
 49213,Ultra Pharm,Niedersachsen,Germany
 49214,Bad Rothenfelde,Niedersachsen,Germany
@@ -10025,6 +9899,7 @@
 49326,Melle,Niedersachsen,Germany
 49328,Melle,Niedersachsen,Germany
 49356,Diepholz,Niedersachsen,Germany
+49375,AOK,Niedersachsen,Germany
 49375,Amtsgericht,Niedersachsen,Germany
 49375,Landkreis Vechta,Niedersachsen,Germany
 49375,St. Marienhospital,Niedersachsen,Germany
@@ -10058,6 +9933,7 @@
 49475,Amtsgericht,Nordrhein-Westfalen,Germany
 49475,Bodelschwingh-Krankenhaus,Nordrhein-Westfalen,Germany
 49475,Klinikum Ibbenbüren,Nordrhein-Westfalen,Germany
+49475,Sparkasse Ibbenbüren,Nordrhein-Westfalen,Germany
 49475,Stadtverwaltung,Nordrhein-Westfalen,Germany
 49477,Ibbenbüren,Nordrhein-Westfalen,Germany
 49479,Ibbenbüren,Nordrhein-Westfalen,Germany
@@ -10128,6 +10004,8 @@
 49779,Niederlangen,Niedersachsen,Germany
 49779,Oberlangen,Niedersachsen,Germany
 49801,EMP Merchandising Handelsgesellschaft,Niedersachsen,Germany
+49803,Bundeswehr,Niedersachsen,Germany
+49803,Justizvollzugsanstalt JVA I,Niedersachsen,Germany
 49803,Stadtverwaltung,Niedersachsen,Germany
 49808,Lingen,Niedersachsen,Germany
 49809,Lingen,Niedersachsen,Germany
@@ -10173,7 +10051,6 @@
 50259,Pulheim,Nordrhein-Westfalen,Germany
 50319,Amtsgericht,Nordrhein-Westfalen,Germany
 50319,Marienhospital,Nordrhein-Westfalen,Germany
-50319,Stadt Brühl Der Bürgermeister,Nordrhein-Westfalen,Germany
 50321,Brühl,Nordrhein-Westfalen,Germany
 50351,Stadtverwaltung,Nordrhein-Westfalen,Germany
 50354,Hürth,Nordrhein-Westfalen,Germany
@@ -10181,11 +10058,11 @@
 50387,Dreifaltigkeits-Krankenhaus,Nordrhein-Westfalen,Germany
 50387,Stadtverwaltung,Nordrhein-Westfalen,Germany
 50389,Wesseling,Nordrhein-Westfalen,Germany
-50399,Großannahmestelle BZ Köln West,Nordrhein-Westfalen,Germany
 50415,Wahl Finance,Nordrhein-Westfalen,Germany
+50421,HUK-Coburg,Nordrhein-Westfalen,Germany
 50422,Daihatsu Versicherungsdienst,Nordrhein-Westfalen,Germany
 50423,AdvoCard Rechtschutzversicherung Aktiengesellschaft,Hamburg,Germany
-50428,REWE Zentralfinanz eG,Nordrhein-Westfalen,Germany
+50574,Familienkasse Nordrhein-Westfalen-Nord,Nordrhein-Westfalen,Germany
 50576,Generali Schadenservice-Center Köln,Nordrhein-Westfalen,Germany
 50585,Atradius Kreditversicherung,Nordrhein-Westfalen,Germany
 50586,BERLIN-KÖLNISCHE VERSICHERUNGEN,Nordrhein-Westfalen,Germany
@@ -10193,19 +10070,20 @@
 50590,KÃ¶lner Morgen,Nordrhein-Westfalen,Germany
 50590,KÃ¶lner Stadt-Anzeiger,Nordrhein-Westfalen,Germany
 50598,Gothaer Versicherungen,Nordrhein-Westfalen,Germany
+50600,Westdeutscher Rundfunk Köln,Nordrhein-Westfalen,Germany
 50602,Kreissparkasse KSK KÃ¶ln,Nordrhein-Westfalen,Germany
+50604,Sparkasse Köln Bonn,Nordrhein-Westfalen,Germany
 50605,Stadt Köln Stadthaus,Nordrhein-Westfalen,Germany
 50606,Bezirksregierung Köln,Nordrhein-Westfalen,Germany
-50606,Deutsche Kolpingsfamilie e. V.,Nordrhein-Westfalen,Germany
 50606,Erzbistum Köln Generalvikariat,Nordrhein-Westfalen,Germany
 50606,Genossenschaftsverband Rheinland e.V.,Nordrhein-Westfalen,Germany
 50606,Kolpingwerk Deutschland n.e.V.,Nordrhein-Westfalen,Germany
 50606,Music + More,Nordrhein-Westfalen,Germany
-50606,Raiffeisen-Waren Rhein-Main eG,Nordrhein-Westfalen,Germany
 50606,RheinEnergie Köln,Nordrhein-Westfalen,Germany
 50606,SIGNAL IDUNA,Nordrhein-Westfalen,Germany
 50663,Landschaftsverband Rheinland,Nordrhein-Westfalen,Germany
 50664,AGIAMONDO e.V.,Nordrhein-Westfalen,Germany
+50664,Deutsche Angestellten Krankenkasse,Nordrhein-Westfalen,Germany
 50664,Hauptzollamt,Nordrhein-Westfalen,Germany
 50667,Köln,Nordrhein-Westfalen,Germany
 50668,Köln,Nordrhein-Westfalen,Germany
@@ -10226,7 +10104,6 @@
 50765,Köln,Nordrhein-Westfalen,Germany
 50767,Köln,Nordrhein-Westfalen,Germany
 50769,Köln,Nordrhein-Westfalen,Germany
-50819,Bundeszentrale für gesundheitliche Aufklärung,Nordrhein-Westfalen,Germany
 50823,Köln,Nordrhein-Westfalen,Germany
 50825,Köln,Nordrhein-Westfalen,Germany
 50827,Köln,Nordrhein-Westfalen,Germany
@@ -10237,11 +10114,9 @@
 50859,Köln,Nordrhein-Westfalen,Germany
 50922,Amtsgericht Köln,Nordrhein-Westfalen,Germany
 50922,Landgericht KÃ¶ln,Nordrhein-Westfalen,Germany
-50924,Evang. Klinikum Köln Weyertal,Nordrhein-Westfalen,Germany
 50924,Krankenhaus Weyertal,Nordrhein-Westfalen,Germany
 50926,Bundesärztekammer BÄK,Nordrhein-Westfalen,Germany
 50926,KÃ¶lner Studentenwerk AÃ¶R,Nordrhein-Westfalen,Germany
-50926,Max-Planck-Institut für Stoffwechselforschung,Nordrhein-Westfalen,Germany
 50926,Staatsanwaltschaft Köln,Nordrhein-Westfalen,Germany
 50927,Deutsche Sporthochschule,Nordrhein-Westfalen,Germany
 50927,Pfeifer & Langen,Nordrhein-Westfalen,Germany
@@ -10264,7 +10139,6 @@
 51065,Köln,Nordrhein-Westfalen,Germany
 51067,Köln,Nordrhein-Westfalen,Germany
 51069,Köln,Nordrhein-Westfalen,Germany
-51101,Bundeszentrale für gesundheitliche Aufklärung,Nordrhein-Westfalen,Germany
 51101,Malteser Hilfsdienst e.V.,Nordrhein-Westfalen,Germany
 51101,Polizeipräsidium Köln,Nordrhein-Westfalen,Germany
 51103,Köln,Nordrhein-Westfalen,Germany
@@ -10276,6 +10150,7 @@
 51147,Köln,Nordrhein-Westfalen,Germany
 51149,Köln,Nordrhein-Westfalen,Germany
 51170,ITS Reisen,Nordrhein-Westfalen,Germany
+51222,Postbank Niederlassung Köln,Nordrhein-Westfalen,Germany
 51367,Amtsgericht Leverkusen,Nordrhein-Westfalen,Germany
 51371,Leverkusen,Nordrhein-Westfalen,Germany
 51373,Leverkusen,Nordrhein-Westfalen,Germany
@@ -10293,7 +10168,6 @@
 51465,Bergisch Gladbach,Nordrhein-Westfalen,Germany
 51467,Bergisch Gladbach,Nordrhein-Westfalen,Germany
 51469,Bergisch Gladbach,Nordrhein-Westfalen,Germany
-51489,Soennecken eG,Nordrhein-Westfalen,Germany
 51491,Overath,Nordrhein-Westfalen,Germany
 51503,Rösrath,Nordrhein-Westfalen,Germany
 51515,Kürten,Nordrhein-Westfalen,Germany
@@ -10312,16 +10186,16 @@
 51647,Gummersbach,Nordrhein-Westfalen,Germany
 51674,Wiehl,Nordrhein-Westfalen,Germany
 51688,Wipperfürth,Nordrhein-Westfalen,Germany
-51700,Stiftung Missionswerk Werner Heukelbach,Nordrhein-Westfalen,Germany
 51702,Bergneustadt,Nordrhein-Westfalen,Germany
 51709,Marienheide,Nordrhein-Westfalen,Germany
 51766,Engelskirchen,Nordrhein-Westfalen,Germany
 51777,Christkindspostamt,Nordrhein-Westfalen,Germany
 51789,Lindlar,Nordrhein-Westfalen,Germany
+52045,HUK-Coburg,Nordrhein-Westfalen,Germany
 52047,BIG direkt gesund,Nordrhein-Westfalen,Germany
 52056,RWTH Aachen,Nordrhein-Westfalen,Germany
-52057,Universitätsklinikum der RWTH Aachen,Nordrhein-Westfalen,Germany
 52058,Stadtverwaltung,Nordrhein-Westfalen,Germany
+52059,Sparkasse Aachen,Nordrhein-Westfalen,Germany
 52062,Aachen,Nordrhein-Westfalen,Germany
 52064,Aachen,Nordrhein-Westfalen,Germany
 52066,Aachen,Nordrhein-Westfalen,Germany
@@ -10348,6 +10222,7 @@
 52348,Amtsgericht,Nordrhein-Westfalen,Germany
 52348,IKK classic,Nordrhein-Westfalen,Germany
 52348,Kreisverwaltung,Nordrhein-Westfalen,Germany
+52348,Sparkasse Düren,Nordrhein-Westfalen,Germany
 52348,Stadtverwaltung Düren,Nordrhein-Westfalen,Germany
 52349,Düren,Nordrhein-Westfalen,Germany
 52351,Düren,Nordrhein-Westfalen,Germany
@@ -10371,7 +10246,6 @@
 52499,Baesweiler,Nordrhein-Westfalen,Germany
 52509,Amtsgericht Geilenkirchen,Nordrhein-Westfalen,Germany
 52509,CSB-Systems SE,Nordrhein-Westfalen,Germany
-52509,Kreissparkasse Heinsberg Filialdirektion Geilenkirchen,Nordrhein-Westfalen,Germany
 52509,St. Elisabeth Krankenhaus,Nordrhein-Westfalen,Germany
 52509,Stadt Geilenkirchen,Nordrhein-Westfalen,Germany
 52511,Geilenkirchen,Nordrhein-Westfalen,Germany
@@ -10388,13 +10262,11 @@
 53103,Stadtverwaltung,Nordrhein-Westfalen,Germany
 53105,Amtsgericht Bonn,Nordrhein-Westfalen,Germany
 53105,Borromäusverein,Nordrhein-Westfalen,Germany
-53105,Bundesministerium des Auswärtigen Bonn,Nordrhein-Westfalen,Germany
 53105,Bundesnetzagentur,Nordrhein-Westfalen,Germany
-53105,Bundeszentrale für politische Bildung,Nordrhein-Westfalen,Germany
-53105,Deutscher Industrie- und Handelstag,Nordrhein-Westfalen,Germany
 53105,IKK classic,Nordrhein-Westfalen,Germany
 53105,Landgericht,Nordrhein-Westfalen,Germany
 53105,Landwirtschaftskammer Rheinland,Nordrhein-Westfalen,Germany
+53105,Techniker Krankenkasse,Nordrhein-Westfalen,Germany
 53106,FDP-Bundesgeschäftsstelle,Nordrhein-Westfalen,Germany
 53106,Inforum,Nordrhein-Westfalen,Germany
 53107,Bundesministerium für Gesundheit,Nordrhein-Westfalen,Germany
@@ -10417,6 +10289,7 @@
 53127,Bonn,Nordrhein-Westfalen,Germany
 53129,Bonn,Nordrhein-Westfalen,Germany
 53160,Aktion Mensch,Nordrhein-Westfalen,Germany
+53170,AOK Bundesverband,Nordrhein-Westfalen,Germany
 53170,Botschaft USA,Nordrhein-Westfalen,Germany
 53170,Bundesverband Deutscher Zeitungsverleger,Nordrhein-Westfalen,Germany
 53170,Deutsche Forschungsgemeinschaft,Nordrhein-Westfalen,Germany
@@ -10434,11 +10307,13 @@
 53222,Deutscher Verkehrssicherheitsrat e.V.,Nordrhein-Westfalen,Germany
 53222,Kreiswehrersatzamt,Nordrhein-Westfalen,Germany
 53222,Rathaus Beuel,Nordrhein-Westfalen,Germany
+53222,Sanitätsamt der Bundeswehr,Nordrhein-Westfalen,Germany
 53222,Staatsanwaltschaft,Nordrhein-Westfalen,Germany
 53225,Bonn,Nordrhein-Westfalen,Germany
 53227,Bonn,Nordrhein-Westfalen,Germany
 53229,Bonn,Nordrhein-Westfalen,Germany
 53248,Kundenservice Paket,Nordrhein-Westfalen,Germany
+53249,HUK-Coburg,Nordrhein-Westfalen,Germany
 53330,Stadtverwaltung,Nordrhein-Westfalen,Germany
 53332,Bornheim,Nordrhein-Westfalen,Germany
 53338,Bundeskriminalamt,Nordrhein-Westfalen,Germany
@@ -10448,7 +10323,6 @@
 53343,Wachtberg,Nordrhein-Westfalen,Germany
 53347,Alfter,Nordrhein-Westfalen,Germany
 53357,Amtsgericht,Nordrhein-Westfalen,Germany
-53357,Raiffeisenbank eG,Nordrhein-Westfalen,Germany
 53357,Stadtverwaltung,Nordrhein-Westfalen,Germany
 53359,Rheinbach,Nordrhein-Westfalen,Germany
 53423,Stadtverwaltung Remagen,Rheinland-Pfalz,Germany
@@ -10456,7 +10330,6 @@
 53426,Dedenbach,Rheinland-Pfalz,Germany
 53426,Königsfeld,Rheinland-Pfalz,Germany
 53426,Schalkenbach,Rheinland-Pfalz,Germany
-53470,Brogsitter Grundstücksgesellschaft Gelsdorf GbR,Rheinland-Pfalz,Germany
 53470,Weingut Albert Kreuzberg,Rheinland-Pfalz,Germany
 53474,Bad Neuenahr-Ahrweiler,Rheinland-Pfalz,Germany
 53489,Sinzig,Rheinland-Pfalz,Germany
@@ -10558,11 +10431,10 @@
 53719,Stadtverwaltung,Nordrhein-Westfalen,Germany
 53719,rhenag,Nordrhein-Westfalen,Germany
 53721,Siegburg,Nordrhein-Westfalen,Germany
-53754,Deutsche Gesetzliche Unfallvers. e.V.,Nordrhein-Westfalen,Germany
+53754,Bundeswehr,Nordrhein-Westfalen,Germany
 53754,Diedenhofen-Gesundheitspflege,Nordrhein-Westfalen,Germany
 53754,Dolorgiet-Arzneimittel,Nordrhein-Westfalen,Germany
 53754,Grenzschutzpräsidium West,Nordrhein-Westfalen,Germany
-53754,Hochschule Bonn Rhein Sieg,Nordrhein-Westfalen,Germany
 53754,Konrad-Adenauer-Stiftung,Nordrhein-Westfalen,Germany
 53754,Stadt Sankt Augustin,Nordrhein-Westfalen,Germany
 53757,Sankt Augustin,Nordrhein-Westfalen,Germany
@@ -10577,8 +10449,6 @@
 53844,Troisdorf,Nordrhein-Westfalen,Germany
 53859,Niederkassel,Nordrhein-Westfalen,Germany
 53877,Amtsgericht,Nordrhein-Westfalen,Germany
-53877,Kreis Euskirchen Der Landrat,Nordrhein-Westfalen,Germany
-53877,Kreissparkasse Euskirchen Technische Dienste,Nordrhein-Westfalen,Germany
 53879,Euskirchen,Nordrhein-Westfalen,Germany
 53881,Euskirchen,Nordrhein-Westfalen,Germany
 53884,Feldpostleitstelle Mechernich,Nordrhein-Westfalen,Germany
@@ -10612,7 +10482,6 @@
 54309,Newel,Rheinland-Pfalz,Germany
 54310,Menningen,Rheinland-Pfalz,Germany
 54310,Minden,Rheinland-Pfalz,Germany
-54310,Ralingen an der Sauer,Rheinland-Pfalz,Germany
 54311,Trierweiler,Rheinland-Pfalz,Germany
 54313,Zemmer,Rheinland-Pfalz,Germany
 54314,Baldringen,Rheinland-Pfalz,Germany
@@ -10732,8 +10601,6 @@
 54457,Wincheringen,Rheinland-Pfalz,Germany
 54459,Wiltingen,Rheinland-Pfalz,Germany
 54469,Amtsgericht,Rheinland-Pfalz,Germany
-54469,Moselland eG,Rheinland-Pfalz,Germany
-54469,REHA-Zentrum Bernkastel-Kues,Rheinland-Pfalz,Germany
 54469,Verbandsgemeindeverwaltung Bernkastel-Kues,Rheinland-Pfalz,Germany
 54470,Bernkastel-Kues,Rheinland-Pfalz,Germany
 54470,Graach,Rheinland-Pfalz,Germany
@@ -10986,7 +10853,6 @@
 54636,Hamm,Rheinland-Pfalz,Germany
 54636,Heilenbach,Rheinland-Pfalz,Germany
 54636,Hütterscheid,Rheinland-Pfalz,Germany
-54636,Hüttingen an der Kyll,Rheinland-Pfalz,Germany
 54636,Idenheim,Rheinland-Pfalz,Germany
 54636,Idesheim,Rheinland-Pfalz,Germany
 54636,Ingendorf,Rheinland-Pfalz,Germany
@@ -11053,7 +10919,6 @@
 54662,Herforst,Rheinland-Pfalz,Germany
 54662,Philippsheim,Rheinland-Pfalz,Germany
 54662,Speicher,Rheinland-Pfalz,Germany
-54664,Auw an der Kyll,Rheinland-Pfalz,Germany
 54664,Hosten,Rheinland-Pfalz,Germany
 54664,Preist,Rheinland-Pfalz,Germany
 54666,Irrel,Rheinland-Pfalz,Germany
@@ -11095,7 +10960,6 @@
 54673,Uppershausen,Rheinland-Pfalz,Germany
 54673,Waldhof-Falkenstein,Rheinland-Pfalz,Germany
 54673,Zweifelscheid,Rheinland-Pfalz,Germany
-54675,Ammeldingen an der Our,Rheinland-Pfalz,Germany
 54675,Biesdorf,Rheinland-Pfalz,Germany
 54675,Fischbach-Oberraden,Rheinland-Pfalz,Germany
 54675,Geichlingen,Rheinland-Pfalz,Germany
@@ -11110,7 +10974,6 @@
 54675,Niederraden,Rheinland-Pfalz,Germany
 54675,Nusbaum,Rheinland-Pfalz,Germany
 54675,Obergeckler,Rheinland-Pfalz,Germany
-54675,Roth an der Our,Rheinland-Pfalz,Germany
 54675,Sinspelt,Rheinland-Pfalz,Germany
 54675,Utscheid,Rheinland-Pfalz,Germany
 54675,Wallendorf,Rheinland-Pfalz,Germany
@@ -11126,6 +10989,7 @@
 54689,Preischeid,Rheinland-Pfalz,Germany
 54689,Reipeldingen,Rheinland-Pfalz,Germany
 54689,Übereisenbach,Rheinland-Pfalz,Germany
+55097,HUK-Coburg,Rheinland-Pfalz,Germany
 55099,Johannes-Gutenberg-UniversitÃ¤t,Rheinland-Pfalz,Germany
 55100,ZDF Sendezentrum,Rheinland-Pfalz,Germany
 55116,Mainz,Rheinland-Pfalz,Germany
@@ -11140,14 +11004,13 @@
 55130,Mainz,Rheinland-Pfalz,Germany
 55131,Mainz,Rheinland-Pfalz,Germany
 55146,Südwestrundfunk,Rheinland-Pfalz,Germany
-55148,Deutsche Bundesbank Servicezentrum Außenwirtschaftsstatistik,Rheinland-Pfalz,Germany
+55149,Familienkasse Rheinland-Pfalz-Saarland,Rheinland-Pfalz,Germany
 55218,Ingelheim am Rhein,Rheinland-Pfalz,Germany
 55232,Alzey,Rheinland-Pfalz,Germany
 55232,Ensheim,Rheinland-Pfalz,Germany
 55234,Albig,Rheinland-Pfalz,Germany
 55234,Bechenheim,Rheinland-Pfalz,Germany
 55234,Bechtolsheim,Rheinland-Pfalz,Germany
-55234,Bermersheim vor der Höhe,Rheinland-Pfalz,Germany
 55234,Biebelnheim,Rheinland-Pfalz,Germany
 55234,Dintesheim,Rheinland-Pfalz,Germany
 55234,Eppelsheim,Rheinland-Pfalz,Germany
@@ -11183,7 +11046,6 @@
 55270,Jugenheim,Rheinland-Pfalz,Germany
 55270,Klein-Winternheim,Rheinland-Pfalz,Germany
 55270,Ober-Olm,Rheinland-Pfalz,Germany
-55270,Schwabenheim an der Selz,Rheinland-Pfalz,Germany
 55270,Sörgenloch,Rheinland-Pfalz,Germany
 55270,Zornheim,Rheinland-Pfalz,Germany
 55271,Stadecken-Elsheim,Rheinland-Pfalz,Germany
@@ -11342,9 +11204,11 @@
 55497,Ellern,Rheinland-Pfalz,Germany
 55497,Schnorbach,Rheinland-Pfalz,Germany
 55499,Riesweiler,Rheinland-Pfalz,Germany
+55541,AOK Bad Kreuznach,Rheinland-Pfalz,Germany
 55541,Amtsgericht,Rheinland-Pfalz,Germany
 55541,JustizbehÃ¶rden,Rheinland-Pfalz,Germany
 55541,Landgericht,Rheinland-Pfalz,Germany
+55541,Sparkasse Rhein-Nahe,Rheinland-Pfalz,Germany
 55543,Bad Kreuznach,Rheinland-Pfalz,Germany
 55545,Bad Kreuznach,Rheinland-Pfalz,Germany
 55546,Biebelsheim,Rheinland-Pfalz,Germany
@@ -11380,13 +11244,11 @@
 55578,Vendersheim,Rheinland-Pfalz,Germany
 55578,Wallertheim,Rheinland-Pfalz,Germany
 55578,Wolfsheim,Rheinland-Pfalz,Germany
-55583,Bad Münster am Stein-Ebernburg,Rheinland-Pfalz,Germany
 55585,Altenbamberg,Rheinland-Pfalz,Germany
 55585,Duchroth,Rheinland-Pfalz,Germany
 55585,Hochstätten,Rheinland-Pfalz,Germany
 55585,Niederhausen,Rheinland-Pfalz,Germany
 55585,Norheim,Rheinland-Pfalz,Germany
-55585,Oberhausen an der Nahe,Rheinland-Pfalz,Germany
 55590,Meisenheim,Rheinland-Pfalz,Germany
 55592,Breitenheim,Rheinland-Pfalz,Germany
 55592,Desloch,Rheinland-Pfalz,Germany
@@ -11549,20 +11411,20 @@
 55779,Heimbach,Rheinland-Pfalz,Germany
 55779,Leitzweiler,Rheinland-Pfalz,Germany
 56048,Debeka BKK,Rheinland-Pfalz,Germany
+56053,HUK-Coburg,Rheinland-Pfalz,Germany
 56054,Debeka Bausparkasse,Rheinland-Pfalz,Germany
-56056,Struktur- und Genehmigungsdirektion Nord,Rheinland-Pfalz,Germany
 56062,Landesamt fÃ¼r Finanzen,Rheinland-Pfalz,Germany
+56063,AOK,Rheinland-Pfalz,Germany
 56063,Handwerkskammer Koblenz,Rheinland-Pfalz,Germany
 56063,Kreisverwaltung Mayen-Koblenz,Rheinland-Pfalz,Germany
 56063,Polizeipräsidium Koblenz,Rheinland-Pfalz,Germany
+56063,Techniker Krankenkasse,Rheinland-Pfalz,Germany
 56064,Bundesarchiv,Rheinland-Pfalz,Germany
 56064,Bundeswehrzentralkrankenhaus,Rheinland-Pfalz,Germany
 56064,Industrie- u. Handelskammer,Rheinland-Pfalz,Germany
 56064,Landesamt fÃ¼r Steuern,Rheinland-Pfalz,Germany
 56064,Medizinaluntersuchungsamt,Rheinland-Pfalz,Germany
 56064,Stadtverwaltung Koblenz,Rheinland-Pfalz,Germany
-56065,Amt für Soziale Angelegenheiten,Rheinland-Pfalz,Germany
-56065,Arbeitsgericht Koblenz Neues Justizzentrum,Rheinland-Pfalz,Germany
 56065,Bezirksärztekammer,Rheinland-Pfalz,Germany
 56065,Deutscher Gewerkschaftsbund,Rheinland-Pfalz,Germany
 56065,Integrationsamt,Rheinland-Pfalz,Germany
@@ -11570,9 +11432,6 @@
 56065,Landesberufsgericht,Rheinland-Pfalz,Germany
 56065,Landgericht / Amtsgericht,Rheinland-Pfalz,Germany
 56065,Oberlandesgericht,Rheinland-Pfalz,Germany
-56065,Oberverwaltungsgericht Rheinland-Pfalz Neues Justizzentrum,Rheinland-Pfalz,Germany
-56065,Sozialgericht Koblenz Neues Justizzentrum,Rheinland-Pfalz,Germany
-56065,Staatsanwaltschaft Koblenz Neues Justizzentrum,Rheinland-Pfalz,Germany
 56065,Verfassungsgerichtshof,Rheinland-Pfalz,Germany
 56065,Verwaltungsgericht,Rheinland-Pfalz,Germany
 56068,Koblenz,Rheinland-Pfalz,Germany
@@ -11793,7 +11652,6 @@
 56357,Gemmerich,Rheinland-Pfalz,Germany
 56357,Hainau,Rheinland-Pfalz,Germany
 56357,Himmighofen,Rheinland-Pfalz,Germany
-56357,Holzhausen an der Haide,Rheinland-Pfalz,Germany
 56357,Kasdorf,Rheinland-Pfalz,Germany
 56357,Lierschied,Rheinland-Pfalz,Germany
 56357,Lipporn,Rheinland-Pfalz,Germany
@@ -11932,6 +11790,7 @@
 56459,Willmenrod,Rheinland-Pfalz,Germany
 56459,Winnen,Rheinland-Pfalz,Germany
 56462,Höhn,Rheinland-Pfalz,Germany
+56469,Sparkasse Westerwald-Sieg,Rheinland-Pfalz,Germany
 56469,Verbandsgemeindeverwaltung,Rheinland-Pfalz,Germany
 56470,Bad Marienberg,Rheinland-Pfalz,Germany
 56472,Dreisbach,Rheinland-Pfalz,Germany
@@ -12000,7 +11859,6 @@
 56598,Rheinbrohl,Rheinland-Pfalz,Germany
 56599,Leutesdorf,Rheinland-Pfalz,Germany
 56624,Amtsgericht,Rheinland-Pfalz,Germany
-56624,Landesversicherungsanstalt Rheinland-Pfalz ZwSt. Andernach,Rheinland-Pfalz,Germany
 56624,Unfallkasse Rheinland-Pfalz,Rheinland-Pfalz,Germany
 56626,Andernach,Rheinland-Pfalz,Germany
 56630,Kretz,Rheinland-Pfalz,Germany
@@ -12184,11 +12042,10 @@
 56869,Mastershausen,Rheinland-Pfalz,Germany
 57069,Bundesknappschaft,Nordrhein-Westfalen,Germany
 57069,IKK classic,Nordrhein-Westfalen,Germany
-57069,Industrie- und Handelskammer Siegen,Nordrhein-Westfalen,Germany
 57069,Kreis Siegen-Wittgenstein,Nordrhein-Westfalen,Germany
 57069,Muscheid (Eisen),Nordrhein-Westfalen,Germany
 57069,Reichwald + Co,Nordrhein-Westfalen,Germany
-57069,St. Marien-Krankenhaus Siegen gGmbH,Nordrhein-Westfalen,Germany
+57069,Sparkasse Siegen,Nordrhein-Westfalen,Germany
 57069,Stadtverwaltung,Nordrhein-Westfalen,Germany
 57072,Siegen,Nordrhein-Westfalen,Germany
 57074,Siegen,Nordrhein-Westfalen,Germany
@@ -12207,7 +12064,6 @@
 57319,Bad Berleburg Alertshausen,Nordrhein-Westfalen,Germany
 57319,Bad Berleburg Arfeld,Nordrhein-Westfalen,Germany
 57319,Bad Berleburg Aue,Nordrhein-Westfalen,Germany
-57319,Bad Berleburg Bad Berleburg,Nordrhein-Westfalen,Germany
 57319,Bad Berleburg Beddelhausen,Nordrhein-Westfalen,Germany
 57319,Bad Berleburg Berghausen,Nordrhein-Westfalen,Germany
 57319,Bad Berleburg Diedenshausen,Nordrhein-Westfalen,Germany
@@ -12326,6 +12182,8 @@
 57614,Stürzelbach,Rheinland-Pfalz,Germany
 57614,Wahlrod,Rheinland-Pfalz,Germany
 57614,Woldert,Rheinland-Pfalz,Germany
+57626,Nassauische Sparkasse,Rheinland-Pfalz,Germany
+57626,Sparkasse Westerwald-Sieg,Rheinland-Pfalz,Germany
 57626,Verbandsgemeindeverwaltung Hachenburg,Rheinland-Pfalz,Germany
 57626,Westerwald-Brauerei,Rheinland-Pfalz,Germany
 57627,Astert,Rheinland-Pfalz,Germany
@@ -12349,7 +12207,6 @@
 57629,Müschenbach,Rheinland-Pfalz,Germany
 57629,Norken,Rheinland-Pfalz,Germany
 57629,Stein-Wingert,Rheinland-Pfalz,Germany
-57629,Steinebach an der Wied,Rheinland-Pfalz,Germany
 57629,Streithausen,Rheinland-Pfalz,Germany
 57629,Wied,Rheinland-Pfalz,Germany
 57632,Berzhausen,Rheinland-Pfalz,Germany
@@ -12398,16 +12255,18 @@
 57647,Nistertal,Rheinland-Pfalz,Germany
 57648,Bölsberg,Rheinland-Pfalz,Germany
 57648,Unnau,Rheinland-Pfalz,Germany
+58079,AOK NordWest,Nordrhein-Westfalen,Germany
 58081,Amtsgericht Hagen -Mahnabteilung-,Nordrhein-Westfalen,Germany
 58084,FernUniversität in Hagen,Nordrhein-Westfalen,Germany
 58085,BARMER,Nordrhein-Westfalen,Germany
 58085,DAK Hagen,Nordrhein-Westfalen,Germany
-58085,DEBEKA Versicherungen und Bausparkasse,Nordrhein-Westfalen,Germany
 58085,IKK classic,Nordrhein-Westfalen,Germany
 58085,Polizeipräsident,Nordrhein-Westfalen,Germany
 58085,Stadtanzeiger,Nordrhein-Westfalen,Germany
 58085,Stadtverwaltung Hagen,Nordrhein-Westfalen,Germany
+58085,Techniker Krankenkasse,Nordrhein-Westfalen,Germany
 58086,Amtsgericht Hagen,Nordrhein-Westfalen,Germany
+58086,Justizvollzugsanstalt (ohne Insassen),Nordrhein-Westfalen,Germany
 58086,Landgericht Hagen,Nordrhein-Westfalen,Germany
 58086,Staatsanwaltschaft Hagen,Nordrhein-Westfalen,Germany
 58089,Hagen,Nordrhein-Westfalen,Germany
@@ -12421,13 +12280,12 @@
 58119,Hagen,Nordrhein-Westfalen,Germany
 58135,Hagen,Nordrhein-Westfalen,Germany
 58147,bol.de,Nordrhein-Westfalen,Germany
-58237,Stadtsparkasse Dortmund Filiale Schwerte,Nordrhein-Westfalen,Germany
 58237,Stadtverwaltung,Nordrhein-Westfalen,Germany
 58239,Schwerte,Nordrhein-Westfalen,Germany
 58256,Ennepetal,Nordrhein-Westfalen,Germany
 58283,Stadtverwaltung Gevelsberg,Nordrhein-Westfalen,Germany
 58285,Gevelsberg,Nordrhein-Westfalen,Germany
-58292,KÃ¶hler & Lafrenz GbR,Nordrhein-Westfalen,Germany
+58292,Evangelische Stiftung Volmarstein,Nordrhein-Westfalen,Germany
 58298,Amtsgericht und Jugendarrestanstalt,Nordrhein-Westfalen,Germany
 58298,Stadtverwaltung Wetter (Ruhr),Nordrhein-Westfalen,Germany
 58300,Wetter (Ruhr),Nordrhein-Westfalen,Germany
@@ -12441,7 +12299,7 @@
 58332,Schwelm,Nordrhein-Westfalen,Germany
 58339,Breckerfeld,Nordrhein-Westfalen,Germany
 58449,Amtsgericht,Nordrhein-Westfalen,Germany
-58449,"Diakoniewerk Ruhr, Ev. Krankenhaus",Nordrhein-Westfalen,Germany
+58449,Sparkasse Witten,Nordrhein-Westfalen,Germany
 58449,Stadt Witten,Nordrhein-Westfalen,Germany
 58452,Witten,Nordrhein-Westfalen,Germany
 58453,Witten,Nordrhein-Westfalen,Germany
@@ -12461,10 +12319,11 @@
 58553,Halver,Nordrhein-Westfalen,Germany
 58566,Kierspe,Nordrhein-Westfalen,Germany
 58579,Schalksmühle,Nordrhein-Westfalen,Germany
-58634,Ev. Krankenhaus Bethanien,Nordrhein-Westfalen,Germany
 58634,IKK classic,Nordrhein-Westfalen,Germany
 58634,Märkischer Kreis,Nordrhein-Westfalen,Germany
+58634,Sparkasse Iserlohn,Nordrhein-Westfalen,Germany
 58634,Stadt Iserlohn,Nordrhein-Westfalen,Germany
+58634,Techniker Krankenkasse,Nordrhein-Westfalen,Germany
 58636,Iserlohn,Nordrhein-Westfalen,Germany
 58638,Iserlohn,Nordrhein-Westfalen,Germany
 58640,Iserlohn,Nordrhein-Westfalen,Germany
@@ -12489,10 +12348,10 @@
 59061,Landesarbeitsgericht Arbeitsgericht,Nordrhein-Westfalen,Germany
 59061,Liboriusblatt,Nordrhein-Westfalen,Germany
 59061,Oberlandesgericht,Nordrhein-Westfalen,Germany
+59061,Sparkasse Hamm,Nordrhein-Westfalen,Germany
 59061,Staatsanwaltschaft Dortmund-Zweigstelle Hamm,Nordrhein-Westfalen,Germany
-59061,Stadt Hamm Bürgeramt Mitte,Nordrhein-Westfalen,Germany
 59061,Westf. Drahtindustrie,Nordrhein-Westfalen,Germany
-59061,Zentrale Zahlstelle Justiz,Nordrhein-Westfalen,Germany
+59062,HUK-Coburg,Nordrhein-Westfalen,Germany
 59063,Hamm,Nordrhein-Westfalen,Germany
 59065,Hamm,Nordrhein-Westfalen,Germany
 59067,Hamm,Nordrhein-Westfalen,Germany
@@ -12501,6 +12360,7 @@
 59073,Hamm,Nordrhein-Westfalen,Germany
 59075,Hamm,Nordrhein-Westfalen,Germany
 59077,Hamm,Nordrhein-Westfalen,Germany
+59089,Sparkasse SoestWerl,Nordrhein-Westfalen,Germany
 59172,Amtsgericht,Nordrhein-Westfalen,Germany
 59172,Stadtverwaltung,Nordrhein-Westfalen,Germany
 59174,Kamen,Nordrhein-Westfalen,Germany
@@ -12532,14 +12392,17 @@
 59438,V.W. WERKE WIEDERHOLT,Nordrhein-Westfalen,Germany
 59439,Holzwickede,Nordrhein-Westfalen,Germany
 59455,Amtsgericht Werl,Nordrhein-Westfalen,Germany
+59455,Justizvollzugsanstalt Werl,Nordrhein-Westfalen,Germany
 59455,Mariannenhospital,Nordrhein-Westfalen,Germany
 59455,Stadt Werl,Nordrhein-Westfalen,Germany
 59457,Werl,Nordrhein-Westfalen,Germany
 59469,Ense,Nordrhein-Westfalen,Germany
 59491,Amtsgericht Soest,Nordrhein-Westfalen,Germany
 59491,Marienkrankenhaus,Nordrhein-Westfalen,Germany
+59491,Sparkasse Soest,Nordrhein-Westfalen,Germany
 59491,Stadt Soest,Nordrhein-Westfalen,Germany
 59491,Stadtkrankenhaus Soest,Nordrhein-Westfalen,Germany
+59491,Techniker Krankenkasse,Nordrhein-Westfalen,Germany
 59494,Soest,Nordrhein-Westfalen,Germany
 59495,Kreis Soest,Nordrhein-Westfalen,Germany
 59505,Bad Sassendorf,Nordrhein-Westfalen,Germany
@@ -12549,6 +12412,7 @@
 59553,Amtsgericht,Nordrhein-Westfalen,Germany
 59553,Evangelisches Krankenhaus Lippstadt,Nordrhein-Westfalen,Germany
 59553,IKK classic,Nordrhein-Westfalen,Germany
+59553,Sparkasse Lippstadt,Nordrhein-Westfalen,Germany
 59553,Stadtverwaltung Lippstadt,Nordrhein-Westfalen,Germany
 59555,Lippstadt,Nordrhein-Westfalen,Germany
 59556,Lippstadt,Nordrhein-Westfalen,Germany
@@ -12559,6 +12423,7 @@
 59597,Erwitte,Nordrhein-Westfalen,Germany
 59602,Rüthen,Nordrhein-Westfalen,Germany
 59609,Anröchte,Nordrhein-Westfalen,Germany
+59753,Sparkasse Arnsberg-Sundern,Nordrhein-Westfalen,Germany
 59753,Stadt Arnsberg,Nordrhein-Westfalen,Germany
 59755,Arnsberg,Nordrhein-Westfalen,Germany
 59757,Arnsberg,Nordrhein-Westfalen,Germany
@@ -12584,14 +12449,16 @@
 59964,Medebach,Nordrhein-Westfalen,Germany
 59969,Bromskirchen,Hessen,Germany
 59969,Hallenberg,Nordrhein-Westfalen,Germany
-60256,Amtsgericht Frankfurt am Main,Hessen,Germany
+60222,Hessischer Rundfunk,Hessen,Germany
+60255,Frankfurter Sparkasse,Hessen,Germany
 60257,Allianz Versicherungen,Hessen,Germany
 60263,Deutsche Bundesbank,Hessen,Germany
 60284,Helvetia Schweizerische Versicherungsgesellschaft,Hessen,Germany
-60284,Industrie- und Handelskammer Frankfurt,Hessen,Germany
 60284,Isbank,Hessen,Germany
 60286,American Express Reisescheck,Hessen,Germany
+60290,Postbank Frankfurt,Hessen,Germany
 60291,DAK -Sozialversicherungswahlen-,Hessen,Germany
+60297,Landesbank Hessen-Thüringen,Hessen,Germany
 60306,Frankfurt am Main,Hessen,Germany
 60307,Stadt- und Universitätsbibliothek,Hessen,Germany
 60308,Frankfurt am Main,Hessen,Germany
@@ -12617,7 +12484,6 @@
 60386,Frankfurt am Main,Hessen,Germany
 60388,Frankfurt am Main,Hessen,Germany
 60389,Frankfurt am Main,Hessen,Germany
-60423,Deutsche Gesellschaft für Qualität,Hessen,Germany
 60423,Industriegewerkschaft Bauen-Agrar-Umwelt,Hessen,Germany
 60431,Frankfurt am Main,Hessen,Germany
 60433,Frankfurt am Main,Hessen,Germany
@@ -12627,7 +12493,6 @@
 60439,Frankfurt am Main,Hessen,Germany
 60484,Airtours International,Hessen,Germany
 60484,Nordwest-Krankenhaus,Hessen,Germany
-60484,Zentralverband der Deutschen Elektrohandwerke,Hessen,Germany
 60486,Frankfurt am Main,Hessen,Germany
 60487,Frankfurt am Main,Hessen,Germany
 60488,Frankfurt am Main,Hessen,Germany
@@ -12635,21 +12500,21 @@
 60519,IG Metall Vorstand,Hessen,Germany
 60521,ADAC Hessen-Thüringen e.V.,Hessen,Germany
 60525,Deutscher Olympischer Sportbund,Hessen,Germany
+60525,Techniker Krankenkasse,Hessen,Germany
 60528,Frankfurt am Main,Hessen,Germany
 60529,Frankfurt am Main,Hessen,Germany
 60549,Frankfurt am Main,Hessen,Germany
 60590,Universitätsklinikum Frankfurt,Hessen,Germany
+60591,Deutsche Angestellten-Krankenkasse,Hessen,Germany
 60594,Frankfurt am Main,Hessen,Germany
 60596,Frankfurt am Main,Hessen,Germany
 60598,Frankfurt am Main,Hessen,Germany
 60599,Frankfurt am Main,Hessen,Germany
-60600,PATRIZIA THE SQUAIRE 18,Hessen,Germany
 60625,"DekaBank, Deutsche Girozentrale",Hessen,Germany
 60634,Deutsche Vermögensberatung Aktiengesellschaft,Hessen,Germany
 60640,Europäische Zentralbank,Hessen,Germany
 60647,Servicecenter Fahrgastrechte,Land Berlin,Germany
 61116,Amtsgericht,Hessen,Germany
-61116,Berufsförderungswerk Frankfurt am Main,Hessen,Germany
 61116,Verband Hessischer Zeitungsverleger,Hessen,Germany
 61116,harmony.fm,Hessen,Germany
 61116,planet Radio,Hessen,Germany
@@ -12660,14 +12525,12 @@
 61167,Amtsgericht,Hessen,Germany
 61169,Friedberg,Hessen,Germany
 61184,Karben,Hessen,Germany
-61191,Rosbach vor der Höhe,Hessen,Germany
 61194,Niddatal,Hessen,Germany
 61197,Florstadt,Hessen,Germany
 61200,Wölfersheim,Hessen,Germany
 61203,Reichelsheim,Hessen,Germany
 61206,Wöllstadt,Hessen,Germany
 61209,Echzell,Hessen,Germany
-61229,Diakoniewerk Elisabethhaus Bad Nauheim,Hessen,Germany
 61231,Bad Nauheim,Hessen,Germany
 61239,Ober-Mörlen,Hessen,Germany
 61250,Usingen,Hessen,Germany
@@ -12680,6 +12543,7 @@
 61343,Hochtaunus-Kliniken gGmbH,Hessen,Germany
 61343,Patienten-Heimversorgung,Hessen,Germany
 61343,Stadtverwaltung,Hessen,Germany
+61343,Taunus-Sparkasse,Hessen,Germany
 61346,Fresenius Netcare,Hessen,Germany
 61381,Friedrichsdorf,Hessen,Germany
 61389,Schmitten,Hessen,Germany
@@ -12687,15 +12551,12 @@
 61440,Oberursel,Hessen,Germany
 61449,Steinbach (Taunus),Hessen,Germany
 61462,Königstein im Taunus,Hessen,Germany
-61462,Königstein im Taunus Falkenstein,Hessen,Germany
-61462,Königstein im Taunus Mammolshain,Hessen,Germany
-61462,Königstein im Taunus Schneidhain,Hessen,Germany
-61474,Magistrat der Stadt Kronberg,Hessen,Germany
 61476,Kronberg im Taunus,Hessen,Germany
 61479,Glashütten,Hessen,Germany
 63061,Stadtverwaltung,Hessen,Germany
 63063,Amtsgericht Offenbach,Hessen,Germany
 63063,IHK,Hessen,Germany
+63063,Städt. Sparkasse,Hessen,Germany
 63065,Offenbach,Hessen,Germany
 63067,Offenbach,Hessen,Germany
 63069,Offenbach,Hessen,Germany
@@ -12712,15 +12573,15 @@
 63179,Obertshausen,Hessen,Germany
 63222,Amtsgericht,Hessen,Germany
 63225,Langen,Hessen,Germany
-63257,Banque PSA Finance S.A.,Hessen,Germany
 63257,Stadtverwaltung,Hessen,Germany
+63259,Mobil Krankenkasse,Hessen,Germany
 63263,Neu-Isenburg,Hessen,Germany
 63299,Stadtverwaltung,Hessen,Germany
 63303,Dreieich,Hessen,Germany
-63317,"The Bradford Exchange, Ltd.",Hessen,Germany
 63322,Rödermark,Hessen,Germany
 63329,Egelsbach,Hessen,Germany
 63405,Hanau,Hessen,Germany
+63446,Sparkasse Hanau,Hessen,Germany
 63446,St. Vinzenz Krankenhaus,Hessen,Germany
 63446,Stadtverwaltung,Hessen,Germany
 63450,Hanau,Hessen,Germany
@@ -12731,13 +12592,13 @@
 63475,Stadtverwaltung Maintal,Hessen,Germany
 63477,Maintal,Hessen,Germany
 63486,Bruchköbel,Hessen,Germany
+63499,Sparkasse Langen-Seligenstadt,Hessen,Germany
 63499,Stadtverwaltung,Hessen,Germany
 63500,Seligenstadt,Hessen,Germany
 63505,Langenselbold,Hessen,Germany
 63512,Hainburg,Hessen,Germany
 63517,Rodenbach,Hessen,Germany
 63526,Erlensee,Hessen,Germany
-63532,anwr Ariston-Nord-West-Ring eG,Hessen,Germany
 63533,Mainhausen,Hessen,Germany
 63538,Großkrotzenburg,Hessen,Germany
 63543,Neuberg,Hessen,Germany
@@ -12772,8 +12633,10 @@
 63695,Glauburg,Hessen,Germany
 63697,Hirzenhain,Hessen,Germany
 63699,Kefenrod,Hessen,Germany
+63736,AOK,Bayern,Germany
 63736,Justizbehörden,Bayern,Germany
 63736,Landratsamt,Bayern,Germany
+63736,Sparkasse Aschaffenburg-Alzenau,Bayern,Germany
 63736,Stadt Aschaffenburg,Bayern,Germany
 63739,Aschaffenburg,Bayern,Germany
 63741,Aschaffenburg,Bayern,Germany
@@ -12838,15 +12701,14 @@
 63936,Schneeberg,Bayern,Germany
 63937,Weilbach,Bayern,Germany
 63939,Wörth am Main,Bayern,Germany
-64271,Merck KGaA,Hessen,Germany
 64276,Klinikum Darmstadt,Hessen,Germany
 64276,Landkreis Darmstadt-Dieburg Kreisausschuß,Hessen,Germany
 64276,Staatsanwaltschaft Darmstadt,Hessen,Germany
 64276,Studiengemeinschaft Darmstadt,Hessen,Germany
-64278,Hessisches Landessozialgericht und Sozialgericht,Hessen,Germany
 64278,Landgericht Darmstadt,Hessen,Germany
 64278,Regierungspräsidium Darmstadt,Hessen,Germany
 64278,Staatskasse Darmstadt,Hessen,Germany
+64278,Stadt- und Kreis-Sparkasse,Hessen,Germany
 64283,Darmstadt,Hessen,Germany
 64285,Darmstadt,Hessen,Germany
 64287,Darmstadt,Hessen,Germany
@@ -12872,6 +12734,7 @@
 64405,Fischbachtal,Hessen,Germany
 64407,Fränkisch-Crumbach,Hessen,Germany
 64409,Messel,Hessen,Germany
+64518,AOK Geschäftsstelle Groß-Gerau,Hessen,Germany
 64518,Amtsgericht Groß-Gerau,Hessen,Germany
 64518,Kreiskrankenhaus Groß-Gerau,Hessen,Germany
 64518,Landratsamt Groß-Gerau,Hessen,Germany
@@ -12886,7 +12749,6 @@
 64623,Amtsgericht,Hessen,Germany
 64623,Fernmeldeverkaufsbezirk,Hessen,Germany
 64623,IKK Südhessen,Hessen,Germany
-64623,Magistrat der Stadt Bensheim,Hessen,Germany
 64625,Bensheim,Hessen,Germany
 64646,Heppenheim (Bergstraße),Hessen,Germany
 64653,Lorsch,Hessen,Germany
@@ -12902,7 +12764,6 @@
 64720,Michelstadt,Hessen,Germany
 64732,Bad König,Hessen,Germany
 64738,Gemeindeverwaltung,Hessen,Germany
-64738,Hübbe Reisen OHG,Hessen,Germany
 64739,Höchst im Odenwald,Hessen,Germany
 64743,Beerfelden,Hessen,Germany
 64747,Breuberg,Hessen,Germany
@@ -12930,20 +12791,18 @@
 65174,Hessisches Polizeiverwaltungsamt,Hessen,Germany
 65174,Justizbehörden,Hessen,Germany
 65174,Landesbeschaffungsstelle Hessen,Hessen,Germany
-65174,Landeswohlfahrtsverband Hess. Zweigverwaltung Wiesbaden,Hessen,Germany
-65174,Lohnausgleichskasse für das Dachdeckerhandwerk,Hessen,Germany
 65174,Sparkassenversicherung,Hessen,Germany
 65175,GVV-Kommunalversicherung VVaG,Hessen,Germany
 65175,Hessisches Statistisches Landesamt,Hessen,Germany
 65175,Landeshauptstadt Der Magistrat,Hessen,Germany
-65175,Landeshauptstadt Wiesbaden Der Magistrat,Hessen,Germany
+65175,Nassauische Sparkasse Rechnungseingang,Hessen,Germany
 65175,Polizeipräsidium Westhessen,Hessen,Germany
 65175,Staatsanwaltschaft beim Landgericht,Hessen,Germany
-65175,Urlaubs-und Ausgleichskasse der Bauwirtschaft,Hessen,Germany
 65177,Harald Reif Dipl.-Betriebswirt,Hessen,Germany
 65178,DBV-Winterthur Holding Aktiengesellschaft,Hessen,Germany
 65179,Zusatzversorgungskasse des Baugewerbes,Hessen,Germany
 65180,Statistisches Bundesamt,Hessen,Germany
+65182,HUK-Coburg,Hessen,Germany
 65183,Wiesbaden,Hessen,Germany
 65185,Wiesbaden,Hessen,Germany
 65187,Wiesbaden,Hessen,Germany
@@ -12985,7 +12844,6 @@
 65396,Walluf,Hessen,Germany
 65399,Kiedrich,Hessen,Germany
 65424,Amtsgericht,Hessen,Germany
-65424,EDS Electronic Data Systems,Hessen,Germany
 65424,Stadtkrankenhaus,Hessen,Germany
 65428,Rüsselsheim,Hessen,Germany
 65438,Deutsche Shell,Hessen,Germany
@@ -13006,14 +12864,6 @@
 65547,Landratsamt,Hessen,Germany
 65547,Missionshaus der Pallottiner,Hessen,Germany
 65547,Stadtverwaltung Limburg,Hessen,Germany
-65549,Limburg an der Lahn,Hessen,Germany
-65550,Limburg an der Lahn,Hessen,Germany
-65551,Limburg an der Lahn,Hessen,Germany
-65552,Limburg an der Lahn,Hessen,Germany
-65553,Limburg an der Lahn,Hessen,Germany
-65554,Limburg an der Lahn,Hessen,Germany
-65555,Limburg an der Lahn,Hessen,Germany
-65556,Limburg an der Lahn,Hessen,Germany
 65558,Balduinstein,Rheinland-Pfalz,Germany
 65558,Burgschwalbach,Rheinland-Pfalz,Germany
 65558,Cramberg,Rheinland-Pfalz,Germany
@@ -13029,6 +12879,7 @@
 65558,Lohrheim,Rheinland-Pfalz,Germany
 65558,Oberneisen,Rheinland-Pfalz,Germany
 65580,Amtsgericht,Rheinland-Pfalz,Germany
+65580,Nassauische Sparkasse,Rheinland-Pfalz,Germany
 65580,Staatsbauamt Diez,Rheinland-Pfalz,Germany
 65580,Straßenbauamt Diez,Rheinland-Pfalz,Germany
 65580,Verbandsgemeindeverwaltung Diez,Rheinland-Pfalz,Germany
@@ -13054,6 +12905,7 @@
 65627,Elbtal,Hessen,Germany
 65629,Niederneisen,Rheinland-Pfalz,Germany
 65717,Barmer Ersatzkasse,Hessen,Germany
+65717,Deutsche Angestellten Krankenkasse,Hessen,Germany
 65717,Haus Maria Elisabeth,Hessen,Germany
 65717,Innungskrankenkasse,Hessen,Germany
 65717,Main-Taunus-Kreis Kreisausschuß,Hessen,Germany
@@ -13064,7 +12916,6 @@
 65784,TASSO,Hessen,Germany
 65795,Hattersheim,Hessen,Germany
 65810,Barmer Ersatzkasse,Hessen,Germany
-65812,Bad Soden am Taunus,Hessen,Germany
 65817,Eppstein,Hessen,Germany
 65824,Schwalbach am Taunus,Hessen,Germany
 65830,Kriftel,Hessen,Germany
@@ -13080,12 +12931,15 @@
 66098,Innungskrankenkasse Südwest,Saarland,Germany
 66103,Regio Print,Saarland,Germany
 66103,Saarbrücker Media Verkaufsgesellschaft,Saarland,Germany
+66104,AOK Rheinland-Pfalz/Saarland,Saarland,Germany
 66104,Deutsche Rentenversicherung Knappschaft-Bahn-See,Saarland,Germany
-66104,Generali Versicherungen Organisationsdirektion Saarbrücken,Saarland,Germany
 66104,IHK Saarland,Saarland,Germany
 66104,Justizbehörden Saarbrücken,Saarland,Germany
+66104,Landesbank Saar,Saarland,Germany
 66104,Landeshauptstadt Saarbrücken,Saarland,Germany
+66104,Sparkasse Saarbrücken,Saarland,Germany
 66108,Deutsche Rentenversicherung Saarland,Saarland,Germany
+66109,HUK Coburg,Saarland,Germany
 66111,Saarbrücken,Saarland,Germany
 66113,Saarbrücken,Saarland,Germany
 66115,Saarbrücken,Saarland,Germany
@@ -13293,7 +13147,6 @@
 66978,Donsieders,Rheinland-Pfalz,Germany
 66978,Leimen,Rheinland-Pfalz,Germany
 66978,Merzalben,Rheinland-Pfalz,Germany
-66981,Münchweiler an der Rodalb,Rheinland-Pfalz,Germany
 66987,Thaleischweiler-Fröschen,Rheinland-Pfalz,Germany
 66989,Höheinöd,Rheinland-Pfalz,Germany
 66989,Höheischweiler,Rheinland-Pfalz,Germany
@@ -13309,6 +13162,7 @@
 66996,Schönau,Rheinland-Pfalz,Germany
 66999,Hinterweidenthal,Rheinland-Pfalz,Germany
 67056,BASF SE,Rheinland-Pfalz,Germany
+67057,Postbank Niederlassung Ludwigshafen,Rheinland-Pfalz,Germany
 67059,Ludwigshafen am Rhein,Rheinland-Pfalz,Germany
 67061,Ludwigshafen am Rhein,Rheinland-Pfalz,Germany
 67063,Ludwigshafen am Rhein,Rheinland-Pfalz,Germany
@@ -13330,11 +13184,9 @@
 67136,Fußgönheim,Rheinland-Pfalz,Germany
 67141,Neuhofen,Rheinland-Pfalz,Germany
 67146,Deidesheim,Rheinland-Pfalz,Germany
-67147,Forst an der Weinstraße,Rheinland-Pfalz,Germany
 67149,Meckenheim,Rheinland-Pfalz,Germany
 67150,Niederkirchen bei Deidesheim,Rheinland-Pfalz,Germany
 67152,Ruppertsberg,Rheinland-Pfalz,Germany
-67157,Wachenheim an der Weinstraße,Rheinland-Pfalz,Germany
 67158,Ellerstadt,Rheinland-Pfalz,Germany
 67159,Friedelsheim,Rheinland-Pfalz,Germany
 67161,Gönnheim,Rheinland-Pfalz,Germany
@@ -13342,6 +13194,7 @@
 67166,Otterstadt,Rheinland-Pfalz,Germany
 67167,Erpolzheim,Rheinland-Pfalz,Germany
 67169,Kallstadt,Rheinland-Pfalz,Germany
+67225,Justizvollzugsanstalt,Rheinland-Pfalz,Germany
 67225,Landgericht,Rheinland-Pfalz,Germany
 67225,Staatsanwaltschaft Frankenthal,Rheinland-Pfalz,Germany
 67225,Stadtverwaltung,Rheinland-Pfalz,Germany
@@ -13374,7 +13227,6 @@
 67280,Ebertsheim,Rheinland-Pfalz,Germany
 67280,Quirnheim,Rheinland-Pfalz,Germany
 67281,Bissersheim,Rheinland-Pfalz,Germany
-67281,Kirchheim an der Weinstraße,Rheinland-Pfalz,Germany
 67283,Obrigheim,Rheinland-Pfalz,Germany
 67292,Kirchheimbolanden,Rheinland-Pfalz,Germany
 67294,Bischheim,Rheinland-Pfalz,Germany
@@ -13411,7 +13263,7 @@
 67340,Deutsche Rentenversicherung Rheinland-Pfalz,Rheinland-Pfalz,Germany
 67342,Deutsche Rentenversicherung Rheinland-Pfalz,Rheinland-Pfalz,Germany
 67343,Bischöfliches Ordinariat,Rheinland-Pfalz,Germany
-67343,Kreis- und Stadtsparkasse Speyer,Rheinland-Pfalz,Germany
+67343,Evangelische Diakonissenanstalt Speyer,Rheinland-Pfalz,Germany
 67343,Postbeamtenkrankenkasse Außenstelle (PBeaKK),Rheinland-Pfalz,Germany
 67343,St. Vincentius-Krankenhaus,Rheinland-Pfalz,Germany
 67343,Stadtverwaltung,Rheinland-Pfalz,Germany
@@ -13432,12 +13284,10 @@
 67429,Bezirksregierung Rheinhessen-Pfalz,Rheinland-Pfalz,Germany
 67429,DAK-Gesundheit,Rheinland-Pfalz,Germany
 67429,Justizbehörden Neustadt,Rheinland-Pfalz,Germany
+67429,Sparkasse Rhein-Haardt,Rheinland-Pfalz,Germany
 67429,Stadtverwaltung,Rheinland-Pfalz,Germany
 67429,Vereinte Versicherungen,Rheinland-Pfalz,Germany
 67429,Versicherungskammer Bayern,Rheinland-Pfalz,Germany
-67433,Neustadt an der Weinstraße,Rheinland-Pfalz,Germany
-67434,Neustadt an der Weinstraße,Rheinland-Pfalz,Germany
-67435,Neustadt an der Weinstraße,Rheinland-Pfalz,Germany
 67454,Haßloch,Rheinland-Pfalz,Germany
 67459,Böhl-Iggelheim,Rheinland-Pfalz,Germany
 67466,Lambrecht,Rheinland-Pfalz,Germany
@@ -13490,16 +13340,18 @@
 67596,Frettenheim,Rheinland-Pfalz,Germany
 67598,Gundersheim,Rheinland-Pfalz,Germany
 67599,Gundheim,Rheinland-Pfalz,Germany
-67653,1. FC Kaiserslautern e.V.,Rheinland-Pfalz,Germany
+67653,AOK Regionaldirektion Kaiserslautern,Rheinland-Pfalz,Germany
 67653,ARGE Land,Rheinland-Pfalz,Germany
 67653,ARGE Landkreis Kaiserslautern,Rheinland-Pfalz,Germany
 67653,ARGE Stadt Kaiserslautern,Rheinland-Pfalz,Germany
 67653,Bezirksverband Pfalz,Rheinland-Pfalz,Germany
+67653,Deutsche Angestellten Krankenkasse,Rheinland-Pfalz,Germany
 67653,IKK Südwest,Rheinland-Pfalz,Germany
 67653,Justizbehörden-Amtsgericht,Rheinland-Pfalz,Germany
 67653,Justizbehörden-Landgericht,Rheinland-Pfalz,Germany
 67653,Kaiserslautern,Rheinland-Pfalz,Germany
 67653,Kreisverwaltung Kaiserslautern,Rheinland-Pfalz,Germany
+67653,Sparkasse Kaiserslautern,Rheinland-Pfalz,Germany
 67653,Staatsanwaltschaft,Rheinland-Pfalz,Germany
 67653,Stadtsparkasse,Rheinland-Pfalz,Germany
 67653,Stadtverwaltung,Rheinland-Pfalz,Germany
@@ -13546,7 +13398,6 @@
 67725,Breunigweiler,Rheinland-Pfalz,Germany
 67725,Börrstadt,Rheinland-Pfalz,Germany
 67727,Lohnsfeld,Rheinland-Pfalz,Germany
-67728,Münchweiler an der Alsenz,Rheinland-Pfalz,Germany
 67729,Sippersfeld,Rheinland-Pfalz,Germany
 67731,Otterbach,Rheinland-Pfalz,Germany
 67732,Hirschhorn,Rheinland-Pfalz,Germany
@@ -13584,7 +13435,6 @@
 67749,Nerzweiler,Rheinland-Pfalz,Germany
 67749,Offenbach-Hundheim,Rheinland-Pfalz,Germany
 67752,Oberweiler-Tiefenbach,Rheinland-Pfalz,Germany
-67752,Rutsweiler an der Lauter,Rheinland-Pfalz,Germany
 67752,Wolfstein,Rheinland-Pfalz,Germany
 67753,Aschbach,Rheinland-Pfalz,Germany
 67753,Einöllen,Rheinland-Pfalz,Germany
@@ -13634,9 +13484,7 @@
 67822,Kalkofen,Rheinland-Pfalz,Germany
 67822,Mannweiler-Cölln,Rheinland-Pfalz,Germany
 67822,Münsterappel,Rheinland-Pfalz,Germany
-67822,Niederhausen an der Appel,Rheinland-Pfalz,Germany
 67822,Niedermoschel,Rheinland-Pfalz,Germany
-67822,Oberhausen an der Appel,Rheinland-Pfalz,Germany
 67822,Waldgrehweiler,Rheinland-Pfalz,Germany
 67822,Winterborn,Rheinland-Pfalz,Germany
 67823,Lettweiler,Rheinland-Pfalz,Germany
@@ -13650,11 +13498,8 @@
 67829,Callbach,Rheinland-Pfalz,Germany
 67829,Reiffelbach,Rheinland-Pfalz,Germany
 67829,Schmittweiler,Rheinland-Pfalz,Germany
-68124,"Stadtverwaltung, Verkehrsüberwachung u. Ordnungswidrigkeiten",Baden-Württemberg,Germany
-68128,ALSTOM Power Generation Aktiengesellschaft,Baden-Württemberg,Germany
+68122,HUK-Coburg,Baden-Württemberg,Germany
 68132,Bauhaus,Baden-Württemberg,Germany
-68133,Stadt Mannheim -Technischer Bereich-,Baden-Württemberg,Germany
-68136,Berufsgenossenschaft Nahrungsmittel und Gastgewerbe,Baden-Württemberg,Germany
 68143,Berrang SE,Baden-Württemberg,Germany
 68144,Diako Mannheim gGmbH,Baden-Württemberg,Germany
 68144,Medialog,Baden-Württemberg,Germany
@@ -13670,7 +13515,7 @@
 68150,Sozialgericht Mannheim,Baden-Württemberg,Germany
 68151,Bender Buchhandel,Baden-Württemberg,Germany
 68151,Stadtbücherei,Baden-Württemberg,Germany
-68151,Zentralinstitut für Seelische Gesundheit,Baden-Württemberg,Germany
+68151,Techniker Krankenkasse,Baden-Württemberg,Germany
 68159,Mannheim,Baden-Württemberg,Germany
 68161,Mannheim,Baden-Württemberg,Germany
 68163,Mannheim,Baden-Württemberg,Germany
@@ -13684,15 +13529,12 @@
 68229,Mannheim,Baden-Württemberg,Germany
 68239,Mannheim,Baden-Württemberg,Germany
 68259,Mannheim,Baden-Württemberg,Germany
-68300,Asea Brown Boveri (ABB),Baden-Württemberg,Germany
 68302,AVG,Baden-Württemberg,Germany
-68302,IKK classic Regionaldirektion Mannheim,Baden-Württemberg,Germany
 68305,Mannheim,Baden-Württemberg,Germany
 68307,Mannheim,Baden-Württemberg,Germany
 68309,Mannheim,Baden-Württemberg,Germany
 68517,Bezirkssparkasse Viernheim,Hessen,Germany
 68517,Hommel Hercules,Hessen,Germany
-68517,Magistrat der Stadt Viernheim,Hessen,Germany
 68517,Viernheimer Tageblatt,Hessen,Germany
 68519,Viernheim,Hessen,Germany
 68526,Ladenburg,Baden-Württemberg,Germany
@@ -13723,10 +13565,9 @@
 69111,Amtsgericht Heidelberg,Baden-Württemberg,Germany
 69111,Deutsches Krebsforschungszentrum,Baden-Württemberg,Germany
 69111,HEIDELBERGCEMENT,Baden-Württemberg,Germany
-69111,Landratsamt Heidelberg Rhein-Neckar Kreis,Baden-Württemberg,Germany
+69111,Sparkasse Heidelberg,Baden-Württemberg,Germany
 69111,Versorgungsamt,Baden-Württemberg,Germany
 69112,Polizeidirektion Heidelberg,Baden-Württemberg,Germany
-69112,STRACK ET COLLEGAE Rechtsanwälte,Baden-Württemberg,Germany
 69112,"Schindler, Staatliche Lotterie-Einnahme",Baden-Württemberg,Germany
 69112,Staatsanwaltschaft,Baden-Württemberg,Germany
 69112,Stadtverwaltung,Baden-Württemberg,Germany
@@ -13768,17 +13609,19 @@
 69436,Schönbrunn,Baden-Württemberg,Germany
 69437,Neckargerach,Baden-Württemberg,Germany
 69439,Zwingenberg,Baden-Württemberg,Germany
-69465,Freudenberg & Co.,Baden-Württemberg,Germany
 69469,Weinheim,Baden-Württemberg,Germany
 69483,Wald-Michelbach,Hessen,Germany
 69488,Birkenau,Hessen,Germany
-69493,Hirschberg an der Bergstraße,Baden-Württemberg,Germany
 69502,Hemsbach,Baden-Württemberg,Germany
 69509,Mörlenbach,Hessen,Germany
 69514,Laudenbach,Baden-Württemberg,Germany
 69517,Gorxheimertal,Hessen,Germany
 69518,Abtsteinach,Hessen,Germany
 70135,Stuttgarter Lebensversicherung a.G,Baden-Württemberg,Germany
+70137,HUK-Coburg,Baden-Württemberg,Germany
+70144,Landesbank Baden-Württemberg,Baden-Württemberg,Germany
+70146,Familienkasse Baden-Württemberg-Ost,Baden-Württemberg,Germany
+70148,Postbank Niederlassung Stuttgart,Baden-Württemberg,Germany
 70150,SWR,Baden-Württemberg,Germany
 70154,Amtsgericht -Mahnabteilung-,Baden-Württemberg,Germany
 70158,Statistisches Landesamt,Baden-Württemberg,Germany
@@ -13880,7 +13723,6 @@
 70499,Stuttgart Weilimdorf,Baden-Württemberg,Germany
 70499,Stuttgart Wolfbusch,Baden-Württemberg,Germany
 70499,Stuttgart Zuffenhausen,Baden-Württemberg,Germany
-70551,Fraunhofer Gesellschaft,Baden-Württemberg,Germany
 70551,Süddeutsche Metall-Berufsgenossenschaft,Baden-Württemberg,Germany
 70552,Volksfürsorge Schadenzentrum,Baden-Württemberg,Germany
 70556,Generali Schadenbüro,Baden-Württemberg,Germany
@@ -13926,10 +13768,8 @@
 70732,Statistisches Landesamt,Baden-Württemberg,Germany
 70734,Fellbach,Baden-Württemberg,Germany
 70736,Fellbach,Baden-Württemberg,Germany
-70767,"RTS Rieger Team, Werbeagentur",Baden-Württemberg,Germany
 70767,Stadtverwaltung alle Ämter,Baden-Württemberg,Germany
 70771,Leinfelden-Echterdingen,Baden-Württemberg,Germany
-70790,Bettenring eG,Baden-Württemberg,Germany
 70790,Stadt Filderstadt,Baden-Württemberg,Germany
 70792,Filderklinik,Baden-Württemberg,Germany
 70794,Filderstadt,Baden-Württemberg,Germany
@@ -13975,7 +13815,6 @@
 71226,Amtsgericht Leonberg,Baden-Württemberg,Germany
 71226,Stadtverwaltung Leonberg,Baden-Württemberg,Germany
 71229,Leonberg,Baden-Württemberg,Germany
-71252,Interfunk eG,Baden-Württemberg,Germany
 71252,Reclam Verlag,Baden-Württemberg,Germany
 71252,Stadtverwaltung,Baden-Württemberg,Germany
 71254,Ditzingen,Baden-Württemberg,Germany
@@ -13990,6 +13829,7 @@
 71296,Heimsheim,Baden-Württemberg,Germany
 71297,Mönsheim,Baden-Württemberg,Germany
 71299,Wimsheim,Baden-Württemberg,Germany
+71328,AOK Rems-Murr,Baden-Württemberg,Germany
 71328,Amtsgericht Waiblingen,Baden-Württemberg,Germany
 71328,Landratsamt Rems-Murr-Kreis,Baden-Württemberg,Germany
 71328,Stadtverwaltung,Baden-Württemberg,Germany
@@ -14004,6 +13844,7 @@
 71397,Leutenbach,Baden-Württemberg,Germany
 71404,Korb,Baden-Württemberg,Germany
 71409,Schwaikheim,Baden-Württemberg,Germany
+71520,AOK Geschäftsstelle,Baden-Württemberg,Germany
 71520,Stadtverwaltung,Baden-Württemberg,Germany
 71520,Südbund,Baden-Württemberg,Germany
 71522,Backnang,Baden-Württemberg,Germany
@@ -14013,7 +13854,6 @@
 71546,Aspach,Baden-Württemberg,Germany
 71549,Auenwald,Baden-Württemberg,Germany
 71554,Weissach im Tal,Baden-Württemberg,Germany
-71560,Sulzbach an der Murr,Baden-Württemberg,Germany
 71563,Affalterbach,Baden-Württemberg,Germany
 71566,Althütte,Baden-Württemberg,Germany
 71570,Oppenweiler,Baden-Württemberg,Germany
@@ -14031,7 +13871,6 @@
 71638,Ludwigsburg,Baden-Württemberg,Germany
 71640,Ludwigsburg,Baden-Württemberg,Germany
 71642,Ludwigsburg,Baden-Württemberg,Germany
-71665,Vaihingen an der Enz,Baden-Württemberg,Germany
 71672,Marbach am Neckar,Baden-Württemberg,Germany
 71679,Asperg,Baden-Württemberg,Germany
 71686,Remseck am Neckar,Baden-Württemberg,Germany
@@ -14040,7 +13879,6 @@
 71701,Schwieberdingen,Baden-Württemberg,Germany
 71706,Markgröningen,Baden-Württemberg,Germany
 71711,Murr,Baden-Württemberg,Germany
-71711,Steinheim an der Murr,Baden-Württemberg,Germany
 71717,Beilstein,Baden-Württemberg,Germany
 71718,Billensbach,Baden-Württemberg,Germany
 71720,Oberstenfeld,Baden-Württemberg,Germany
@@ -14049,7 +13887,6 @@
 71729,Erdmannhausen,Baden-Württemberg,Germany
 71732,Tamm,Baden-Württemberg,Germany
 71735,Eberdingen,Baden-Württemberg,Germany
-71737,Kirchberg an der Murr,Baden-Württemberg,Germany
 71739,Oberriexingen,Baden-Württemberg,Germany
 72070,Tübingen,Baden-Württemberg,Germany
 72072,Tübingen,Baden-Württemberg,Germany
@@ -14098,6 +13935,7 @@
 72299,Wörnersberg,Baden-Württemberg,Germany
 72334,EDEKA Handelsgesellschaft,Baden-Württemberg,Germany
 72334,Landratsamt Zollernalbkreis,Baden-Württemberg,Germany
+72334,Sparkasse Zollernalb,Baden-Württemberg,Germany
 72336,Balingen,Baden-Württemberg,Germany
 72348,Rosenfeld,Baden-Württemberg,Germany
 72351,Geislingen,Baden-Württemberg,Germany
@@ -14109,8 +13947,6 @@
 72362,Nusplingen,Baden-Württemberg,Germany
 72364,Obernheim,Baden-Württemberg,Germany
 72365,Ratshausen,Baden-Württemberg,Germany
-72367,Weilen unter den Rinnen,Baden-Württemberg,Germany
-72369,Zimmern unter der Burg,Baden-Württemberg,Germany
 72379,Hechingen,Baden-Württemberg,Germany
 72393,Burladingen,Baden-Württemberg,Germany
 72401,Haigerloch,Baden-Württemberg,Germany
@@ -14131,7 +13967,6 @@
 72488,Sigmaringen,Baden-Württemberg,Germany
 72501,Gammertingen,Baden-Württemberg,Germany
 72505,Krauchenwies,Baden-Württemberg,Germany
-72510,Stetten am kalten Markt,Baden-Württemberg,Germany
 72511,Bingen,Baden-Württemberg,Germany
 72513,Hettingen,Baden-Württemberg,Germany
 72514,Inzigkofen,Baden-Württemberg,Germany
@@ -14154,7 +13989,6 @@
 72539,Pfronstetten,Baden-Württemberg,Germany
 72555,Metzingen,Baden-Württemberg,Germany
 72574,Bad Urach,Baden-Württemberg,Germany
-72581,Dettingen an der Erms,Baden-Württemberg,Germany
 72582,Grabenstetten,Baden-Württemberg,Germany
 72584,Hülben,Baden-Württemberg,Germany
 72585,Riederich,Baden-Württemberg,Germany
@@ -14204,7 +14038,6 @@
 73035,Göppingen,Baden-Württemberg,Germany
 73037,Göppingen,Baden-Württemberg,Germany
 73054,Eislingen/Fils,Baden-Württemberg,Germany
-73061,Ebersbach an der Fils,Baden-Württemberg,Germany
 73066,Uhingen,Baden-Württemberg,Germany
 73072,Donzdorf,Baden-Württemberg,Germany
 73079,Süßen,Baden-Württemberg,Germany
@@ -14230,14 +14063,11 @@
 73207,Plochingen,Baden-Württemberg,Germany
 73228,BKK Scheufelen,Baden-Württemberg,Germany
 73230,Kirchheim unter Teck,Baden-Württemberg,Germany
-73235,Weilheim an der Teck,Baden-Württemberg,Germany
 73240,Wendlingen am Neckar,Baden-Württemberg,Germany
 73249,Wernau,Baden-Württemberg,Germany
 73252,Lenningen,Baden-Württemberg,Germany
 73257,Köngen,Baden-Württemberg,Germany
-73262,Reichenbach an der Fils,Baden-Württemberg,Germany
 73265,Dettingen unter Teck,Baden-Württemberg,Germany
-73266,Bissingen an der Teck,Baden-Württemberg,Germany
 73268,Erkenbrechtsweiler,Baden-Württemberg,Germany
 73269,Hochdorf,Baden-Württemberg,Germany
 73271,Holzmaden,Baden-Württemberg,Germany
@@ -14246,10 +14076,8 @@
 73275,Ohmden,Baden-Württemberg,Germany
 73277,Owen,Baden-Württemberg,Germany
 73278,Schlierbach,Baden-Württemberg,Germany
-73312,Geislingen an der Steige,Baden-Württemberg,Germany
 73326,Deggingen,Baden-Württemberg,Germany
 73329,Kuchen,Baden-Württemberg,Germany
-73333,Gingen an der Fils,Baden-Württemberg,Germany
 73337,Bad Überkingen,Baden-Württemberg,Germany
 73340,Amstetten,Baden-Württemberg,Germany
 73342,Bad Ditzenbach,Baden-Württemberg,Germany
@@ -14262,7 +14090,6 @@
 73428,Fachhochschule Aalen,Baden-Württemberg,Germany
 73428,Landratsamt Ostalbkreis,Baden-Württemberg,Germany
 73428,Ostalb-Klinikum,Baden-Württemberg,Germany
-73428,Radio KOMMA 1,Baden-Württemberg,Germany
 73428,Stadtverwaltung Aalen,Baden-Württemberg,Germany
 73428,Triumph International,Baden-Württemberg,Germany
 73430,Aalen,Baden-Württemberg,Germany
@@ -14282,6 +14109,7 @@
 73466,Lauchheim,Baden-Württemberg,Germany
 73467,Kirchheim am Ries,Baden-Württemberg,Germany
 73469,Riesbürg,Baden-Württemberg,Germany
+73477,Bundeswehr Rheinhardt-Kaserne,Baden-Württemberg,Germany
 73477,Landgericht,Baden-Württemberg,Germany
 73477,Staatsanwaltschaft,Baden-Württemberg,Germany
 73479,Ellwangen (Jagst),Baden-Württemberg,Germany
@@ -14308,7 +14136,6 @@
 73550,Waldstetten,Baden-Württemberg,Germany
 73553,Alfdorf,Baden-Württemberg,Germany
 73557,Mutlangen,Baden-Württemberg,Germany
-73560,Böbingen an der Rems,Baden-Württemberg,Germany
 73563,Mögglingen,Baden-Württemberg,Germany
 73565,Spraitbach,Baden-Württemberg,Germany
 73566,Bartholomä,Baden-Württemberg,Germany
@@ -14342,16 +14169,13 @@
 73733,Esslingen am Neckar,Baden-Württemberg,Germany
 73734,Esslingen am Neckar,Baden-Württemberg,Germany
 73760,Ostfildern,Baden-Württemberg,Germany
-73765,Neuhausen auf den Fildern,Baden-Württemberg,Germany
 73770,Denkendorf,Baden-Württemberg,Germany
 73773,Aichwald,Baden-Württemberg,Germany
 73776,Altbach,Baden-Württemberg,Germany
 73779,Deizisau,Baden-Württemberg,Germany
 74064,Amtsgericht Heilbronn,Baden-Württemberg,Germany
-74064,Galeria HORTEN Filiale Heilbronn,Baden-Württemberg,Germany
 74064,IKK classic Heilbronn,Baden-Württemberg,Germany
-74064,INTERSPORT Deutschland eG,Baden-Württemberg,Germany
-74064,Industrie- und Handelskammer Heilbronn,Baden-Württemberg,Germany
+74064,Justizvollzugsanstalt,Baden-Württemberg,Germany
 74064,Kreissparkasse Heilbronn,Baden-Württemberg,Germany
 74064,Landratsamt Heilbronn,Baden-Württemberg,Germany
 74064,Stadt Heilbronn,Baden-Württemberg,Germany
@@ -14391,6 +14215,7 @@
 74255,Roigheim,Baden-Württemberg,Germany
 74257,Untereisesheim,Baden-Württemberg,Germany
 74259,Widdern,Baden-Württemberg,Germany
+74319,AOK Ludwigsburg-Bietigheim,Baden-Württemberg,Germany
 74319,Dürr Dental SE,Baden-Württemberg,Germany
 74319,Stadtverwaltung Bietigheim-Bissingen,Baden-Württemberg,Germany
 74321,Bietigheim-Bissingen,Baden-Württemberg,Germany
@@ -14432,7 +14257,6 @@
 74538,Rosengarten,Baden-Württemberg,Germany
 74541,Vellberg,Baden-Württemberg,Germany
 74542,Braunsbach,Baden-Württemberg,Germany
-74544,Michelbach an der Bilz,Baden-Württemberg,Germany
 74545,Michelfeld,Baden-Württemberg,Germany
 74547,Untermünkheim,Baden-Württemberg,Germany
 74549,Wolpertshausen,Baden-Württemberg,Germany
@@ -14445,7 +14269,6 @@
 74585,Rot am See,Baden-Württemberg,Germany
 74586,Frankenhardt,Baden-Württemberg,Germany
 74589,Satteldorf,Baden-Württemberg,Germany
-74592,Kirchberg an der Jagst,Baden-Württemberg,Germany
 74594,Kreßberg,Baden-Württemberg,Germany
 74595,Langenburg,Baden-Württemberg,Germany
 74597,Stimpfach,Baden-Württemberg,Germany
@@ -14458,7 +14281,6 @@
 74635,Kupferzell,Baden-Württemberg,Germany
 74638,Waldenburg,Baden-Württemberg,Germany
 74639,Zweiflingen,Baden-Württemberg,Germany
-74651,Bürkert Steuer- u. Regeltechnik,Baden-Württemberg,Germany
 74651,ZIEHL-ABEGG SE,Baden-Württemberg,Germany
 74653,Ingelfingen,Baden-Württemberg,Germany
 74653,Künzelsau,Baden-Württemberg,Germany
@@ -14477,10 +14299,12 @@
 74746,Höpfingen,Baden-Württemberg,Germany
 74747,Ravenstein,Baden-Württemberg,Germany
 74749,Rosenberg,Baden-Württemberg,Germany
+74819,AOK Die Gesundheitskasse,Baden-Württemberg,Germany
 74819,Johannes-Diakonie Mosbach,Baden-Württemberg,Germany
 74819,Justizbehörden Mosbach,Baden-Württemberg,Germany
 74819,Kreiskrankenhaus Mosbach,Baden-Württemberg,Germany
 74819,Landratsamt Neckar-Odenwald-Kreis,Baden-Württemberg,Germany
+74819,Sparkasse Mosbach,Baden-Württemberg,Germany
 74819,Stadtverwaltung Mosbach,Baden-Württemberg,Germany
 74821,Mosbach,Baden-Württemberg,Germany
 74831,Gundelsheim,Baden-Württemberg,Germany
@@ -14529,6 +14353,7 @@
 75057,Kürnbach,Baden-Württemberg,Germany
 75059,Zaisenhausen,Baden-Württemberg,Germany
 75158,Stadtverwaltung,Baden-Württemberg,Germany
+75162,Sparkasse Pforzheim Calw,Baden-Württemberg,Germany
 75172,Pforzheim,Baden-Württemberg,Germany
 75173,Pforzheim,Baden-Württemberg,Germany
 75175,Pforzheim,Baden-Württemberg,Germany
@@ -14550,13 +14375,11 @@
 75248,Ölbronn-Dürrn,Baden-Württemberg,Germany
 75249,Kieselbronn,Baden-Württemberg,Germany
 75305,Neuenbürg,Baden-Württemberg,Germany
-75323,Bad Wildbad im Schwarzwald,Baden-Württemberg,Germany
 75328,Schömberg,Baden-Württemberg,Germany
 75331,Engelsbrand,Baden-Württemberg,Germany
 75334,Straubenhardt,Baden-Württemberg,Germany
 75335,Dobel,Baden-Württemberg,Germany
 75337,Enzklösterle,Baden-Württemberg,Germany
-75339,Höfen an der Enz,Baden-Württemberg,Germany
 75363,Amtsgericht,Baden-Württemberg,Germany
 75363,Landratsamt,Baden-Württemberg,Germany
 75363,Stadtverwaltung,Baden-Württemberg,Germany
@@ -14582,15 +14405,16 @@
 75447,Sternenfels,Baden-Württemberg,Germany
 75449,Wurmberg,Baden-Württemberg,Germany
 76006,Karlsruhe,Baden-Württemberg,Germany
-76073,Regierungspräsidium Karlsruhe Zentrale Bußgeldstelle,Baden-Württemberg,Germany
+76070,AOK Baden-Württemberg,Baden-Württemberg,Germany
+76088,Familienkasse Baden-Württemberg-West,Baden-Württemberg,Germany
 76113,Landeskreditbank,Baden-Württemberg,Germany
 76114,Badenia Bausparkasse,Baden-Württemberg,Germany
 76117,Allianz Private Krankenversicherung,Baden-Württemberg,Germany
 76119,BBBank Karlsruhe,Baden-Württemberg,Germany
 76122,Deutsche Rentenversicherung Baden-Württemberg,Baden-Württemberg,Germany
 76124,Stadt Karlsruhe,Baden-Württemberg,Germany
-76125,Aachener und Münchener Versicherungen,Baden-Württemberg,Germany
 76125,Amtsgericht Karlsruhe,Baden-Württemberg,Germany
+76125,Badische Landesbibliothek,Baden-Württemberg,Germany
 76125,Badischer Sportbund,Baden-Württemberg,Germany
 76125,Badisches Staatstheater,Baden-Württemberg,Germany
 76125,Bundesgerichtshof,Baden-Württemberg,Germany
@@ -14603,6 +14427,7 @@
 76126,Handwerkskammer Karlsruhe,Baden-Württemberg,Germany
 76126,Hauptzollamt Karlsruhe,Baden-Württemberg,Germany
 76126,Jugendamt Karlsruhe,Baden-Württemberg,Germany
+76126,Kaufmännische Krankenkasse Halle,Baden-Württemberg,Germany
 76126,L'Oreal,Baden-Württemberg,Germany
 76126,Landesoberkasse,Baden-Württemberg,Germany
 76126,Landeszentralbank,Baden-Württemberg,Germany
@@ -14614,18 +14439,16 @@
 76126,Staatliches Forstamt Bretten,Baden-Württemberg,Germany
 76126,Staatliches Forstamt Bruchsal,Baden-Württemberg,Germany
 76126,Staatliches Forstamt Karlsbad,Baden-Württemberg,Germany
-76126,Staatliches Forstamt Karlsruhe Hardt,Baden-Württemberg,Germany
 76126,Staatliches Forstamt Philipsburg,Baden-Württemberg,Germany
 76126,Staatliches Vermessungsamt Bruchsal,Baden-Württemberg,Germany
 76126,Staatliches Vermessungsamt Karlsruhe,Baden-Württemberg,Germany
 76126,Versorgungsamt Karlsruhe,Baden-Württemberg,Germany
 76127,GEK Schwäbisch-Gmünder Ersatzkasse,Baden-Württemberg,Germany
 76127,PBeaKK,Baden-Württemberg,Germany
+76127,Sparkasse Karlsruhe,Baden-Württemberg,Germany
 76127,St. Vincentius-Kliniken gAG,Baden-Württemberg,Germany
 76127,Vereinigte Haftpflicht,Baden-Württemberg,Germany
-76127,ZG Raiffeisen eG,Baden-Württemberg,Germany
 76128,Badische Unfallkasse,Baden-Württemberg,Germany
-76128,Industrie- und Handelskammer Karlsruhe,Baden-Württemberg,Germany
 76131,Karlsruhe,Baden-Württemberg,Germany
 76133,Karlsruhe,Baden-Württemberg,Germany
 76135,Karlsruhe,Baden-Württemberg,Germany
@@ -14641,13 +14464,12 @@
 76187,Karlsruhe,Baden-Württemberg,Germany
 76189,Karlsruhe,Baden-Württemberg,Germany
 76199,Karlsruhe,Baden-Württemberg,Germany
-76225,"Dr. Willmar Schwabe, Arzneimittelfabrik",Baden-Württemberg,Germany
 76227,Karlsruhe,Baden-Württemberg,Germany
 76228,Karlsruhe,Baden-Württemberg,Germany
 76229,Karlsruhe,Baden-Württemberg,Germany
+76245,Landesbank Baden-Württemberg,Baden-Württemberg,Germany
 76247,Bezirksstelle für Naturschutz,Baden-Württemberg,Germany
 76247,Regierungspräsidium Karlsruhe,Baden-Württemberg,Germany
-76273,CCI Kosmetik Versand e.K.,Baden-Württemberg,Germany
 76273,Kaufhaus Schneider,Baden-Württemberg,Germany
 76273,WWF (MVS),Baden-Württemberg,Germany
 76275,Ettlingen,Baden-Württemberg,Germany
@@ -14678,6 +14500,7 @@
 76476,Bischweier,Baden-Württemberg,Germany
 76477,Elchesheim-Illingen,Baden-Württemberg,Germany
 76479,Steinmauern,Baden-Württemberg,Germany
+76520,AOK KundenCenter Baden-Baden,Baden-Württemberg,Germany
 76520,IKK classic,Baden-Württemberg,Germany
 76520,Stadtverwaltung,Baden-Württemberg,Germany
 76522,SWR-Südwestrundfunk,Baden-Württemberg,Germany
@@ -14693,6 +14516,8 @@
 76597,Loffenau,Baden-Württemberg,Germany
 76599,Weisenbach,Baden-Württemberg,Germany
 76643,Amtsgericht,Baden-Württemberg,Germany
+76643,Justizvollzugsanstalt Bruchsal,Baden-Württemberg,Germany
+76643,Sparkasse Kraichgau,Baden-Württemberg,Germany
 76646,Bruchsal,Baden-Württemberg,Germany
 76661,Philippsburg,Baden-Württemberg,Germany
 76669,Bad Schönborn,Baden-Württemberg,Germany
@@ -14723,9 +14548,9 @@
 76777,Neupotz,Rheinland-Pfalz,Germany
 76779,Scheibenhardt,Rheinland-Pfalz,Germany
 76825,Justizbehörden Landau,Rheinland-Pfalz,Germany
+76825,Sparkasse Südpfalz,Rheinland-Pfalz,Germany
 76825,Stadtverwaltung,Rheinland-Pfalz,Germany
 76826,Gummi-Mayer,Rheinland-Pfalz,Germany
-76829,Landau in der Pfalz,Rheinland-Pfalz,Germany
 76829,Leinsweiler,Rheinland-Pfalz,Germany
 76829,Ranschbach,Rheinland-Pfalz,Germany
 76831,Billigheim-Ingenheim,Rheinland-Pfalz,Germany
@@ -14745,7 +14570,6 @@
 76835,Hainfeld,Rheinland-Pfalz,Germany
 76835,Rhodt unter Rietburg,Rheinland-Pfalz,Germany
 76835,Roschbach,Rheinland-Pfalz,Germany
-76835,Weyher in der Pfalz,Rheinland-Pfalz,Germany
 76846,Hauenstein,Rheinland-Pfalz,Germany
 76848,Darstein,Rheinland-Pfalz,Germany
 76848,Dimbach,Rheinland-Pfalz,Germany
@@ -14777,7 +14601,6 @@
 76872,Minfeld,Rheinland-Pfalz,Germany
 76872,Steinweiler,Rheinland-Pfalz,Germany
 76872,Winden,Rheinland-Pfalz,Germany
-76877,Offenbach an der Queich,Rheinland-Pfalz,Germany
 76879,Bornheim,Rheinland-Pfalz,Germany
 76879,Essingen,Rheinland-Pfalz,Germany
 76879,Hochstadt,Rheinland-Pfalz,Germany
@@ -14876,9 +14699,9 @@
 77977,Rust,Baden-Württemberg,Germany
 77978,Schuttertal,Baden-Württemberg,Germany
 78044,Schwenninger BKK,Baden-Württemberg,Germany
-78045,Industrie- u. Handelskammer Schwarzwald-Baar-Heuberg,Baden-Württemberg,Germany
 78045,Landratsamt,Baden-Württemberg,Germany
 78045,Stadtverwaltung Villingen-Schwenningen,Baden-Württemberg,Germany
+78045,Techniker Krankenkasse,Baden-Württemberg,Germany
 78048,Villingen-Schwenningen,Baden-Württemberg,Germany
 78050,Villingen-Schwenningen,Baden-Württemberg,Germany
 78052,Villingen-Schwenningen,Baden-Württemberg,Germany
@@ -14891,7 +14714,6 @@
 78087,Mönchweiler,Baden-Württemberg,Germany
 78089,Unterkirnach,Baden-Württemberg,Germany
 78098,Triberg,Baden-Württemberg,Germany
-78112,Sankt Georgen im Schwarzwald,Baden-Württemberg,Germany
 78120,Furtwangen im Schwarzwald,Baden-Württemberg,Germany
 78126,Königsfeld im Schwarzwald,Baden-Württemberg,Germany
 78132,Hornberg,Baden-Württemberg,Germany
@@ -14933,6 +14755,7 @@
 78357,Mühlingen,Baden-Württemberg,Germany
 78359,Orsingen-Nenzingen,Baden-Württemberg,Germany
 78459,Landratsamt,Baden-Württemberg,Germany
+78459,Sparkasse Bodensee,Baden-Württemberg,Germany
 78459,Stadtverwaltung,Baden-Württemberg,Germany
 78462,Konstanz,Baden-Württemberg,Germany
 78464,Konstanz,Baden-Württemberg,Germany
@@ -14946,8 +14769,6 @@
 78559,Gosheim,Baden-Württemberg,Germany
 78564,Reichenbach am Heuberg,Baden-Württemberg,Germany
 78564,Wehingen,Baden-Württemberg,Germany
-78567,Fridingen an der Donau,Baden-Württemberg,Germany
-78570,Mühlheim an der Donau,Baden-Württemberg,Germany
 78573,Wurmlingen,Baden-Württemberg,Germany
 78576,Emmingen-Liptingen,Baden-Württemberg,Germany
 78579,Neuhausen ob Eck,Baden-Württemberg,Germany
@@ -14989,11 +14810,8 @@
 78736,Epfendorf,Baden-Württemberg,Germany
 78737,Fluorn-Winzeln,Baden-Württemberg,Germany
 78739,Hardt,Baden-Württemberg,Germany
-79081,Abfallwirtschaft Landkreis Breisgau Hochschwarzwald,Baden-Württemberg,Germany
-79081,Fachbereich Flurordnung & Landentwicklung,Baden-Württemberg,Germany
+79073,HUK-Coburg,Baden-Württemberg,Germany
 79081,Fachbereich Gesundheitsamt,Baden-Württemberg,Germany
-79081,Fachbereich Schulen & Gebäudemanagement,Baden-Württemberg,Germany
-79081,Fachbereich Veterinärwesen & Lebensmittelüberwachung,Baden-Württemberg,Germany
 79081,Landratsamt Breisgau-Hochschwarzwald,Baden-Württemberg,Germany
 79083,Regierungspräsidium Freiburg,Baden-Württemberg,Germany
 79086,Versorgungsamt Freiburg,Baden-Württemberg,Germany
@@ -15005,12 +14823,6 @@
 79095,Erzbischöfliches Ordinariat,Baden-Württemberg,Germany
 79095,Garten- und Tiefbauamt,Baden-Württemberg,Germany
 79095,Gebäudemanagement Freiburg (GMF),Baden-Württemberg,Germany
-79095,Hauptzollamt Lörrach Dienstsitz Freiburg,Baden-Württemberg,Germany
-79095,Regierungspräsidium Freiburg Abteilung 6,Baden-Württemberg,Germany
-79095,Regierungspräsidium Freiburg Abteilung 7,Baden-Württemberg,Germany
-79095,Regierungspräsidium Freiburg Abteilung 8,Baden-Württemberg,Germany
-79095,Regierungspräsidium Freiburg Abteilung 9,Baden-Württemberg,Germany
-79095,Stadtverwaltung Freiburg im Breisgau,Baden-Württemberg,Germany
 79095,Straßenbauamt,Baden-Württemberg,Germany
 79095,Südwestfunk,Baden-Württemberg,Germany
 79095,Umweltschutzamt (UWSA),Baden-Württemberg,Germany
@@ -15029,7 +14841,6 @@
 79115,Freiburg im Breisgau,Baden-Württemberg,Germany
 79117,Freiburg im Breisgau,Baden-Württemberg,Germany
 79183,Waldkirch,Baden-Württemberg,Germany
-79188,Reha-Zentrum,Baden-Württemberg,Germany
 79188,Rheintalklinik,Baden-Württemberg,Germany
 79188,Theresienklinik,Baden-Württemberg,Germany
 79189,Bad Krozingen,Baden-Württemberg,Germany
@@ -15104,10 +14915,12 @@
 79513,Röttlerweiler,Baden-Württemberg,Germany
 79537,Amtsgericht,Baden-Württemberg,Germany
 79537,Landratsamt,Baden-Württemberg,Germany
+79537,Sparkasse Lörrach-Rheinfelden,Baden-Württemberg,Germany
 79537,Stadtverwaltung,Baden-Württemberg,Germany
 79539,Lörrach,Baden-Württemberg,Germany
 79540,Lörrach,Baden-Württemberg,Germany
 79541,Lörrach,Baden-Württemberg,Germany
+79574,Sparkasse Markgräflerland,Baden-Württemberg,Germany
 79574,Stadtverwaltung,Baden-Württemberg,Germany
 79576,Weil am Rhein,Baden-Württemberg,Germany
 79578,Steinen,Baden-Württemberg,Germany
@@ -15171,6 +14984,7 @@
 79805,Eggingen,Baden-Württemberg,Germany
 79807,Lottstetten,Baden-Württemberg,Germany
 79809,Weilheim,Baden-Württemberg,Germany
+79821,Sparkasse Hochschwarzwald,Baden-Württemberg,Germany
 79821,Stadtverwaltung / Bürgermeisteramt,Baden-Württemberg,Germany
 79822,Titisee-Neustadt,Baden-Württemberg,Germany
 79837,Häusern,Baden-Württemberg,Germany
@@ -15194,24 +15008,19 @@
 80097,Amtsgericht München Strafabteilung,Bayern,Germany
 80097,Bayerisches Oberstes Landgericht,Bayern,Germany
 80097,Generalstaatsanwaltschaft,Bayern,Germany
-80097,Oberlandesgericht München - Strafsenate,Bayern,Germany
-80097,Registratur der Oberjustizkasse München,Bayern,Germany
 80097,Staatsanwaltschaft München II,Bayern,Germany
-80097,Staatsanwaltschaft b. d. Oberlandesgericht,Bayern,Germany
 80097,Verband Bayerischer Rechtspfleger,Bayern,Germany
 80097,Wolfgang Ritter Kantinenbetrieb,Bayern,Germany
+80222,HUK-Coburg Versicherungsgruppe,Bayern,Germany
 80249,Computershare Deutschland,Bayern,Germany
 80263,Boesche Staatliche Lotterieeinnahme,Bayern,Germany
-80272,Münchener Hypothekenbank eG,Bayern,Germany
-80279,KREISSPARKASSE MÜNCHEN STARNBERG EBERSBERG,Bayern,Germany
-80281,Deutsche Bundesbank Hauptverwaltung München,Bayern,Germany
+80277,BayernLB Bayerische Landesbank,Bayern,Germany
+80280,LBS Bayerische Landesbausparkasse,Bayern,Germany
 80287,Stadtwerke München,Bayern,Germany
 80292,WWK Investment S.A.,Bayern,Germany
-80295,Schweitzer Fachinformationen oHG,Bayern,Germany
-80297,Deutsches Patent- und Markenamt,Bayern,Germany
 80298,Europäisches Patentamt,Bayern,Germany
+80300,Bayerischer Rundfunk,Bayern,Germany
 80306,Deutsches Museum,Bayern,Germany
-80308,Debeka Versicherungen und Bausparkasse,Bayern,Germany
 80309,Erzbischöfliches Ordinariat München,Bayern,Germany
 80313,Stadtverwaltung,Bayern,Germany
 80315,Amtsgericht München,Bayern,Germany
@@ -15220,12 +15029,10 @@
 80323,Galeria Kaufhof München-Stachus,Bayern,Germany
 80323,Hochschule München,Bayern,Germany
 80323,Rechtsschutz Union,Bayern,Germany
-80324,Serviceniederlassung Human Resources Deutschland,Bayern,Germany
 80325,Amtsgericht München,Bayern,Germany
 80326,Atlas Reisen,Bayern,Germany
 80326,Dinea Restaurant,Bayern,Germany
 80326,Essanelle,Bayern,Germany
-80326,Lebensversicherung von 1871,Bayern,Germany
 80326,Livv.at,Bayern,Germany
 80326,Mister Minit,Bayern,Germany
 80327,Genossenschaftsverband Bayern e.V.,Bayern,Germany
@@ -15239,7 +15046,6 @@
 80339,München,Bayern,Germany
 80466,Landeshauptstadt München Kreisverwaltungsreferat,Bayern,Germany
 80469,München,Bayern,Germany
-80524,Bayer. Staatsministerium des Innern,Bayern,Germany
 80530,Versicherungskammer Bayern,Bayern,Germany
 80534,Regierung von Oberbayern,Bayern,Germany
 80535,Bayerische Staatskanzlei,Bayern,Germany
@@ -15252,7 +15058,6 @@
 80632,BARMER,Bayern,Germany
 80632,Kreiswehrersatzamt,Bayern,Germany
 80632,Wehrbereichsgebührnisamt VI,Bayern,Germany
-80632,Wehrbereichsverwaltung Süd Außenstelle München,Bayern,Germany
 80634,München,Bayern,Germany
 80636,München,Bayern,Germany
 80637,München,Bayern,Germany
@@ -15316,7 +15121,6 @@
 81476,München,Bayern,Germany
 81477,München,Bayern,Germany
 81479,München,Bayern,Germany
-81536,Philipp Holzmann Bauaktiengesellschaft Süd,Bayern,Germany
 81539,München,Bayern,Germany
 81541,München,Bayern,Germany
 81543,München,Bayern,Germany
@@ -15327,7 +15131,6 @@
 81627,Bayerischer Landtag,Bayern,Germany
 81627,Bayerischer Landtag Landtagsamt,Bayern,Germany
 81660,Landeshauptstadt München Baureferat,Bayern,Germany
-81663,Airbus Group,Bayern,Germany
 81664,cbj Verlag,Bayern,Germany
 81667,München,Bayern,Germany
 81669,München,Bayern,Germany
@@ -15337,7 +15140,6 @@
 81677,München,Bayern,Germany
 81679,München,Bayern,Germany
 81728,D.A.S. Direktion,Bayern,Germany
-81729,Deutsche Rentenversicherung Bayern Süd,Bayern,Germany
 81732,BAYERISCHE BEAMTEN VERSICHERUNGEN,Bayern,Germany
 81735,München,Bayern,Germany
 81737,München,Bayern,Germany
@@ -15346,7 +15148,6 @@
 81827,München,Bayern,Germany
 81829,München,Bayern,Germany
 81919,Bayerische Ärzteversorgung,Bayern,Germany
-81920,Zusatzversorgungskasse der bayerischen Gemeinden,Bayern,Germany
 81921,Bayer. Versorgungskammer,Bayern,Germany
 81925,München,Bayern,Germany
 81927,München,Bayern,Germany
@@ -15404,8 +15205,10 @@
 82296,Schöngeising,Bayern,Germany
 82297,Steindorf,Bayern,Germany
 82299,Türkenfeld,Bayern,Germany
+82317,AOK Allgemeine Ortskrankenkasse,Bayern,Germany
 82317,Amtsgericht Stranberg,Bayern,Germany
 82317,Landratsamt,Bayern,Germany
+82317,Sparkasse Starnberg,Bayern,Germany
 82317,Stadtverwaltung,Bayern,Germany
 82319,Starnberg,Bayern,Germany
 82327,Tutzing,Bayern,Germany
@@ -15538,7 +15341,6 @@
 83344,Bergen,Bayern,Germany
 83346,Bergen,Bayern,Germany
 83349,Palling,Bayern,Germany
-83352,Altenmarkt an der Alz,Bayern,Germany
 83355,Grabenstätt,Bayern,Germany
 83358,Seeon-Seebruck,Bayern,Germany
 83359,Hallabruck,Bayern,Germany
@@ -15584,7 +15386,6 @@
 83550,Emmering,Bayern,Germany
 83552,Durrhausen,Bayern,Germany
 83553,Frauenneuharting,Bayern,Germany
-83555,Haiden bei Gars Bahnhof,Bayern,Germany
 83556,Griesstätt,Bayern,Germany
 83558,Maitenbeth,Bayern,Germany
 83561,Ramerberg,Bayern,Germany
@@ -15626,6 +15427,7 @@
 83739,Hofreuth bei Wörnsmühl,Bayern,Germany
 84023,Gewerbeaufsichtsamt,Bayern,Germany
 84023,Landw. Alterskasse Niederbayern/Oberpfalz,Bayern,Germany
+84023,Landw. Krankenkasse Niederbayern/Oberpfalz,Bayern,Germany
 84023,Regierung von Niederbayern,Bayern,Germany
 84026,Landesamt für Finanzen,Bayern,Germany
 84026,Staatsoberkasse Landshut,Bayern,Germany
@@ -15640,11 +15442,9 @@
 84036,Landshut,Bayern,Germany
 84048,Mainburg,Bayern,Germany
 84051,Essenbach,Bayern,Germany
-84056,Rottenburg an der Laaber,Bayern,Germany
 84061,Ergoldsbach,Bayern,Germany
 84066,Mallersdorf-Pfaffenberg,Bayern,Germany
 84069,Schierling,Bayern,Germany
-84072,Au in der Hallertau,Bayern,Germany
 84076,Pfeffenhausen,Bayern,Germany
 84079,Bruckberg,Bayern,Germany
 84082,Laberweinting,Bayern,Germany
@@ -15663,7 +15463,6 @@
 84104,Rudelzhausen,Bayern,Germany
 84106,Volkenschwand,Bayern,Germany
 84107,Weihmichl,Bayern,Germany
-84109,Wörth an der Isar,Bayern,Germany
 84130,Dingolfing,Bayern,Germany
 84137,Vilsbiburg,Bayern,Germany
 84140,Gangkofen,Bayern,Germany
@@ -15739,10 +15538,8 @@
 84494,Niederbergkirchen,Bayern,Germany
 84494,Niedertaufkirchen,Bayern,Germany
 84503,Altötting,Bayern,Germany
-84508,Burgkirchen an der Alz,Bayern,Germany
 84513,Erharting,Bayern,Germany
 84513,Töging am Inn,Bayern,Germany
-84518,Garching an der Alz,Bayern,Germany
 84524,Neuötting,Bayern,Germany
 84529,Tittmoning,Bayern,Germany
 84533,Haiming,Bayern,Germany
@@ -15755,7 +15552,6 @@
 84546,Egglkofen,Bayern,Germany
 84547,Emmerting,Bayern,Germany
 84549,Engelsberg,Bayern,Germany
-84550,Feichten an der Alz,Bayern,Germany
 84552,Geratskirchen,Bayern,Germany
 84553,"Halsbach, Kreis Altötting",Bayern,Germany
 84555,Jettenbach,Bayern,Germany
@@ -15792,7 +15588,6 @@
 85077,Manching,Bayern,Germany
 85080,Gaimersheim,Bayern,Germany
 85084,Reichertshofen,Bayern,Germany
-85088,Vohburg an der Donau,Bayern,Germany
 85092,Kösching,Bayern,Germany
 85095,Denkendorf,Bayern,Germany
 85098,Großmehring,Bayern,Germany
@@ -15822,11 +15617,11 @@
 85217,BKK ProVita,Bayern,Germany
 85219,Bardtke & Scherer,Bayern,Germany
 85219,Landratsamt Dachau,Bayern,Germany
+85219,Sparkasse Dachau,Bayern,Germany
 85221,Dachau,Bayern,Germany
 85229,Markt Indersdorf,Bayern,Germany
 85232,Bergkirchen,Bayern,Germany
 85235,Odelzhausen,Bayern,Germany
-85235,Pfaffenhofen an der Glonn,Bayern,Germany
 85238,Petershausen,Bayern,Germany
 85241,Hebertshausen,Bayern,Germany
 85244,Röhrmoos,Bayern,Germany
@@ -15838,7 +15633,6 @@
 85258,Weichs,Bayern,Germany
 85259,Wiedenzhausen,Bayern,Germany
 85276,Hettenshausen,Bayern,Germany
-85276,Pfaffenhofen an der Ilm,Bayern,Germany
 85283,Wolnzach,Bayern,Germany
 85290,Geisenfeld,Bayern,Germany
 85293,Reichertshausen,Bayern,Germany
@@ -15855,6 +15649,7 @@
 85350,Stadtverwaltung Freising,Bayern,Germany
 85354,Freising,Bayern,Germany
 85356,Freising,Bayern,Germany
+85366,Sparkasse Freising Moosburg,Bayern,Germany
 85368,Moosburg,Bayern,Germany
 85368,Wang,Bayern,Germany
 85374,Office Discount,Bayern,Germany
@@ -15862,8 +15657,6 @@
 85376,Hetzenhausen,Bayern,Germany
 85385,Gemeinde Eching,Bayern,Germany
 85385,MZV,Bayern,Germany
-85385,Raiffeisenbank Eching eG,Bayern,Germany
-85385,Rewe KGaA,Bayern,Germany
 85386,Eching,Bayern,Germany
 85391,Allershausen,Bayern,Germany
 85395,Attenkirchen,Bayern,Germany
@@ -15873,10 +15666,8 @@
 85405,Nandlstadt,Bayern,Germany
 85406,Zolling,Bayern,Germany
 85408,Gammelsdorf,Bayern,Germany
-85410,Haag an der Amper,Bayern,Germany
 85411,Hohenkammer,Bayern,Germany
 85413,Hörgertshausen,Bayern,Germany
-85414,Kirchdorf an der Amper,Bayern,Germany
 85416,Langenbach,Bayern,Germany
 85417,Marzling,Bayern,Germany
 85419,Mauern,Bayern,Germany
@@ -15931,25 +15722,20 @@
 85665,Moosach,Bayern,Germany
 85667,Oberpframmern,Bayern,Germany
 85669,Pastetten,Bayern,Germany
-85711,Frischdienst 2000,Bayern,Germany
 85711,Raiffeisenbank Unterschleißheim-Lohhof,Bayern,Germany
 85711,Stadt Unterschleißheim,Bayern,Germany
 85716,Unterschleißheim,Bayern,Germany
 85737,Ismaning,Bayern,Germany
-85747,Max-Planck-Institut für Plasmaphysik,Bayern,Germany
-85747,Max-Planck-Institut für Quantenoptik,Bayern,Germany
-85747,Stadtverwaltung Garching b. München,Bayern,Germany
 85748,Garching bei München,Bayern,Germany
 85757,Karlsfeld,Bayern,Germany
-85761,Helmholtz Zentrum München,Bayern,Germany
 85764,Oberschleißheim,Bayern,Germany
 85773,ZDF Landesstudio Bayern,Bayern,Germany
 85774,Unterföhring,Bayern,Germany
 85777,Fahrenzhausen,Bayern,Germany
 85778,Haimhausen,Bayern,Germany
+85821,Techniker Krankenkasse,Bayern,Germany
+86121,HUK-Coburg,Bayern,Germany
 86135,Stadtsparkasse Augsburg,Bayern,Germany
-86136,Deutsch-Japanische Gesellschaft,Bayern,Germany
-86136,Deutsche Bundesbank Filiale Augsburg,Bayern,Germany
 86136,Dierig Holding Aktiengesellschaft,Bayern,Germany
 86136,Gewerbeaufsichtsamt Augsburg,Bayern,Germany
 86136,Landratsamt Augsburg,Bayern,Germany
@@ -15962,8 +15748,6 @@
 86147,Bezirk Schwaben,Bayern,Germany
 86147,Bischöfliches Ordinariat,Bayern,Germany
 86147,IKK classic,Bayern,Germany
-86147,Landesamt für Finanzen-Dienstst.Augsburg Geschäftsstelle/Rechtsabteilung,Bayern,Germany
-86147,Staatsoberkasse Bayern Buchungsstelle Augsburg,Bayern,Germany
 86150,Augsburg,Bayern,Germany
 86152,Augsburg,Bayern,Germany
 86153,Augsburg,Bayern,Germany
@@ -15976,7 +15760,6 @@
 86165,Augsburg,Bayern,Germany
 86167,Augsburg,Bayern,Germany
 86169,Augsburg,Bayern,Germany
-86177,Bayerisches Landesamt für Umwelt,Bayern,Germany
 86179,Augsburg,Bayern,Germany
 86197,Staatsanwaltschaft Augsburg,Bayern,Germany
 86199,Augsburg,Bayern,Germany
@@ -16010,7 +15793,6 @@
 86465,Welden,Bayern,Germany
 86470,Thannhausen,Bayern,Germany
 86473,Ziemetshausen,Bayern,Germany
-86476,Neuburg an der Kammel,Bayern,Germany
 86477,Adelsried,Bayern,Germany
 86479,Aichen,Bayern,Germany
 86480,Aletshausen,Bayern,Germany
@@ -16022,7 +15804,6 @@
 86488,Breitenthal,Bayern,Germany
 86489,Deisenhausen,Bayern,Germany
 86491,Ebershausen,Bayern,Germany
-86492,Egling an der Paar,Bayern,Germany
 86494,Emersacker,Bayern,Germany
 86495,Eurasburg,Bayern,Germany
 86497,Horgau,Bayern,Germany
@@ -16060,9 +15841,9 @@
 86577,Sielenbach,Bayern,Germany
 86579,Waidhofen,Bayern,Germany
 86607,Landratsamt Donau-Ries,Bayern,Germany
+86607,Sparkasse Donauwörth,Bayern,Germany
 86607,Stadtverwaltung,Bayern,Germany
 86609,Donauwörth,Bayern,Germany
-86633,Neuburg an der Donau,Bayern,Germany
 86637,Wertingen,Bayern,Germany
 86641,Rain,Bayern,Germany
 86643,Rennertshofen,Bayern,Germany
@@ -16158,6 +15939,7 @@
 86879,Wiedergeltingen,Bayern,Germany
 86894,Verlag Moderne Industrie,Bayern,Germany
 86896,Amtsgericht,Bayern,Germany
+86896,Justizvollzugsanstalt Landsberg,Bayern,Germany
 86896,Landratsamt Landsberg,Bayern,Germany
 86896,Stadtverwaltung Landsberg,Bayern,Germany
 86899,Landsberg am Lech,Bayern,Germany
@@ -16284,7 +16066,6 @@
 87740,Buxheim,Bayern,Germany
 87742,Apfeltrach,Bayern,Germany
 87742,Dirlewang,Bayern,Germany
-87743,Egg an der Günz,Bayern,Germany
 87745,Eppishausen,Bayern,Germany
 87746,Erkheim,Bayern,Germany
 87748,Fellheim,Bayern,Germany
@@ -16315,10 +16096,11 @@
 87785,Winterrieden,Bayern,Germany
 87787,Wolfertschwenden,Bayern,Germany
 87789,Woringen,Bayern,Germany
+88041,AOK,Baden-Württemberg,Germany
 88041,Architekturbüro Wund,Baden-Württemberg,Germany
-88041,BKK ZF & Partner,Baden-Württemberg,Germany
 88041,Landratsamt Bodenseekreis,Baden-Württemberg,Germany
 88041,Städtisches Krankenhaus,Baden-Württemberg,Germany
+88041,Techniker Krankenkasse,Baden-Württemberg,Germany
 88045,Friedrichshafen,Baden-Württemberg,Germany
 88046,Friedrichshafen,Baden-Württemberg,Germany
 88048,Friedrichshafen,Baden-Württemberg,Germany
@@ -16365,8 +16147,6 @@
 88214,Ravensburg,Baden-Württemberg,Germany
 88237,Stadtverwaltung,Baden-Württemberg,Germany
 88239,Wangen im Allgäu,Baden-Württemberg,Germany
-88248,Industrie- u. Handelskammer Bodensee-Oberschwaben,Baden-Württemberg,Germany
-88248,MVZ Labor Ravensburg GbR,Baden-Württemberg,Germany
 88250,Weingarten,Baden-Württemberg,Germany
 88255,Baienfurt,Baden-Württemberg,Germany
 88255,Baindt,Baden-Württemberg,Germany
@@ -16412,11 +16192,9 @@
 88396,Kreissparkasse Biberach,Baden-Württemberg,Germany
 88396,Landratsamt,Baden-Württemberg,Germany
 88396,Stadtverwaltung,Baden-Württemberg,Germany
-88400,Biberach an der Riß,Baden-Württemberg,Germany
 88410,Bad Wurzach,Baden-Württemberg,Germany
 88416,Erlenmoos,Baden-Württemberg,Germany
 88416,Ochsenhausen,Baden-Württemberg,Germany
-88416,Steinhausen an der Rottum,Baden-Württemberg,Germany
 88422,Alleshausen,Baden-Württemberg,Germany
 88422,Bad Buchau,Baden-Württemberg,Germany
 88422,Betzenweiler,Baden-Württemberg,Germany
@@ -16428,7 +16206,6 @@
 88422,Tiefenbach,Baden-Württemberg,Germany
 88427,Bad Schussenried,Baden-Württemberg,Germany
 88427,Bad Schussenried Dunzenhausen,Baden-Württemberg,Germany
-88430,Rot an der Rot,Baden-Württemberg,Germany
 88433,Schemmerhofen,Baden-Württemberg,Germany
 88436,Eberhardzell,Baden-Württemberg,Germany
 88436,Eberhardzell Füramoos,Baden-Württemberg,Germany
@@ -16439,11 +16216,9 @@
 88447,Warthausen,Baden-Württemberg,Germany
 88448,Attenweiler,Baden-Württemberg,Germany
 88450,Berkheim,Baden-Württemberg,Germany
-88451,Dettingen an der Iller,Baden-Württemberg,Germany
 88453,Erolzheim,Baden-Württemberg,Germany
 88454,Hochdorf,Baden-Württemberg,Germany
 88456,Ingoldingen,Baden-Württemberg,Germany
-88457,Kirchdorf an der Iller,Baden-Württemberg,Germany
 88459,Tannheim,Baden-Württemberg,Germany
 88471,Laupheim,Baden-Württemberg,Germany
 88477,Schwendi,Baden-Württemberg,Germany
@@ -16451,7 +16226,6 @@
 88481,Balzheim,Baden-Württemberg,Germany
 88483,Burgrieden,Baden-Württemberg,Germany
 88484,Gutenzell-Hürbel,Baden-Württemberg,Germany
-88486,Kirchberg an der Iller,Baden-Württemberg,Germany
 88487,Mietingen,Baden-Württemberg,Germany
 88489,Wain,Baden-Württemberg,Germany
 88499,Altheim,Baden-Württemberg,Germany
@@ -16493,6 +16267,7 @@
 89070,Justizbehörden,Baden-Württemberg,Germany
 89070,Landratsamt Alb-Donau-Kreis,Baden-Württemberg,Germany
 89070,Stadtverwaltung,Baden-Württemberg,Germany
+89070,Ulmer Volksbank,Baden-Württemberg,Germany
 89070,Universitätsklinikum Ulm,Baden-Württemberg,Germany
 89073,Ulm,Baden-Württemberg,Germany
 89075,Ulm,Baden-Württemberg,Germany
@@ -16556,7 +16331,6 @@
 89275,Elchingen,Bayern,Germany
 89278,Nersingen,Bayern,Germany
 89281,Altenstadt,Bayern,Germany
-89284,Pfaffenhofen an der Roth,Bayern,Germany
 89287,Bellenberg,Bayern,Germany
 89290,Buch,Bayern,Germany
 89291,Holzheim,Bayern,Germany
@@ -16587,15 +16361,11 @@
 89365,Röfingen,Bayern,Germany
 89367,Waldstetten,Bayern,Germany
 89368,Winterbach,Bayern,Germany
-89407,Dillingen an der Donau,Bayern,Germany
 89415,Lauingen (Donau),Bayern,Germany
-89420,Höchstädt an der Donau,Bayern,Germany
-89423,Gundelfingen an der Donau,Bayern,Germany
 89426,Mödingen,Bayern,Germany
 89426,Wittislingen,Bayern,Germany
 89428,Syrgenstein,Bayern,Germany
 89429,Bachhagel,Bayern,Germany
-89431,Bächingen an der Brenz,Bayern,Germany
 89432,Binswangen,Bayern,Germany
 89434,Blindheim,Bayern,Germany
 89435,Finningen,Bayern,Germany
@@ -16608,11 +16378,6 @@
 89446,Ziertheim,Bayern,Germany
 89447,Zöschingen,Bayern,Germany
 89449,Zusamaltheim,Bayern,Germany
-89516,Industrie- und Handelskammer (IHK),Baden-Württemberg,Germany
-89518,Heidenheim an der Brenz,Baden-Württemberg,Germany
-89520,Heidenheim an der Brenz,Baden-Württemberg,Germany
-89522,Heidenheim an der Brenz,Baden-Württemberg,Germany
-89537,Giengen an der Brenz,Baden-Württemberg,Germany
 89542,Herbrechtingen,Baden-Württemberg,Germany
 89547,Gerstetten,Baden-Württemberg,Germany
 89551,Königsbronn,Baden-Württemberg,Germany
@@ -16620,9 +16385,7 @@
 89558,Böhmenkirch,Baden-Württemberg,Germany
 89561,Dischingen,Baden-Württemberg,Germany
 89564,Nattheim,Baden-Württemberg,Germany
-89567,Sontheim an der Brenz,Baden-Württemberg,Germany
 89568,Hermaringen,Baden-Württemberg,Germany
-89584,Ehingen an der Donau,Baden-Württemberg,Germany
 89584,Lauterach,Baden-Württemberg,Germany
 89597,Hausen am Bussen,Baden-Württemberg,Germany
 89597,Munderkingen,Baden-Württemberg,Germany
@@ -16645,25 +16408,23 @@
 90291,Amazon,Bayern,Germany
 90292,Amazon,Bayern,Germany
 90293,Amazon,Bayern,Germany
+90312,HUK - Coburg,Bayern,Germany
+90316,Familienkasse Bayern-Nord,Bayern,Germany
 90319,GfK SE Nürnberg,Bayern,Germany
-90321,Center für Strategic Projects,Bayern,Germany
-90321,Comunication Services,Bayern,Germany
 90321,DeTeCSM,Bayern,Germany
 90321,Fachhochschule Leipzig,Bayern,Germany
 90321,Konzernsicherheit,Bayern,Germany
 90321,Kunden NL Spezial,Bayern,Germany
-90321,Network Projects & Services,Bayern,Germany
-90321,Rechnungswesen & Controlling GHS,Bayern,Germany
 90321,T-Nova,Bayern,Germany
 90321,T-Systems,Bayern,Germany
-90321,Technische Infrastruktur Niederlsssung Überregional,Bayern,Germany
 90321,Versorgungsservice,Bayern,Germany
 90321,Vivento,Bayern,Germany
 90327,Amtsgericht Nürnberg,Bayern,Germany
+90327,Bayer. Landesbank,Bayern,Germany
 90327,Bundesagentur für Arbeit,Bayern,Germany
-90327,Deutsche Bundesbank Filiale Nürnberg,Bayern,Germany
+90327,Sparkasse Nürnberg,Bayern,Germany
 90328,Wasserwirtschaftsamt Nürnberg,Bayern,Germany
-90329,Foto-Quelle Schickedanz & Co.,Bayern,Germany
+90330,AOK,Bayern,Germany
 90331,Polizeipräsidium Mittelfranken,Bayern,Germany
 90331,Sozialgericht Nürnberg,Bayern,Germany
 90332,HBG Terradur,Bayern,Germany
@@ -16708,7 +16469,6 @@
 90537,Feucht,Bayern,Germany
 90542,Eckental,Bayern,Germany
 90547,Stein bei Nürnberg,Bayern,Germany
-90552,Röthenbach an der Pegnitz,Bayern,Germany
 90556,Cadolzburg,Bayern,Germany
 90556,Seukendorf,Bayern,Germany
 90559,Burgthann,Bayern,Germany
@@ -16729,7 +16489,6 @@
 90610,Winkelhaid,Bayern,Germany
 90613,Großhabersdorf,Bayern,Germany
 90614,Ammerndorf,Bayern,Germany
-90616,Neuhof an der Zenn,Bayern,Germany
 90617,Puschendorf,Bayern,Germany
 90619,Trautskirchen,Bayern,Germany
 90744,Dr. Walter Schuhmann,Bayern,Germany
@@ -16745,10 +16504,7 @@
 91051,Amtsgericht,Bayern,Germany
 91051,Erlanger Tagblatt,Bayern,Germany
 91051,Landratsamt Erlangen-Höchstadt,Bayern,Germany
-91051,Pestalozzi-Verlag Graphische Gesellschaft m.b.H.,Bayern,Germany
 91051,Polizeiinspektion Erlangen-Stadt,Bayern,Germany
-91051,Staatsanwaltschaft Nbg-Fürth Zweigstelle Erlangen,Bayern,Germany
-91051,Stadt- u. Kreissparkasse Erlangen,Bayern,Germany
 91051,Stadtverwaltung Erlangen,Bayern,Germany
 91051,Universitätsbibliothek,Bayern,Germany
 91052,Erlangen,Bayern,Germany
@@ -16785,6 +16541,7 @@
 91126,Rednitzhembach,Bayern,Germany
 91126,Schwabach,Bayern,Germany
 91152,Landratsamt Roth,Bayern,Germany
+91152,Sparkasse Mittelfranken-Süd,Bayern,Germany
 91152,Stadtverwaltung Roth,Bayern,Germany
 91154,Roth,Bayern,Germany
 91161,Hilpoltstein,Bayern,Germany
@@ -16798,7 +16555,6 @@
 91187,Röttenbach,Bayern,Germany
 91189,Rohr,Bayern,Germany
 91205,Landratsamt Nürnberger Land,Bayern,Germany
-91207,Lauf an der Pegnitz,Bayern,Germany
 91217,Hersbruck,Bayern,Germany
 91220,Schnaittach,Bayern,Germany
 91224,Pommelsbrunn,Bayern,Germany
@@ -16818,20 +16574,18 @@
 91247,Vorra,Bayern,Germany
 91249,Weigendorf,Bayern,Germany
 91257,Pegnitz,Bayern,Germany
-91275,Auerbach in der Oberpfalz,Bayern,Germany
 91278,Pottenstein,Bayern,Germany
 91281,Kirchenthumbach,Bayern,Germany
 91282,Betzenstein,Bayern,Germany
-91284,Neuhaus an der Pegnitz,Bayern,Germany
 91286,Obertrubach,Bayern,Germany
 91287,Plech,Bayern,Germany
 91289,Schnabelwaid,Bayern,Germany
 91299,Amtsgericht,Bayern,Germany
-91299,Kimberly-Clark Bereich Personal Care,Bayern,Germany
+91299,Deutsche Angestellten Krankenkasse,Bayern,Germany
 91299,Landratsamt Forchheim,Bayern,Germany
+91299,Sparkasse Forchheim,Bayern,Germany
 91299,Stadtverwaltung Forchheim,Bayern,Germany
 91301,Forchheim,Bayern,Germany
-91315,Höchstadt an der Aisch,Bayern,Germany
 91320,Ebermannstadt,Bayern,Germany
 91322,Gräfenberg,Bayern,Germany
 91325,Adelsdorf,Bayern,Germany
@@ -16859,7 +16613,6 @@
 91365,Weilersbach,Bayern,Germany
 91367,Weißenohe,Bayern,Germany
 91369,Wiesenthau,Bayern,Germany
-91413,Neustadt an der Aisch,Bayern,Germany
 91438,Bad Windsheim,Bayern,Germany
 91443,Scheinfeld,Bayern,Germany
 91448,Emskirchen,Bayern,Germany
@@ -16896,9 +16649,7 @@
 91511,Schwenninger BKK,Bayern,Germany
 91511,Staatsanwaltschaft,Bayern,Germany
 91511,Stadtverwaltung,Bayern,Germany
-91511,Zweckverband Stadt-und Kreiskrankenhaus Ansbach,Bayern,Germany
 91522,Ansbach,Bayern,Germany
-91541,Rothenburg ob der Tauber,Bayern,Germany
 91550,Dinkelsbühl,Bayern,Germany
 91555,Feuchtwangen,Bayern,Germany
 91560,Heilsbronn,Bayern,Germany
@@ -16972,7 +16723,6 @@
 91747,Westheim,Bayern,Germany
 91749,Wittelshofen,Bayern,Germany
 91757,Treuchtlingen,Bayern,Germany
-91780,Amtsgericht Weißenburg i. Bay.,Bayern,Germany
 91780,Landratsamt Weißenburg-Gunzenhausen,Bayern,Germany
 91780,Stadtverwaltung,Bayern,Germany
 91780,Vereinigte Sparkassen,Bayern,Germany
@@ -17026,16 +16776,13 @@
 92286,Rieden,Bayern,Germany
 92287,Schmidmühlen,Bayern,Germany
 92289,Ursensollen,Bayern,Germany
-92318,Neumarkt in der Oberpfalz,Bayern,Germany
 92331,Lupburg,Bayern,Germany
 92331,Parsberg,Bayern,Germany
 92334,Berching,Bayern,Germany
 92339,Beilngries,Bayern,Germany
 92342,Freystadt,Bayern,Germany
-92345,Dietfurt an der Altmühl,Bayern,Germany
 92353,Postbauer-Heng,Bayern,Germany
 92355,Velburg,Bayern,Germany
-92358,Seubersdorf in der Oberpfalz,Bayern,Germany
 92360,Mühlhausen,Bayern,Germany
 92361,Berngau,Bayern,Germany
 92363,Breitenbrunn,Bayern,Germany
@@ -17046,7 +16793,6 @@
 92419,Amtsgericht,Bayern,Germany
 92421,Schwandorf,Bayern,Germany
 92431,Neunburg vorm Wald,Bayern,Germany
-92436,Bruck in der Oberpfalz,Bayern,Germany
 92439,Bodenwöhr,Bayern,Germany
 92442,Wackersdorf,Bayern,Germany
 92444,Rötz,Bayern,Germany
@@ -17083,11 +16829,8 @@
 92637,Weiden,Bayern,Germany
 92648,Vohenstrauß,Bayern,Germany
 92655,Grafenwöhr,Bayern,Germany
-92660,Neustadt an der Waldnaab,Bayern,Germany
-92665,Altenstadt an der Waldnaab,Bayern,Germany
 92665,Kirchendemenreuth,Bayern,Germany
 92670,Windischeschenbach,Bayern,Germany
-92676,Eschenbach in der Oberpfalz,Bayern,Germany
 92676,Speinshart,Bayern,Germany
 92681,Erbendorf,Bayern,Germany
 92685,Floß,Bayern,Germany
@@ -17119,15 +16862,15 @@
 92726,Waidhaus,Bayern,Germany
 92727,Waldthurn,Bayern,Germany
 92729,Weiherhammer,Bayern,Germany
+93013,Familienkasse Bayern-Süd,Bayern,Germany
+93038,HUK-Coburg,Bayern,Germany
 93039,Regierung der Oberpfalz,Bayern,Germany
 93041,E.ON Bayern,Bayern,Germany
-93041,Pathologisch-anatomisches Institut,Bayern,Germany
 93041,Postbeamtenkrankenkasse Bezirksstelle,Bayern,Germany
 93042,Bezirksklinikum Regensburg,Bayern,Germany
+93042,Justizvollzugsanstalt Regensburg,Bayern,Germany
 93042,Universitätsbibliothek,Bayern,Germany
 93043,Bischöfliche Administration,Bayern,Germany
-93043,Fürst Thurn und Taxis,Bayern,Germany
-93043,Polizeipräsidium Oberpfalz Zentrale Geschäftsstelle,Bayern,Germany
 93043,Stadt Regensburg,Bayern,Germany
 93045,creation L,Bayern,Germany
 93047,Regensburg,Bayern,Germany
@@ -17144,10 +16887,8 @@
 93077,Bad Abbach,Bayern,Germany
 93080,Pentling,Bayern,Germany
 93083,Obertraubling,Bayern,Germany
-93086,Wörth an der Donau,Bayern,Germany
 93087,Alteglofsheim,Bayern,Germany
 93089,Aufhausen,Bayern,Germany
-93090,Bach an der Donau,Bayern,Germany
 93092,Barbing,Bayern,Germany
 93093,Donaustauf,Bayern,Germany
 93095,Hagelstadt,Bayern,Germany
@@ -17194,10 +16935,8 @@
 93199,Zell,Bayern,Germany
 93309,Kelheim,Bayern,Germany
 93326,Abensberg,Bayern,Germany
-93333,Neustadt an der Donau,Bayern,Germany
 93336,Altmannstein,Bayern,Germany
 93339,Riedenburg,Bayern,Germany
-93342,Saal an der Donau,Bayern,Germany
 93343,Essing,Bayern,Germany
 93345,Hausen,Bayern,Germany
 93346,Ihrlerstein,Bayern,Germany
@@ -17216,7 +16955,6 @@
 93437,Furth im Wald,Bayern,Germany
 93444,Kötzting,Bayern,Germany
 93449,Waldmünchen,Bayern,Germany
-93453,Neukirchen beim Heiligen Blut,Bayern,Germany
 93455,Traitsching,Bayern,Germany
 93458,Eschlkam,Bayern,Germany
 93462,Lam,Bayern,Germany
@@ -17243,6 +16981,7 @@
 93495,Weiding,Bayern,Germany
 93497,Willmering,Bayern,Germany
 93499,Zandt,Bayern,Germany
+94030,AOK,Bayern,Germany
 94030,Amtsgericht Passau,Bayern,Germany
 94030,Bischöfliches Ordinariat Passau,Bayern,Germany
 94030,Generalvikariat,Bayern,Germany
@@ -17260,11 +16999,9 @@
 94072,Bad Füssing,Bayern,Germany
 94078,Freyung,Bayern,Germany
 94081,Fürstenzell,Bayern,Germany
-94086,Bad Griesbach im Rottal,Bayern,Germany
 94089,Neureichenau,Bayern,Germany
 94094,Malching,Bayern,Germany
 94094,Rotthalmünster,Bayern,Germany
-94099,Ruhstorf an der Rott,Bayern,Germany
 94104,Tittling,Bayern,Germany
 94104,Witzmannsberg,Bayern,Germany
 94107,Untergriesbach,Bayern,Germany
@@ -17357,7 +17094,6 @@
 94375,Stallwang,Bayern,Germany
 94377,Steinach,Bayern,Germany
 94379,Sankt Englmar,Bayern,Germany
-94405,Landau an der Isar,Bayern,Germany
 94419,Reisbach,Bayern,Germany
 94424,Arnstorf,Bayern,Germany
 94428,Eichendorf,Bayern,Germany
@@ -17423,7 +17159,6 @@
 95100,Selb,Bayern,Germany
 95111,Rehau,Bayern,Germany
 95119,Naila,Bayern,Germany
-95126,Schwarzenbach an der Saale,Bayern,Germany
 95131,Schwarzenbach am Wald,Bayern,Germany
 95138,Bad Steben,Bayern,Germany
 95145,Oberkotzau,Bayern,Germany
@@ -17472,7 +17207,6 @@
 95365,Rugendorf,Bayern,Germany
 95367,Trebgast,Bayern,Germany
 95369,Untersteinach,Bayern,Germany
-95440,BSW bonus & club,Bayern,Germany
 95440,Bezirkskrankenhaus Bayreuth,Bayern,Germany
 95440,Deutsche Rentenversicherung Nordbayern,Bayern,Germany
 95440,Handwerkskammer für Oberfranken,Bayern,Germany
@@ -17480,12 +17214,12 @@
 95440,Krankenhaus Hohe Warte,Bayern,Germany
 95440,Landratsamt,Bayern,Germany
 95440,Polizeipräsidium Oberfranken,Bayern,Germany
+95440,Sparkasse Bayreuth,Bayern,Germany
 95440,Stadt Bayreuth,Bayern,Germany
 95444,Bayreuth,Bayern,Germany
 95445,Bayreuth,Bayern,Germany
 95447,Bayreuth,Bayern,Germany
 95448,Bayreuth,Bayern,Germany
-95460,Bad Berneck im Fichtelgebirge,Bayern,Germany
 95463,Bindlach,Bayern,Germany
 95466,Kirchenpingarten,Bayern,Germany
 95466,Weidenberg,Bayern,Germany
@@ -17522,7 +17256,6 @@
 95614,Stadt Marktredwitz,Bayern,Germany
 95615,Marktredwitz,Bayern,Germany
 95631,Amtsgericht Wunsiedel,Bayern,Germany
-95631,Landratsamt Wunsiedel i. Fichtelgebirge,Bayern,Germany
 95632,Wunsiedel,Bayern,Germany
 95643,Tirschenreuth,Bayern,Germany
 95652,Waldsassen,Bayern,Germany
@@ -17539,7 +17272,6 @@
 95686,Fichtelberg,Bayern,Germany
 95688,Friedenfels,Bayern,Germany
 95689,Fuchsmühl,Bayern,Germany
-95691,Hohenberg an der Eger,Bayern,Germany
 95692,Konnersreuth,Bayern,Germany
 95694,Mehlmeisel,Bayern,Germany
 95695,Mähring,Bayern,Germany
@@ -17624,7 +17356,6 @@
 96250,Ebensfeld,Bayern,Germany
 96253,Untersiemau,Bayern,Germany
 96257,Marktgraitz,Bayern,Germany
-96257,Redwitz an der Rodach,Bayern,Germany
 96260,Weismain,Bayern,Germany
 96264,Altenkunstadt,Bayern,Germany
 96268,Mitwitz,Bayern,Germany
@@ -17651,7 +17382,10 @@
 96365,Nordhalben,Bayern,Germany
 96367,Tschirn,Bayern,Germany
 96369,Weißenbrunn,Bayern,Germany
-96438,HUK24,Bayern,Germany
+96435,HUK-Coburg,Bayern,Germany
+96444,HUK-Coburg,Bayern,Germany
+96447,HUK-Coburg,Bayern,Germany
+96448,HUK-Coburg,Bayern,Germany
 96450,Coburg,Bayern,Germany
 96465,Neustadt bei Coburg,Bayern,Germany
 96472,Rödental,Bayern,Germany
@@ -17674,15 +17408,16 @@
 97064,Deutsche Rentenversicherung Nordbayern,Bayern,Germany
 97064,Handwerkskammer für Unterfranken,Bayern,Germany
 97064,Landwirtschaftliche Alterskasse Unterfranken,Bayern,Germany
+97064,Landwirtschaftliche Krankenkasse Unterfranken,Bayern,Germany
 97064,Regierung von Unterfranken,Bayern,Germany
 97064,Versicherungskammer Bayern Schadendirektion,Bayern,Germany
 97064,Verwaltungs-Berufsgenossenschaft (VBG),Bayern,Germany
+97066,HUK -Coburg,Bayern,Germany
 97067,Augustinus-Verlag,Bayern,Germany
-97067,Diözese Würzburg KdöR Poststelle,Bayern,Germany
 97067,Jobcenter Landkreis Würzburg,Bayern,Germany
 97067,Katholisches Diözesan-Kirchensteueramt,Bayern,Germany
-97067,Klinikum Würzburg Mitte gGmbH,Bayern,Germany
 97067,Landratsamt Würzburg,Bayern,Germany
+97067,Sparkasse Mainfranken,Bayern,Germany
 97067,Staatliches Gesundheitsamt,Bayern,Germany
 97067,Stadt Würzburg,Bayern,Germany
 97070,Würzburg,Bayern,Germany
@@ -17792,6 +17527,7 @@
 97420,Amtsgericht Schweinfurt,Bayern,Germany
 97420,"Riedel Bau, Firmengruppe",Bayern,Germany
 97420,Stadtverwaltung,Bayern,Germany
+97420,Techniker Krankenkasse,Bayern,Germany
 97421,Schweinfurt,Bayern,Germany
 97422,Schweinfurt,Bayern,Germany
 97424,Schweinfurt,Bayern,Germany
@@ -17835,7 +17571,6 @@
 97523,Schwanfeld,Bayern,Germany
 97525,Schwebheim,Bayern,Germany
 97526,Sennfeld,Bayern,Germany
-97528,Sulzdorf an der Lederhecke,Bayern,Germany
 97529,Sulzheim,Bayern,Germany
 97531,Theres,Bayern,Germany
 97532,Üchtelhausen,Bayern,Germany
@@ -17856,31 +17591,23 @@
 97618,Strahlungen,Bayern,Germany
 97618,Unsleben,Bayern,Germany
 97618,Wollbach,Bayern,Germany
-97618,Wülfershausen an der Saale,Bayern,Germany
-97631,Bad Königshofen im Grabfeld,Bayern,Germany
 97633,Aubstadt,Bayern,Germany
 97633,Großbardorf,Bayern,Germany
 97633,Großeibstadt,Bayern,Germany
 97633,Herbstadt,Bayern,Germany
 97633,Höchheim,Bayern,Germany
-97633,Saal an der Saale,Bayern,Germany
 97633,Sulzfeld,Bayern,Germany
 97633,Trappstadt,Bayern,Germany
 97638,Mellrichstadt,Bayern,Germany
 97640,Hendungen,Bayern,Germany
 97640,Oberstreu,Bayern,Germany
 97640,Stockheim,Bayern,Germany
-97645,Ostheim vor der Rhön,Bayern,Germany
 97647,Hausen,Bayern,Germany
-97647,Nordheim vor der Rhön,Bayern,Germany
-97647,Sondheim vor der Rhön,Bayern,Germany
 97647,Willmars,Bayern,Germany
 97650,Fladungen,Bayern,Germany
-97653,Bischofsheim an der Rhön,Bayern,Germany
 97654,Bastheim,Bayern,Germany
 97656,Oberelsbach,Bayern,Germany
 97657,Sandberg,Bayern,Germany
-97659,Schönau an der Brend,Bayern,Germany
 97685,Landratsamt,Bayern,Germany
 97688,Bad Kissingen,Bayern,Germany
 97702,Münnerstadt,Bayern,Germany
@@ -17889,7 +17616,6 @@
 97711,Maßbach,Bayern,Germany
 97711,Thundorf in Unterfranken,Bayern,Germany
 97714,Oerlenbach,Bayern,Germany
-97717,Aura an der Saale,Bayern,Germany
 97717,Euerdorf,Bayern,Germany
 97717,Sulzthal,Bayern,Germany
 97720,Nüdlingen,Bayern,Germany
@@ -18006,6 +17732,7 @@
 98597,Fambach,Thüringen,Germany
 98597,Heßles,Thüringen,Germany
 98599,Brotterode,Thüringen,Germany
+98610,Rhön-Rennsteig-Sparkasse Meiningen,Thüringen,Germany
 98617,Bauerbach,Thüringen,Germany
 98617,Belrieth,Thüringen,Germany
 98617,Einhausen,Thüringen,Germany
@@ -18152,6 +17879,7 @@
 99100,Zimmernsupra,Thüringen,Germany
 99102,Klettbach,Thüringen,Germany
 99102,Rockhausen,Thüringen,Germany
+99112,HUK-Coburg,Thüringen,Germany
 99113,Bundesarbeitsgericht,Thüringen,Germany
 99115,OBI-Systemzentrale Außenstelle Erfurt,Thüringen,Germany
 99117,Deutsche Rentenversicherung Erfurt,Thüringen,Germany
@@ -18202,7 +17930,6 @@
 99338,Gossel,Thüringen,Germany
 99338,Neusiß,Thüringen,Germany
 99338,Plaue,Thüringen,Germany
-99420,Staatliche Lotterie-Einnahme Harry Neugebauer,Thüringen,Germany
 99421,Amtsgericht Weimar,Thüringen,Germany
 99421,Stadtverwaltung Weimar,Thüringen,Germany
 99423,Weimar,Thüringen,Germany
@@ -18385,13 +18112,11 @@
 99765,Windehausen,Thüringen,Germany
 99768,Ilfeld,Thüringen,Germany
 99817,Eisenach,Thüringen,Germany
-99819,Ettenhausen an der Suhl,Thüringen,Germany
 99819,Hörselberg,Thüringen,Germany
 99819,Krauthausen,Thüringen,Germany
 99819,Marksuhl,Thüringen,Germany
 99819,Wolfsburg-Unkeroda,Thüringen,Germany
 99820,Behringen,Thüringen,Germany
-99826,Berka vor der Hainich,Thüringen,Germany
 99826,Bischofroda,Thüringen,Germany
 99826,Ebenshausen,Thüringen,Germany
 99826,Frankenroda,Thüringen,Germany
