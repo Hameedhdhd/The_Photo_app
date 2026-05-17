@@ -10,12 +10,9 @@ import Header from '../components/Header';
 import Button from '../components/Button';
 import Card from '../components/Card';
 import LanguageToggle from '../components/LanguageToggle';
-import CategoryScroll from '../components/CategoryScroll';
+import CategoryPicker from '../components/CategoryPicker';
 import { colors, typography, spacing, radius, shadows } from '../theme';
-
-const ROOMS = [
-  'Kitchen', 'Bathroom', 'Bedroom', 'Living Room', 'Garage', 'Office', 'Other'
-];
+import { CATEGORIES } from '../constants/categories';
 
 export default function ItemDetailScreen({ route, navigation }) {
   const { item } = route.params;
@@ -271,19 +268,20 @@ export default function ItemDetailScreen({ route, navigation }) {
           </Card>
         </Animated.View>
 
-        {/* Room Selector */}
+        {/* Category Selector */}
         <Animated.View entering={FadeInDown.duration(300).delay(250)}>
           <Card shadow="sm" style={styles.fieldCard}>
             <View style={styles.fieldHeader}>
               <View style={styles.fieldHeaderLeft}>
                 <Ionicons name="location-outline" size={16} color={colors.primary} />
-                <Text style={[styles.fieldLabel, { color: colors.primary }]}>Room / Section</Text>
+                <Text style={[styles.fieldLabel, { color: colors.primary }]}>Category</Text>
               </View>
             </View>
-            <CategoryScroll
-              categories={ROOMS}
+            <CategoryPicker
               selectedCategory={roomValue}
-              onSelect={setRoomValue}
+              onSelectCategory={setRoomValue}
+              selectedSubcategories={[]}
+              onSelectSubcategory={() => {}}
               showAllOption={false}
             />
           </Card>
@@ -368,7 +366,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: spacing.page,
     paddingTop: spacing.lg,
-    paddingBottom: spacing.xxxl + 20,
+    paddingBottom: spacing.xxxl + 100, // Increased padding to ensure end of page is visible
   },
   // Image
   imageSection: {

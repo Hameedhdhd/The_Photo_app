@@ -1,0 +1,14 @@
+{
+  "name": "the_photo_app",
+  "version": "1.0.0",
+  "description": "The Photo App - Marketplace",
+  "scripts": {
+    "dev:frontend": "cd frontend && npm start",
+    "dev:backend": "cd backend && call venv/Scripts/activate.bat && uvicorn app.main:app --reload",
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "prisma": "^7.8.0"
+  }
+}

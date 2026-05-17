@@ -1,24 +1,15 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import {
-  StyleSheet, Text, View, ScrollView, Image, TextInput,
-  KeyboardAvoidingView, Platform, Alert, TouchableOpacity, Dimensions
+  StyleSheet, View, ScrollView, KeyboardAvoidingView, Platform, Alert
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
-import { supabase } from '../../supabase';
 import Header from '../components/Header';
 import Button from '../components/Button';
-import Card from '../components/Card';
-import LanguageToggle from '../components/LanguageToggle';
-import CategoryScroll from '../components/CategoryScroll';
-import { colors, typography, spacing, radius, shadows } from '../theme';
+import { colors, spacing } from '../theme';
+import { supabase } from '../../supabase';
 
-const ROOMS = [
-  'Kitchen', 'Bathroom', 'Bedroom', 'Living Room', 'Garage', 'Office', 'Other'
-];
-
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
-const IMAGE_HEIGHT = SCREEN_WIDTH * 0.5;
+// New Sub-components
+import ResultImageGallery from '../components/result/ResultImageGallery';
+import ResultForm from '../components/result/ResultForm';
 
 export default function ResultScreen({ route, navigation }) {
   const { result, imageUris, room } = route.params;
@@ -27,102 +18,199 @@ export default function ResultScreen({ route, navigation }) {
   const [title, setTitle] = useState(result?.title || '');
   const [description, setDescription] = useState(result?.description || '');
   const [price, setPrice] = useState(result?.price || '');
-  const [address, setAddress] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState(result?.category || 'Other');
+  const [selectedSubcategories, setSelectedSubcategories] = useState(result?.subcategory ? [result.subcategory] : []);
+  const [postalCode, setPostalCode] = useState(result?.postalCode || '');
+  const [streetName, setStreetName] = useState(result?.streetName || '');
+  const [city, setCity] = useState(result?.city || '');
+  const [country, setCountry] = useState(result?.country || '');
   const [editingField, setEditingField] = useState(null);
   const [saving, setSaving] = useState(false);
   const [activePhotoIndex, setActivePhotoIndex] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
   const [status, setStatus] = useState('listed');
 
+  // German address autocomplete state
+  const [citySuggestions, setCitySuggestions] = useState([]);
+  const [showCitySuggestions, setShowCitySuggestions] = useState(false);
+  const [postalLookupLoading, setPostalLookupLoading] = useState(false);
+  const citySearchTimer = useRef(null);
+
   const titleRef = useRef(null);
-  const descRef = useRef(null);
   const priceRef = useRef(null);
+  const descRef = useRef(null);
+  const cityRef = useRef(null);
 
   const itemId = result?.item_id || result?.id;
 
+  // Auto-fill city + state when postal code reaches 5 digits
+  const handlePostalCodeChange = useCallback(async (text) => {
+    setPostalCode(text);
+    const clean = text.replace(/\D/g, '');
+    if (clean.length === 5) {
+      setPostalLookupLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('german_addresses')
+          .select('city, state')
+          .eq('postal_code', clean)
+          .limit(1)
+          .single();
+        if (data && !error) {
+          setCity(data.city);
+          setCountry('Germany');
+        }
+      } catch (_) {
+        // silently ignore
+      } finally {
+        setPostalLookupLoading(false);
+      }
+    }
+  }, []);
+
+  // Debounced city search for autocomplete dropdown
+  const handleCityChange = useCallback((text) => {
+    setCity(text);
+    setShowCitySuggestions(false);
+    if (citySearchTimer.current) clearTimeout(citySearchTimer.current);
+
+    if (text.trim().length < 2) {
+      setCitySuggestions([]);
+      return;
+    }
+
+    citySearchTimer.current = setTimeout(async () => {
+      try {
+        const { data } = await supabase
+          .from('german_addresses')
+          .select('city, postal_code, state')
+          .ilike('city', `${text.trim()}%`)
+          .order('city')
+          .limit(6);
+        if (data && data.length > 0) {
+          const seen = new Set();
+          const unique = data.filter(r => {
+            if (seen.has(r.city)) return false;
+            seen.add(r.city);
+            return true;
+          });
+          setCitySuggestions(unique);
+          setShowCitySuggestions(true);
+        } else {
+          setCitySuggestions([]);
+          setShowCitySuggestions(false);
+        }
+      } catch (_) {
+        setCitySuggestions([]);
+      }
+    }, 300);
+  }, []);
+
+  const selectCitySuggestion = useCallback((item) => {
+    setCity(item.city);
+    setPostalCode(prev => prev || item.postal_code);
+    setCountry('Germany');
+    setCitySuggestions([]);
+    setShowCitySuggestions(false);
+    setEditingField(null);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (citySearchTimer.current) clearTimeout(citySearchTimer.current);
+    };
+  }, []);
+
   const handleSave = useCallback(async () => {
-    // Validate required fields
-    if (!title.trim()) {
-      Alert.alert('Missing Title', 'Please enter a title for your item.');
-      return;
-    }
-    if (!price.trim()) {
-      Alert.alert('Missing Price', 'Please enter a price for your item.');
-      return;
-    }
-    if (!address.trim()) {
-      Alert.alert('Missing Address', 'Please enter your address so buyers know where to pick up the item.');
+    if (!title.trim() || !price.trim()) {
+      Alert.alert('Missing Fields', 'Title and Price are required.');
       return;
     }
 
     setSaving(true);
     try {
-      // Get the current user to save user_id with the listing
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { session } } = await supabase.auth.getSession();
+      const user = session?.user;
+      if (!user?.id) {
+        Alert.alert('Login Required', 'You must log in to list items.');
+        setSaving(false);
+        return;
+      }
       
-      const updateData = {
-        title,
-        price,
-        description,
-        address,
-        status,
-        user_id: user?.id || null,
+      const combinedAddress = `${streetName}, ${postalCode} ${city}, ${country}`.trim();
+      const imageUrls = [];
+      for (let i = 0; i < photos.length; i++) {
+        const uri = photos[i];
+        if (uri.startsWith('file:') || uri.startsWith('content:')) {
+          const fileName = `${user.id}_${Date.now()}_${i}.jpg`;
+          const response = await fetch(uri);
+          const blob = await response.blob();
+          const { error } = await supabase.storage.from('item_images').upload(fileName, blob, { contentType: 'image/jpeg', upsert: true });
+          if (error) throw error;
+          const { data: { publicUrl } } = supabase.storage.from('item_images').getPublicUrl(fileName);
+          imageUrls.push(publicUrl);
+        } else {
+          imageUrls.push(uri);
+        }
+      }
+
+      const listingData = {
+        title: title.trim(),
+        price: price.trim(),
+        description: (description || '').trim(),
+        address: combinedAddress,
+        status: status || 'listed',
+        user_id: user.id,
         listed_at: new Date().toISOString(),
+        category: selectedCategory,
+        subcategory: selectedSubcategories.length > 0 ? selectedSubcategories[0] : null,
+        room: selectedCategory,
+        image_url: imageUrls.length > 0 ? imageUrls[0] : null,
       };
 
       if (itemId) {
-        const { error } = await supabase
-          .from('items')
-          .update(updateData)
-          .eq('item_id', itemId);
-
+        const { error } = await supabase.from('items').update(listingData).eq('item_id', itemId);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase.from('items').insert([listingData]);
         if (error) throw error;
       }
 
-      Alert.alert('🎉 Listed!', 'Your item is now live on the marketplace. Buyers can message you directly!');
+      Alert.alert('🎉 Listed!', 'Your item is now live!');
       navigation.navigate('Main', { screen: 'Marketplace' });
     } catch (error) {
-      console.error('Save error:', error);
-      Alert.alert('Save Failed', 'Could not save changes. Please try again.');
+      Alert.alert('Save Failed', error.message || 'Could not save changes.');
     } finally {
       setSaving(false);
     }
-  }, [title, price, description, address, status, itemId, navigation]);
+  }, [title, price, description, streetName, postalCode, city, country, selectedCategory, status, itemId, navigation, photos]);
 
   const toggleFavorite = useCallback(async () => {
     const newValue = !isFavorite;
     setIsFavorite(newValue);
     try {
       if (itemId) {
-        await supabase
-          .from('items')
-          .update({ favorite: newValue })
-          .eq('item_id', itemId);
+        await supabase.from('items').update({ favorite: newValue }).eq('item_id', itemId);
       }
     } catch (err) {
-      console.error('Favorite toggle error:', err);
       setIsFavorite(!newValue);
     }
   }, [isFavorite, itemId]);
 
   const copyToClipboard = useCallback(async () => {
-    const text = description;
-    if (!text) return;
+    if (!description) return;
     try {
       if (Platform.OS === 'web') {
-        await navigator.clipboard.writeText(text);
+        await navigator.clipboard.writeText(description);
       } else {
         const Clipboard = require('expo-clipboard').default;
-        await Clipboard.setStringAsync(text);
+        await Clipboard.setStringAsync(description);
       }
-      Alert.alert('Copied!', 'Description copied to clipboard.');
-    } catch (err) {
-      console.error('Clipboard error:', err);
-    }
+      Alert.alert('Copied!', 'Description copied.');
+    } catch (err) {}
   }, [description]);
 
   const handleDone = useCallback(() => {
-    // Navigate back to scan screen with reset
     navigation.navigate('Main', { screen: 'Scan', params: { reset: true } });
   }, [navigation]);
 
@@ -131,7 +219,6 @@ export default function ResultScreen({ route, navigation }) {
     if (field === 'title') titleRef.current?.focus();
     else if (field === 'price') priceRef.current?.focus();
     else if (field === 'description') descRef.current?.focus();
-    else if (field === 'address') setEditingField('address');
   }, []);
 
   const blurField = useCallback(() => {
@@ -139,11 +226,7 @@ export default function ResultScreen({ route, navigation }) {
   }, []);
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
-    >
+    <View style={styles.container}>
       <Header
         title="Listing Details"
         subtitle="Review & edit your item"
@@ -155,215 +238,62 @@ export default function ResultScreen({ route, navigation }) {
         onRightPress={handleDone}
       />
 
-      <ScrollView
-        style={styles.scroll}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
-        keyboardShouldPersistTaps="handled"
-      >
-        {/* Photo Gallery */}
-        {photos.length > 0 && (
-          <Animated.View entering={FadeInUp.duration(400)} style={styles.photoSection}>
-            {/* Main Photo */}
-            <Image
-              source={{ uri: photos[activePhotoIndex] }}
-              style={styles.mainPhoto}
-            />
-            <View style={styles.photoBadge}>
-              <Ionicons name="checkmark-circle" size={14} color={colors.white} />
-              <Text style={styles.photoBadgeText}>
-                {activePhotoIndex + 1}/{photos.length}
-              </Text>
-            </View>
-            {/* Favorite Heart */}
-            <TouchableOpacity
-              style={styles.favBadge}
-              onPress={toggleFavorite}
-              activeOpacity={0.7}
-            >
-              <Ionicons
-                name={isFavorite ? 'heart' : 'heart-outline'}
-                size={22}
-                color={isFavorite ? colors.favorite : colors.white}
-              />
-            </TouchableOpacity>
-
-            {/* Photo Thumbnails */}
-            {photos.length > 1 && (
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                style={styles.thumbScroll}
-                contentContainerStyle={styles.thumbContainer}
-              >
-                {photos.map((uri, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() => setActivePhotoIndex(index)}
-                    activeOpacity={0.8}
-                    style={[
-                      styles.thumb,
-                      index === activePhotoIndex && styles.thumbActive,
-                    ]}
-                  >
-                    <Image source={{ uri }} style={styles.thumbImage} />
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            )}
-          </Animated.View>
-        )}
-
-        {/* Item ID */}
-        {itemId && (
-          <Animated.View entering={FadeInDown.duration(300).delay(50)} style={styles.idRow}>
-            <Text style={styles.idLabel}>Item ID</Text>
-            <Text style={styles.idValue}>{itemId}</Text>
-          </Animated.View>
-        )}
-
-        {/* Editable Title */}
-        <Animated.View entering={FadeInDown.duration(300).delay(150)}>
-          <Card shadow="sm" style={[styles.fieldCard, editingField === 'title' && styles.fieldCardActive]}>
-            <View style={styles.fieldHeader}>
-              <View style={styles.fieldHeaderLeft}>
-                <Ionicons name="text-outline" size={16} color={editingField === 'title' ? colors.primary : colors.textTertiary} />
-                <Text style={[styles.fieldLabel, editingField === 'title' && styles.fieldLabelActive]}>Title</Text>
-              </View>
-              <TouchableOpacity onPress={() => focusField('title')} activeOpacity={0.7}>
-                <Ionicons name="pencil-outline" size={16} color={editingField === 'title' ? colors.primary : colors.textTertiary} />
-              </TouchableOpacity>
-            </View>
-            <TextInput
-              ref={titleRef}
-              style={styles.titleInput}
-              value={title}
-              onChangeText={setTitle}
-              onFocus={() => setEditingField('title')}
-              onBlur={blurField}
-              placeholder="Enter title..."
-              placeholderTextColor={colors.textTertiary}
-              returnKeyType="next"
-              onSubmitEditing={() => focusField('price')}
-            />
-          </Card>
-        </Animated.View>
-
-        {/* Editable Price */}
-        <Animated.View entering={FadeInDown.duration(300).delay(200)}>
-          <Card shadow="sm" style={[styles.fieldCard, editingField === 'price' && styles.fieldCardActive]}>
-            <View style={styles.fieldHeader}>
-              <View style={styles.fieldHeaderLeft}>
-                <Ionicons name="pricetag-outline" size={16} color={editingField === 'price' ? colors.primary : colors.textTertiary} />
-                <Text style={[styles.fieldLabel, editingField === 'price' && styles.fieldLabelActive]}>Price</Text>
-              </View>
-              <TouchableOpacity onPress={() => focusField('price')} activeOpacity={0.7}>
-                <Ionicons name="pencil-outline" size={16} color={editingField === 'price' ? colors.primary : colors.textTertiary} />
-              </TouchableOpacity>
-            </View>
-            <TextInput
-              ref={priceRef}
-              style={styles.priceInput}
-              value={price}
-              onChangeText={setPrice}
-              onFocus={() => setEditingField('price')}
-              onBlur={blurField}
-              placeholder="Enter price..."
-              placeholderTextColor={colors.textTertiary}
-              keyboardType="decimal-pad"
-              returnKeyType="next"
-              onSubmitEditing={() => focusField('description')}
-            />
-          </Card>
-        </Animated.View>
-
-        {/* Editable Description */}
-        <Animated.View entering={FadeInDown.duration(300).delay(300)}>
-          <Card shadow="sm" style={[styles.fieldCard, editingField === 'description' && styles.fieldCardActive]}>
-            <View style={styles.fieldHeader}>
-              <View style={styles.fieldHeaderLeft}>
-                <Ionicons name="document-text-outline" size={16} color={editingField === 'description' ? colors.primary : colors.textTertiary} />
-                <Text style={[styles.fieldLabel, editingField === 'description' && styles.fieldLabelActive]}>
-                  Description
-                </Text>
-              </View>
-              <View style={styles.fieldHeaderRight}>
-                <TouchableOpacity onPress={copyToClipboard} style={styles.copyBtn} activeOpacity={0.7}>
-                  <Ionicons name="copy-outline" size={16} color={colors.textTertiary} />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => focusField('description')} activeOpacity={0.7}>
-                  <Ionicons name="pencil-outline" size={16} color={editingField === 'description' ? colors.primary : colors.textTertiary} />
-                </TouchableOpacity>
-              </View>
-            </View>
-            <TextInput
-              ref={descRef}
-              style={styles.descriptionInput}
-              value={description}
-              onChangeText={setDescription}
-              onFocus={() => setEditingField('description')}
-              onBlur={blurField}
-              placeholder="Enter description..."
-              placeholderTextColor={colors.textTertiary}
-              multiline
-              textAlignVertical="top"
-            />
-          </Card>
-       </Animated.View>
-
-       {/* Address Input */}
-       <Animated.View entering={FadeInDown.duration(300).delay(350)}>
-         <Card shadow="sm" style={[styles.fieldCard, editingField === 'address' && styles.fieldCardActive]}>
-           <View style={styles.fieldHeader}>
-             <View style={styles.fieldHeaderLeft}>
-               <Ionicons name="location" size={16} color={editingField === 'address' ? colors.primary : colors.textTertiary} />
-               <Text style={[styles.fieldLabel, editingField === 'address' && styles.fieldLabelActive]}>
-                 Pickup Address *
-               </Text>
-             </View>
-             <TouchableOpacity onPress={() => focusField('address')} activeOpacity={0.7}>
-               <Ionicons name="pencil-outline" size={16} color={editingField === 'address' ? colors.primary : colors.textTertiary} />
-             </TouchableOpacity>
-           </View>
-           <TextInput
-             ref={null}
-             style={styles.addressInput}
-             value={address}
-             onChangeText={setAddress}
-             onFocus={() => setEditingField('address')}
-             onBlur={blurField}
-             placeholder="Enter street, city, postal code..."
-             placeholderTextColor={colors.textTertiary}
-             multiline
-             numberOfLines={2}
-           />
-           <Text style={styles.hintText}>Required: Buyers need to know where to pick up the item</Text>
-         </Card>
-       </Animated.View>
-
-       {/* Action Buttons */}
-       <Animated.View entering={FadeInDown.duration(300).delay(400)} style={styles.actions}>
-         <Button
-           title="List Item"
-           onPress={handleSave}
-           loading={saving}
-           variant="primary"
-           icon="checkmark-circle"
-           fullWidth
-           size="large"
-         />
-          <View style={styles.buttonGap} />
-          <Button
-            title="Done — Back to Scanner"
-            onPress={handleDone}
-            variant="dark"
-            icon="checkmark-done"
-            fullWidth
-            size="large"
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'none'}>
+        <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
+          <ResultImageGallery
+            photos={photos}
+            activePhotoIndex={activePhotoIndex}
+            setActivePhotoIndex={setActivePhotoIndex}
+            isFavorite={isFavorite}
+            toggleFavorite={toggleFavorite}
           />
-        </Animated.View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+
+          <ResultForm
+            itemId={itemId}
+            title={title} setTitle={setTitle}
+            price={price} setPrice={setPrice}
+            description={description} setDescription={setDescription}
+            selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory}
+            selectedSubcategories={selectedSubcategories} setSelectedSubcategories={setSelectedSubcategories}
+            streetName={streetName} setStreetName={setStreetName}
+            postalCode={postalCode} handlePostalCodeChange={handlePostalCodeChange}
+            city={city} handleCityChange={handleCityChange}
+            country={country} setCountry={setCountry}
+            editingField={editingField} focusField={focusField} blurField={blurField}
+            copyToClipboard={copyToClipboard}
+            postalLookupLoading={postalLookupLoading}
+            showCitySuggestions={showCitySuggestions}
+            citySuggestions={citySuggestions}
+            selectCitySuggestion={selectCitySuggestion}
+            titleRef={titleRef}
+            priceRef={priceRef}
+            descRef={descRef}
+            cityRef={cityRef}
+          />
+
+          <View style={styles.actions}>
+            <Button
+              title="List Item"
+              onPress={handleSave}
+              loading={saving}
+              variant="primary"
+              icon="checkmark-circle"
+              fullWidth
+              size="large"
+            />
+            <View style={styles.buttonGap} />
+            <Button
+              title="Done — Back to Scanner"
+              onPress={handleDone}
+              variant="dark"
+              icon="checkmark-done"
+              fullWidth
+              size="large"
+            />
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </View>
   );
 }
 
@@ -372,175 +302,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.gray50,
   },
-  scroll: {
-    flex: 1,
-  },
   scrollContent: {
     paddingHorizontal: spacing.page,
     paddingTop: spacing.lg,
-    paddingBottom: spacing.xxxl + 20,
+    paddingBottom: spacing.xxxl + 100,
   },
-  // Photo Section
-  photoSection: {
-    marginBottom: spacing.lg,
-  },
-  mainPhoto: {
-    width: '100%',
-    height: IMAGE_HEIGHT,
-    borderRadius: radius.xl,
-    resizeMode: 'cover',
-  },
-  photoBadge: {
-    position: 'absolute',
-    top: spacing.md,
-    right: spacing.md,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs + 2,
-    borderRadius: radius.full,
-    gap: spacing.xs,
-  },
-  photoBadgeText: {
-    ...typography.small,
-    color: colors.white,
-    fontWeight: '700',
-  },
-  thumbScroll: {
-    marginTop: spacing.sm,
-  },
-  thumbContainer: {
-    gap: spacing.sm,
-    paddingBottom: spacing.xs,
-  },
-  thumb: {
-    width: 56,
-    height: 56,
-    borderRadius: radius.md,
-    overflow: 'hidden',
-    borderWidth: 2,
-    borderColor: 'transparent',
-  },
-  thumbActive: {
-    borderColor: colors.primary,
-  },
-  thumbImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-  },
-  // ID Row
-  idRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: colors.infoLight,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm + 2,
-    borderRadius: radius.md,
-    marginBottom: spacing.md,
-  },
-  idLabel: {
-    ...typography.small,
-    color: colors.primary,
-    fontWeight: '600',
-  },
-  idValue: {
-    ...typography.small,
-    color: colors.primary,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-  },
-  // Language
-  langSection: {
-    marginBottom: spacing.lg,
-  },
-  // Field Cards
-  fieldCard: {
-    marginBottom: spacing.md,
-    borderWidth: 1.5,
-    borderColor: 'transparent',
-  },
-  fieldCardActive: {
-    borderColor: colors.primary,
-    backgroundColor: colors.infoLight,
-  },
-  fieldHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: spacing.xs,
-  },
-  fieldHeaderLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.xs,
-  },
-  fieldLabel: {
-    ...typography.overline,
-    color: colors.textTertiary,
-  },
-  fieldLabelActive: {
-    color: colors.primary,
-  },
-  fieldHeaderRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
-  },
-  copyBtn: {
-    padding: spacing.xs,
-  },
-  favBadge: {
-    position: 'absolute',
-    top: spacing.md,
-    left: spacing.md,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  // Title Input
-  titleInput: {
-    ...typography.h3,
-    color: colors.textPrimary,
-    paddingVertical: spacing.xs,
-    paddingHorizontal: 0,
-  },
-  // Price Input
-  priceInput: {
-    fontSize: 28,
-    fontWeight: '900',
-    color: colors.accent,
-    paddingVertical: spacing.xs,
-    paddingHorizontal: 0,
-  },
-  // Description Input
-  descriptionInput: {
-    ...typography.body,
-    color: colors.textSecondary,
-    lineHeight: 24,
-    minHeight: 120,
-    paddingVertical: spacing.xs,
-    paddingHorizontal: 0,
-    textAlignVertical: 'top',
-  },
-  // Address Input
-  addressInput: {
-    ...typography.body,
-    color: colors.textPrimary,
-    paddingVertical: spacing.xs,
-    paddingHorizontal: 0,
-    minHeight: 50,
-  },
-  hintText: {
-    ...typography.small,
-    color: colors.textTertiary,
-    marginTop: spacing.xs,
-  },
-  // Actions
   actions: {
     marginTop: spacing.xl,
   },

@@ -1,24 +1,40 @@
 # Memory Bank Instructions
 
-At the start of every task:
+## On Every Task Start — Read These in Order
 
-Read:
+1. `memory-bank/project.md` → App overview, architecture, key features
+2. `memory-bank/current-task.md` → What was last worked on, what's next
+3. `memory-bank/decisions.md` → Architectural decisions and their rationale
+4. `memory-bank/progress.md` → Completed features, pending tasks, known issues
 
-* memory-bank/project.md
-* memory-bank/current-task.md
-* memory-bank/decisions.md
-* memory-bank/progress.md
+**Do NOT rely on chat history. Memory bank is the single source of truth.**
 
-Use them as persistent memory.
+---
 
-Do NOT rely on old chat history.
+## What Each File Contains
 
-Keep memory concise and efficient.
+| File | Use it for |
+|------|-----------|
+| `project.md` | Tech stack, architecture, feature list |
+| `current-task.md` | Active work, last session summary, next steps |
+| `decisions.md` | WHY decisions were made (consult before changing architecture) |
+| `progress.md` | Feature status, pending tasks, known bugs |
 
-After major changes:
+---
 
-* update progress.md
-* update current-task.md
-* update decisions.md if architecture changes
+## After Major Changes — Update These
 
-Never store unnecessary logs or long explanations.
+- **Always**: `progress.md` (mark tasks done/pending, add known issues)
+- **Always**: `current-task.md` (update status, what was done, what's next)
+- **Architecture changes**: `decisions.md` (log the decision, rationale, trade-offs)
+- **Scope changes**: `project.md` (only if features or stack changed)
+
+---
+
+## Memory Bank Update Rules
+
+- Keep entries short and factual — no long explanations
+- Use checkboxes `✅ / [ ]` for tasks in `progress.md`
+- Always include date on updates
+- Never duplicate info across files — each file has one purpose
+- If context grows large: summarize, update memory bank, suggest `/newtask`

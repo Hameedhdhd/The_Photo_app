@@ -8,18 +8,15 @@ import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
-import CategoryScroll from '../components/CategoryScroll';
+import CategoryPicker from '../components/CategoryPicker';
 import ListingCard from '../components/ListingCard';
 import EmptyState from '../components/EmptyState';
 import MenuDrawer from '../components/MenuDrawer';
 import { LoadingScreen } from '../components/LoadingSpinner';
 import { colors, typography, spacing, radius } from '../theme';
+import { CATEGORIES } from '../constants/categories';
 
 const FILTER_TABS = ['All', 'Favorites'];
-
-const ROOMS = [
-  'Kitchen', 'Bathroom', 'Bedroom', 'Living Room', 'Garage', 'Office', 'Other'
-];
 
 export default function MyListingsScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
@@ -42,30 +39,44 @@ export default function MyListingsScreen({ navigation }) {
   const fetchListings = useCallback(async () => {
     setLoading(true);
     try {
-      let query = supabase
+      // Use getSession() which reads local storage (no network required)
+      const { data: { session } } = await supabase.auth.getSession();
+      const currentUserId = session?.user?.id;
+      console.log('[MyListings] Fetching for user:', currentUserId);
+
+      if (!currentUserId) {
+        console.log('[MyListings] No active session - user not logged in');
+        setListings([]);
+        setLoading(false);
+        return;
+      }
+
+      // Diagnostic fetch: Pull all items to check UID alignment
+      const { data, error } = await supabase
         .from('items')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (userId) {
-        query = query.eq('user_id', userId);
-      }
+      console.log('[MyListings] DB Query result:', { count: data?.length, error });
 
-      const { data, error } = await query;
-
-      if (error) {
-        console.error('Error fetching listings:', error);
-        setListings([]);
-      } else {
-        setListings(data || []);
-      }
+       if (error) {
+         console.error('[MyListings] DB Error:', error);
+         setListings([]);
+       } else if (data) {
+         console.log('[MyListings] Items found in DB:', data.length);
+         
+         // Filter to show only current user's items
+         const myItems = data.filter(item => item.user_id === currentUserId);
+         console.log('[MyListings] Current user items:', myItems.length);
+         setListings(myItems);
+       }
     } catch (err) {
-      console.error('Fetch error:', err);
+      console.error('[MyListings] Global Fetch error:', err);
       setListings([]);
     } finally {
       setLoading(false);
     }
-  }, [userId]);
+  }, []);
 
   useEffect(() => {
     const loadUserId = async () => {
@@ -85,7 +96,7 @@ export default function MyListingsScreen({ navigation }) {
   useEffect(() => {
     const categorySet = new Set();
     listings.forEach(item => {
-      if (item.category) categorySet.add(item.category);
+      if (item.category && item.category !== 'All') categorySet.add(item.category);
     });
     setCategories(['All', ...Array.from(categorySet)]);
   }, [listings]);
@@ -99,14 +110,15 @@ export default function MyListingsScreen({ navigation }) {
       result = result.filter(item => item.favorite);
     }
 
-    // Room filter
-    if (selectedRoom !== 'All') {
-      result = result.filter(item => item.room === selectedRoom);
-    }
-
-    // Category filter
-    if (selectedCategory !== 'All') {
-      result = result.filter(item => item.category === selectedCategory);
+    // Category Filter - Robust filtering for Room/Category transition
+    if (selectedRoom && selectedRoom !== 'All') {
+      result = result.filter(item => {
+        const itemRoom = String(item.room || '').toLowerCase();
+        const itemCategory = String(item.category || '').toLowerCase();
+        const target = selectedRoom.toLowerCase();
+        
+        return itemRoom === target || itemCategory === target;
+      });
     }
 
     // Search filter
@@ -118,7 +130,11 @@ export default function MyListingsScreen({ navigation }) {
         (item.description_en && item.description_en.toLowerCase().includes(query)) ||
         (item.description_de && item.description_de.toLowerCase().includes(query)) ||
         (item.category && item.category.toLowerCase().includes(query)) ||
-        (item.address && item.address.toLowerCase().includes(query))
+        (item.address && item.address.toLowerCase().includes(query)) ||
+        (item.street_name && item.street_name.toLowerCase().includes(query)) ||
+        (item.city && item.city.toLowerCase().includes(query)) ||
+        (item.country && item.country.toLowerCase().includes(query)) ||
+        (item.postal_code && item.postal_code.toLowerCase().includes(query))
       );
     }
 
@@ -158,8 +174,8 @@ export default function MyListingsScreen({ navigation }) {
 
   const handleMenuNavigate = useCallback((route) => {
     setMenuVisible(false);
-    if (route === 'Scan') {
-      navigation.navigate('Scan');
+    if (route === 'Scan Items') {
+      navigation.navigate('Scan Items');
     }
   }, [navigation]);
 
@@ -167,14 +183,24 @@ export default function MyListingsScreen({ navigation }) {
     await supabase.auth.signOut();
   }, []);
 
-  const renderListingItem = ({ item, index }) => (
-    <ListingCard
-      item={item}
-      index={index}
-      onPress={handleItemPress}
-      onToggleFavorite={handleToggleFavorite}
-    />
-  );
+  const renderListingItem = ({ item, index }) => {
+    // Standardize description for old items
+    const displayDescription = item.description || item.description_en || item.description_de || '';
+    const displayCategory = item.category || item.room || 'Other';
+    
+    return (
+      <ListingCard
+        item={{
+          ...item,
+          description: displayDescription,
+          category: displayCategory
+        }}
+        index={index}
+        onPress={handleItemPress}
+        onToggleFavorite={handleToggleFavorite}
+      />
+    );
+  };
 
   if (loading && !refreshing) {
     return <LoadingScreen message="Loading your items..." />;
@@ -222,31 +248,19 @@ export default function MyListingsScreen({ navigation }) {
           ))}
         </View>
 
-        {/* Room Filter */}
+        {/* Category Filter */}
         <View style={styles.filterLabel}>
-          <Ionicons name="location-outline" size={12} color={colors.textTertiary} />
-          <Text style={styles.filterLabelText}>Room</Text>
+          <Ionicons name="grid-outline" size={12} color={colors.textTertiary} />
+          <Text style={styles.filterLabelText}>Category</Text>
         </View>
-        <CategoryScroll
-          categories={['All', ...ROOMS]}
+        <CategoryPicker
           selectedCategory={selectedRoom}
-          onSelect={setSelectedRoom}
+          onSelectCategory={setSelectedRoom}
+          selectedSubcategories={[]}
+          onSelectSubcategory={() => {}}
+          showAllOption={true}
         />
 
-        {/* Category Filter */}
-        {categories.length > 1 && (
-          <>
-            <View style={styles.filterLabel}>
-              <Ionicons name="pricetag-outline" size={12} color={colors.textTertiary} />
-              <Text style={styles.filterLabelText}>Category</Text>
-            </View>
-            <CategoryScroll
-              categories={categories}
-              selectedCategory={selectedCategory}
-              onSelect={setSelectedCategory}
-            />
-          </>
-        )}
       </Animated.View>
 
       {/* Items Grid or Empty State */}

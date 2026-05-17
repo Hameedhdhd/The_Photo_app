@@ -1,37 +1,21 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import {
-  View, Text, StyleSheet, FlatList, TouchableOpacity,
-  Image, TextInput, ScrollView, RefreshControl, Modal, Platform, StatusBar,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
-import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { View, StyleSheet, StatusBar, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import * as Location from 'expo-location';
 import { supabase } from '../../supabase';
-import { colors, spacing, radius, typography, shadows, layout } from '../theme';
-import EmptyState from '../components/EmptyState';
+import { colors, spacing, layout } from '../theme';
 import ListingCard from '../components/ListingCard';
 import { SkeletonCard } from '../components/Skeleton';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Text } from 'react-native';
 
-// Safe maps import
-let MapView = null, Marker = null, PROVIDER_GOOGLE = null;
-if (Platform.OS !== 'web') {
-  try {
-    const moduleName = 'react-native-maps';
-    const maps = require(moduleName);
-    MapView = maps.default; Marker = maps.Marker; PROVIDER_GOOGLE = maps.PROVIDER_GOOGLE;
-  } catch (e) { console.log('react-native-maps not available'); }
-}
-
-const CATEGORIES = [
-  { label: 'All', icon: 'grid-outline' },
-  { label: 'Electronics', icon: 'phone-portrait-outline' },
-  { label: 'Furniture', icon: 'bed-outline' },
-  { label: 'Clothing', icon: 'shirt-outline' },
-  { label: 'Books', icon: 'book-outline' },
-  { label: 'Sports', icon: 'bicycle-outline' },
-  { label: 'Other', icon: 'ellipsis-horizontal-outline' },
-];
+// New Sub-components
+import MarketplaceHeader from '../components/marketplace/MarketplaceHeader';
+import MarketplaceLocationModal from '../components/marketplace/MarketplaceLocationModal';
+import MarketplaceList from '../components/marketplace/MarketplaceList';
+import MarketplaceMap from '../components/marketplace/MarketplaceMap';
+import MarketplaceItemModal from '../components/marketplace/MarketplaceItemModal';
+import { CATEGORIES } from '../constants/categories';
 
 export default function MarketplaceScreen() {
   const navigation = useNavigation();
@@ -42,48 +26,107 @@ export default function MarketplaceScreen() {
   const [viewMode, setViewMode] = useState('list');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedSubcategories, setSelectedSubcategories] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
   const [currentUserId, setCurrentUserId] = useState(null);
+  const [searchLocation, setSearchLocation] = useState(null);
+  const [searchRadius, setSearchRadius] = useState(25);
+  const [showLocationModal, setShowLocationModal] = useState(false);
+  const [cityInput, setCityInput] = useState('');
+  const [postcodeInput, setPostcodeInput] = useState('');
+  const [stateInput, setStateInput] = useState('');
+  const [searchResults, setSearchResults] = useState(null);
+  const [mapKey, setMapKey] = useState(0);
+  const mapRef = useRef(null);
+  const [unifiedSearchInput, setUnifiedSearchInput] = useState('');
+  const [unifiedSearchSuggestions, setUnifiedSearchSuggestions] = useState([]);
+  const [showUnifiedSearchSuggestions, setShowUnifiedSearchSuggestions] = useState(false);
+  const [citySuggestions, setCitySuggestions] = useState([]);
+  const [showCitySuggestions, setShowCitySuggestions] = useState(false);
+  const [postcodeSuggestions, setPostcodeSuggestions] = useState([]);
+  const [showPostcodeSuggestions, setShowPostcodeSuggestions] = useState(false);
+  const [pageOffset, setPageOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const pageSize = 20;
 
   useEffect(() => {
     const init = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) setCurrentUserId(user.id);
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) setCurrentUserId(session.user.id);
     };
     init();
-    fetchItems();
+    fetchItems(0);
     getCurrentLocation();
   }, []);
 
   useEffect(() => { filterItems(); }, [items, searchQuery, selectedCategory]);
 
-  const fetchItems = async () => {
+  const fetchItems = async (offset = 0) => {
     try {
-      const { data, error } = await supabase
-        .from('items').select('*').eq('status', 'listed')
-        .order('created_at', { ascending: false });
-      if (error) throw error;
-      setItems(data || []);
+      const baseURL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8000';
+      const url = `${baseURL}/api/items?limit=${pageSize}&offset=${offset}&category=${selectedCategory}`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+      if (offset === 0) setItems(data || []);
+      else setItems(prev => [...prev, ...data]);
+      setHasMore((data || []).length === pageSize);
+      setPageOffset(offset);
     } catch (e) {
-      console.error('Error fetching items:', e);
-      setItems([]);
+      if (offset === 0) setItems([]);
     } finally {
       setLoading(false);
     }
   };
 
-  const getCurrentLocation = () => {
+  const getCurrentLocation = async () => {
     try {
+      if (Platform.OS !== 'web') {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          setUserLocation({ latitude: 52.52, longitude: 13.405 });
+          return;
+        }
+        const loc = await Location.getCurrentPositionAsync({});
+        setUserLocation({ latitude: loc.coords.latitude, longitude: loc.coords.longitude });
+        return;
+      }
       if (navigator?.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (pos) => setUserLocation({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }),
-          (err) => console.log('Location:', err.message),
+          () => setUserLocation({ latitude: 52.52, longitude: 13.405 }),
           { enableHighAccuracy: false, timeout: 10000, maximumAge: 60000 }
         );
+      } else {
+        setUserLocation({ latitude: 52.52, longitude: 13.405 });
       }
-    } catch (e) {}
+    } catch (e) {
+      setUserLocation({ latitude: 52.52, longitude: 13.405 });
+    }
   };
+
+  const performRadiusSearch = useCallback(async () => {
+    if (!searchLocation) {
+      filterItems();
+      return;
+    }
+    setLoading(true);
+    setSearchResults([]);
+    try {
+      const baseURL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8000';
+      let url = `${baseURL}/api/search-radius?latitude=${searchLocation.lat}&longitude=${searchLocation.lng}&radius_km=${searchRadius}`;
+      if (selectedCategory !== 'All') url += `&category=${selectedCategory}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      if (response.ok) setSearchResults(data);
+      else setSearchResults([]);
+    } catch (error) {
+      setSearchResults([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [searchLocation, searchRadius, selectedCategory]);
 
   const filterItems = () => {
     let filtered = items;
@@ -95,50 +138,272 @@ export default function MarketplaceScreen() {
     setFilteredItems(filtered);
   };
 
+  useEffect(() => {
+    if (searchLocation) performRadiusSearch();
+    else {
+      setSearchResults(null);
+      filterItems();
+    }
+  }, [searchLocation, searchRadius, selectedCategory, performRadiusSearch]);
+
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await fetchItems();
     setRefreshing(false);
   }, []);
 
+  const handleUseMyLocation = async () => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') return;
+      const loc = await Location.getCurrentPositionAsync({});
+      const lat = loc.coords.latitude;
+      const lng = loc.coords.longitude;
+      try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=10&addressdetails=1`);
+        const data = await response.json();
+        if (data && data.address) {
+          const address = data.address;
+          let postcode = address.postcode || '';
+          if (!postcode) {
+            const displayNameParts = data.display_name ? data.display_name.split(',').map(p => p.trim()) : [];
+            const postcodeMatch = displayNameParts.join(' ').match(/\b\d{5}\b/);
+            if (postcodeMatch) postcode = postcodeMatch[0];
+          }
+          if (postcode) {
+             const { data: dbData } = await supabase.from('german_addresses').select('postcode, city, state').eq('postcode', postcode.trim()).limit(1);
+             if (dbData && dbData.length > 0) {
+               const dbRecord = dbData[0];
+               setCityInput(dbRecord.city);
+               setPostcodeInput(dbRecord.postcode);
+               setStateInput(dbRecord.state);
+              setSearchLocation({ lat, lng, name: `${dbRecord.state}, ${dbRecord.city}, ${dbRecord.postcode}` });
+            } else {
+              const city = address.city || address.town || address.village || address.county || '';
+              setCityInput(city);
+              setPostcodeInput(postcode);
+              setStateInput(address.state || '');
+              setSearchLocation({ lat, lng, name: `${address.state || ''}, ${city}, ${postcode}` });
+            }
+          } else {
+            setSearchLocation({ lat, lng, name: `${lat.toFixed(4)}, ${lng.toFixed(4)}` });
+          }
+        }
+      } catch (geocodeError) {
+        setSearchLocation({ lat, lng, name: `${lat.toFixed(4)}, ${lng.toFixed(4)}` });
+      }
+    } catch (error) {}
+  };
+
+  const handleClearLocation = () => {
+    setSearchLocation(null);
+    setSearchResults(null);
+    setCityInput('');
+    setPostcodeInput('');
+    setStateInput('');
+    setShowCitySuggestions(false);
+    setShowPostcodeSuggestions(false);
+  };
+
+  // Individual field clear handlers
+  const handleClearCity = () => {
+    setCityInput('');
+    setShowCitySuggestions(false);
+  };
+
+  const handleClearPostcode = () => {
+    setPostcodeInput('');
+    setShowPostcodeSuggestions(false);
+  };
+
+  const handleClearState = () => {
+    setStateInput('');
+  };
+
+  // State search handler - search locations by state only
+  const handleStateChange = async (text) => {
+    setStateInput(text);
+    if (text.trim().length >= 2) {
+      try {
+        // Search for unique states and their cities
+        const trimmedText = text.trim();
+        const { data } = await supabase
+          .from('german_addresses')
+          .select('state, city, postcode')
+          .ilike('state', `${trimmedText}%`)
+          .limit(20);
+        
+        if (data && data.length > 0) {
+          // Get unique states with at least one city example
+          const uniqueStates = Array.from(
+            new Map(data.map(item => [item.state, item])).values()
+          );
+          // For now, we'll search all cities in that state
+          const citiesInState = Array.from(
+            new Map(data.map(item => [`${item.city}_${item.state}`, item])).values()
+          );
+          setPostcodeSuggestions(citiesInState);
+          setShowPostcodeSuggestions(true);
+        }
+      } catch (error) {
+        console.log('State search error:', error);
+      }
+    } else {
+      setShowPostcodeSuggestions(false);
+    }
+  };
+
+  const handlePostcodeChange = async (text) => {
+    setPostcodeInput(text);
+    if (text.trim().length === 5) {
+      try {
+        const { data } = await supabase.from('german_addresses').select('postcode, city, state').eq('postcode', text.trim()).order('city', { ascending: true });
+        if (data && data.length > 0) {
+          if (data.length === 1) {
+            setCityInput(data[0].city);
+            setStateInput(data[0].state);
+            setPostcodeSuggestions([]);
+            setShowPostcodeSuggestions(false);
+            await geocodeLocation(data[0].city, text.trim());
+          } else {
+            const uniqueCities = Array.from(new Map(data.map(item => [`${item.city}_${item.state}`, { city: item.city, state: item.state, postcode: item.postcode }])).values());
+            setPostcodeSuggestions(uniqueCities);
+            setShowPostcodeSuggestions(true);
+          }
+        }
+      } catch (error) {}
+    } else {
+      setPostcodeSuggestions([]);
+      setShowPostcodeSuggestions(false);
+    }
+  };
+
+  const handleSelectPostcode = async (suggestion) => {
+    setCityInput(suggestion.city);
+    setStateInput(suggestion.state);
+    setPostcodeInput(suggestion.postcode);
+    setShowPostcodeSuggestions(false);
+    await geocodeLocation(suggestion.city, suggestion.postcode);
+  };
+
+  const handleUnifiedSearchChange = async (text) => {
+    setUnifiedSearchInput(text);
+    if (text.trim().length >= 2) {
+      try {
+        const trimmedText = text.trim();
+        const isNumeric = /^\d+$/.test(trimmedText);
+        let query = supabase.from('german_addresses').select('postcode, city, state');
+        if (isNumeric) query = query.ilike('postcode', `${trimmedText}%`);
+        else query = query.ilike('city', `${trimmedText}%`);
+        const { data } = await query.limit(10);
+        if (data && data.length > 0) {
+          const uniqueResults = Array.from(new Map(data.map(item => [`${item.city}_${item.state}_${item.postcode}`, item])).values());
+          setUnifiedSearchSuggestions(uniqueResults);
+          setShowUnifiedSearchSuggestions(true);
+        } else setShowUnifiedSearchSuggestions(false);
+      } catch (error) { setUnifiedSearchSuggestions([]); }
+    } else setShowUnifiedSearchSuggestions(false);
+  };
+
+  const handleSelectUnifiedResult = async (result) => {
+    setCityInput(result.city);
+    setPostcodeInput(result.postcode);
+    setStateInput(result.state);
+    setUnifiedSearchInput('');
+    setShowUnifiedSearchSuggestions(false);
+    await geocodeLocation(result.city, result.postcode);
+  };
+
+  const handleCityChange = async (text) => {
+    setCityInput(text);
+    if (text.trim().length > 1) {
+      try {
+        const trimmedText = text.trim();
+        const { data } = await supabase
+          .from('german_addresses')
+          .select('city, postcode, state')
+          .ilike('city', `${trimmedText}%`)
+          .limit(10);
+        
+        if (data && data.length > 0) {
+          // Get unique cities with their first postcode/state
+          const uniqueCities = Array.from(
+            new Map(data.map(item => [item.city, { city: item.city, postcode: item.postcode, state: item.state }])).values()
+          );
+          setCitySuggestions(uniqueCities);
+          setShowCitySuggestions(true);
+        } else setShowCitySuggestions(false);
+      } catch (error) { 
+        console.log('City search error:', error);
+        setCitySuggestions([]); 
+      }
+    } else setShowCitySuggestions(false);
+  };
+
+  const handleSelectCity = async (city) => {
+    console.log('[MarketplaceScreen] City selected:', city.city, city.postcode);
+    setCityInput(city.city);
+    setPostcodeInput(city.postcode);
+    setStateInput(city.state);
+    setShowCitySuggestions(false);
+    setCitySuggestions([]);
+    // Auto-geocode immediately
+    await geocodeLocation(city.city, city.postcode);
+  };
+
+  const geocodeLocation = async (city, postcode) => {
+    try {
+      let query = '';
+      if (city && postcode) query = `${city}, ${postcode}, Germany`;
+      else if (city) query = `${city}, Germany`;
+      else if (postcode) query = `${postcode}, Germany`;
+      else return;
+      
+      console.log('[MarketplaceScreen] Geocoding:', query);
+      
+      const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1`);
+      const data = await response.json();
+      
+      if (data && data.length > 0) {
+        const { lat, lon } = data[0];
+        const cleanName = city && postcode ? `${city}, ${postcode}, Germany` : query;
+        console.log('[MarketplaceScreen] Geocoded successfully:', cleanName, 'Lat:', lat, 'Lng:', lon);
+        setSearchLocation({ lat: parseFloat(lat), lng: parseFloat(lon), name: cleanName });
+      } else {
+        console.log('[MarketplaceScreen] Geocoding returned no results for:', query);
+      }
+    } catch (error) {
+      console.error('[MarketplaceScreen] Geocoding error:', error);
+    }
+  };
+
+  const handleMapPress = (e) => {
+    const { latitude, longitude } = e.nativeEvent.coordinate;
+    setSearchLocation({ lat: latitude, lng: longitude, name: `${latitude.toFixed(4)}, ${longitude.toFixed(4)}` });
+  };
+
   const navigateToItemDetail = (item) => navigation.navigate('ItemDetail', { item });
 
   const navigateToChat = (item) => {
     if (!item.user_id || !currentUserId || item.user_id === currentUserId) return;
     const sortedIds = [currentUserId, item.user_id].sort();
-    navigation.navigate('ChatDetail', {
-      chatId: `${sortedIds[0]}_${sortedIds[1]}_${item.item_id}`,
-      otherUserId: item.user_id,
-      item,
-    });
+    navigation.navigate('ChatDetail', { chatId: `${sortedIds[0]}_${sortedIds[1]}_${item.item_id}`, otherUserId: item.user_id, item });
   };
 
   const renderListItem = ({ item, index }) => (
-    <ListingCard
-      item={item}
-      index={index}
-      onPress={() => navigateToItemDetail(item)}
-      onMessage={() => navigateToChat(item)}
-    />
+    <ListingCard item={item} index={index} onPress={() => navigateToItemDetail(item)} onMessage={() => navigateToChat(item)} />
   );
 
+  const displayItems = searchResults !== null ? searchResults : filteredItems;
   const itemsWithLocation = filteredItems.filter(i => i.latitude && i.longitude);
 
-  if (loading) {
+  if (loading && items.length === 0) {
     return (
       <View style={styles.container}>
         <LinearGradient colors={[colors.primary, '#818CF8']} style={styles.headerGradient}>
-          <View style={styles.headerContent}>
-            <Text style={styles.headerTitle}>Marketplace</Text>
-            <Text style={styles.headerSub}>Discover amazing deals</Text>
-          </View>
+          <View style={styles.headerContent}><Text style={styles.headerTitle}>Marketplace</Text></View>
         </LinearGradient>
-        <View style={styles.skeletonContainer}>
-          <View style={styles.skeletonRow}>
-            <SkeletonCard />
-            <SkeletonCard />
-          </View>
-        </View>
+        <View style={styles.skeletonContainer}><View style={styles.skeletonRow}><SkeletonCard /><SkeletonCard /></View></View>
       </View>
     );
   }
@@ -146,389 +411,91 @@ export default function MarketplaceScreen() {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
+      
+      <MarketplaceHeader
+        filteredItemsCount={filteredItems.length}
+        viewMode={viewMode}
+        setViewMode={setViewMode}
+        searchLocation={searchLocation}
+        setShowLocationModal={setShowLocationModal}
+        searchRadius={searchRadius}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        categories={[{ label: 'All', icon: 'grid-outline' }, ...CATEGORIES]}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        selectedSubcategories={selectedSubcategories}
+        onSelectSubcategory={setSelectedSubcategories}
+        navigation={navigation}
+      />
 
-      {/* ─── Premium Header ─── */}
-      <LinearGradient
-        colors={[colors.primary, '#818CF8']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.headerGradient}
-      >
-        <Animated.View entering={FadeInDown.duration(400)} style={styles.headerContent}>
-          <View style={styles.headerTop}>
-            <View>
-              <Text style={styles.headerTitle}>Marketplace</Text>
-              <Text style={styles.headerSub}>
-                {filteredItems.length > 0
-                  ? `${filteredItems.length} items available`
-                  : 'Discover amazing deals'}
-              </Text>
-            </View>
-            <View style={styles.viewToggle}>
-              <TouchableOpacity
-                style={[styles.toggleBtn, viewMode === 'list' && styles.toggleBtnActive]}
-                onPress={() => setViewMode('list')}
-              >
-                <Ionicons name="grid-outline" size={17} color={viewMode === 'list' ? colors.primary : 'rgba(255,255,255,0.7)'} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.toggleBtn, viewMode === 'map' && styles.toggleBtnActive]}
-                onPress={() => setViewMode('map')}
-              >
-                <Ionicons name="map-outline" size={17} color={viewMode === 'map' ? colors.primary : 'rgba(255,255,255,0.7)'} />
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {/* Search Bar */}
-          <View style={styles.searchBar}>
-            <Ionicons name="search" size={18} color={colors.textTertiary} />
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Search items, categories..."
-              placeholderTextColor={colors.textTertiary}
-              value={searchQuery}
-              onChangeText={setSearchQuery}
-              returnKeyType="search"
-            />
-            {searchQuery ? (
-              <TouchableOpacity onPress={() => setSearchQuery('')}>
-                <Ionicons name="close-circle" size={18} color={colors.textTertiary} />
-              </TouchableOpacity>
-            ) : null}
-          </View>
-        </Animated.View>
-      </LinearGradient>
-
-      {/* ─── Category Chips ─── */}
-      <Animated.View entering={FadeInDown.duration(400).delay(100)}>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.categoriesContainer}
-          contentContainerStyle={styles.categoriesContent}
-        >
-          {CATEGORIES.map((cat) => {
-            const isSelected = selectedCategory === cat.label;
-            return (
-              <TouchableOpacity
-                key={cat.label}
-                style={[styles.categoryChip, isSelected && styles.categoryChipActive]}
-                onPress={() => setSelectedCategory(cat.label)}
-                activeOpacity={0.75}
-              >
-                <Ionicons
-                  name={cat.icon}
-                  size={13}
-                  color={isSelected ? colors.white : colors.textSecondary}
-                />
-                <Text style={[styles.categoryText, isSelected && styles.categoryTextActive]}>
-                  {cat.label}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
-      </Animated.View>
-
-      {/* ─── Content ─── */}
       {viewMode === 'list' ? (
-        filteredItems.length === 0 ? (
-          <EmptyState
-            icon="storefront-outline"
-            title={searchQuery ? 'No Results' : 'No Items Yet'}
-            subtitle={searchQuery ? 'Try a different search term' : 'Be the first to list something!'}
-            iconBgColor={colors.infoLight}
-            iconColor={colors.primary}
-          />
-        ) : (
-          <FlatList
-            data={filteredItems}
-            keyExtractor={(item) => String(item.item_id || item.id)}
-            renderItem={renderListItem}
-            numColumns={2}
-            columnWrapperStyle={styles.row}
-            contentContainerStyle={styles.listContent}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />
-            }
-            showsVerticalScrollIndicator={false}
-          />
-        )
+        <MarketplaceList
+          items={displayItems}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          searchQuery={searchQuery}
+          searchLocation={searchLocation}
+          searchRadius={searchRadius}
+          renderListItem={renderListItem}
+        />
       ) : (
-        <View style={styles.mapContainer}>
-          {!MapView || itemsWithLocation.length === 0 ? (
-            <EmptyState
-              icon="map-outline"
-              title={!MapView ? 'Map Not Available' : 'No Items on Map'}
-              subtitle={!MapView ? 'Use list view to browse items' : 'List items with addresses to see them here'}
-              iconBgColor={colors.infoLight}
-              iconColor={colors.primary}
-            />
-          ) : (
-            <MapView
-              provider={PROVIDER_GOOGLE}
-              style={styles.map}
-              initialRegion={{
-                latitude: userLocation?.latitude || 52.52,
-                longitude: userLocation?.longitude || 13.405,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-              }}
-            >
-              {Marker && itemsWithLocation.map((item) => (
-                item.latitude && item.longitude ? (
-                  <Marker
-                    key={item.item_id}
-                    coordinate={{ latitude: item.latitude, longitude: item.longitude }}
-                    title={item.title}
-                    description={item.price}
-                    onPress={() => setSelectedItem(item)}
-                  />
-                ) : null
-              ))}
-            </MapView>
-          )}
-        </View>
+        <MarketplaceMap
+          itemsWithLocation={itemsWithLocation}
+          userLocation={userLocation}
+          setSelectedItem={setSelectedItem}
+        />
       )}
 
-      {/* ─── Map Item Modal ─── */}
-      <Modal visible={!!selectedItem} transparent animationType="slide" onRequestClose={() => setSelectedItem(null)}>
-        {selectedItem && (
-          <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPress={() => setSelectedItem(null)}>
-            <Animated.View entering={FadeInUp.duration(300)} style={styles.modalCard}>
-              {selectedItem.image_url && (
-                <Image source={{ uri: selectedItem.image_url }} style={styles.modalImage} />
-              )}
-              <View style={styles.modalBody}>
-                <Text style={styles.modalTitle} numberOfLines={2}>{selectedItem.title}</Text>
-                <Text style={styles.modalPrice}>{selectedItem.price}</Text>
-                {selectedItem.address && (
-                  <View style={styles.modalLocationRow}>
-                    <Ionicons name="location-outline" size={14} color={colors.textTertiary} />
-                    <Text style={styles.modalLocationText} numberOfLines={1}>{selectedItem.address}</Text>
-                  </View>
-                )}
-                <View style={styles.modalActions}>
-                  <TouchableOpacity style={styles.modalBtn} onPress={() => { setSelectedItem(null); navigateToItemDetail(selectedItem); }}>
-                    <Ionicons name="eye-outline" size={18} color={colors.textPrimary} />
-                    <Text style={styles.modalBtnText}>Details</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={[styles.modalBtn, styles.modalBtnPrimary]} onPress={() => { setSelectedItem(null); navigateToChat(selectedItem); }}>
-                    <Ionicons name="chatbubble-outline" size={18} color={colors.white} />
-                    <Text style={[styles.modalBtnText, { color: colors.white }]}>Message</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <TouchableOpacity style={styles.modalClose} onPress={() => setSelectedItem(null)}>
-                <Ionicons name="close" size={20} color={colors.textSecondary} />
-              </TouchableOpacity>
-            </Animated.View>
-          </TouchableOpacity>
-        )}
-      </Modal>
+      <MarketplaceLocationModal
+        visible={showLocationModal}
+        onClose={() => setShowLocationModal(false)}
+        handleUseMyLocation={handleUseMyLocation}
+        unifiedSearchInput={unifiedSearchInput}
+        handleUnifiedSearchChange={handleUnifiedSearchChange}
+        showUnifiedSearchSuggestions={showUnifiedSearchSuggestions}
+        unifiedSearchSuggestions={unifiedSearchSuggestions}
+        handleSelectUnifiedResult={handleSelectUnifiedResult}
+        cityInput={cityInput}
+        handleCityChange={handleCityChange}
+        handleClearCity={handleClearCity}
+        showCitySuggestions={showCitySuggestions}
+        citySuggestions={citySuggestions}
+        handleSelectCity={handleSelectCity}
+        postcodeInput={postcodeInput}
+        handlePostcodeChange={handlePostcodeChange}
+        handleClearPostcode={handleClearPostcode}
+        showPostcodeSuggestions={showPostcodeSuggestions}
+        postcodeSuggestions={postcodeSuggestions}
+        handleSelectPostcode={handleSelectPostcode}
+        stateInput={stateInput}
+        handleStateChange={handleStateChange}
+        handleClearState={handleClearState}
+        geocodeLocation={geocodeLocation}
+        searchRadius={searchRadius}
+        setSearchRadius={setSearchRadius}
+        searchLocation={searchLocation}
+        handleMapPress={handleMapPress}
+        handleClearLocation={handleClearLocation}
+        mapKey={mapKey}
+        mapRef={mapRef}
+      />
+
+      <MarketplaceItemModal
+        selectedItem={selectedItem}
+        onClose={() => setSelectedItem(null)}
+        navigateToItemDetail={navigateToItemDetail}
+        navigateToChat={navigateToChat}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.gray50,
-  },
-  // ── Header ──
-  headerGradient: {
-    paddingTop: Platform.OS === 'ios' ? 54 : 40,
-    paddingBottom: spacing.lg,
-    paddingHorizontal: spacing.page,
-  },
+  container: { flex: 1, backgroundColor: colors.gray50 },
+  headerGradient: { paddingTop: Platform.OS === 'ios' ? 54 : 40, paddingBottom: spacing.lg, paddingHorizontal: spacing.page },
   headerContent: {},
-  headerTop: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: spacing.md,
-  },
-  headerTitle: {
-    fontSize: 28,
-    fontWeight: '900',
-    color: colors.white,
-    letterSpacing: -0.5,
-  },
-  headerSub: {
-    fontSize: 13,
-    color: 'rgba(255,255,255,0.75)',
-    marginTop: 2,
-    fontWeight: '500',
-  },
-  viewToggle: {
-    flexDirection: 'row',
-    backgroundColor: 'rgba(255,255,255,0.15)',
-    borderRadius: radius.lg,
-    padding: 3,
-    gap: 2,
-  },
-  toggleBtn: {
-    width: 34,
-    height: 34,
-    borderRadius: radius.md,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  toggleBtnActive: {
-    backgroundColor: colors.white,
-  },
-  searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.white,
-    borderRadius: radius.xl,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm + 2,
-    gap: spacing.sm,
-    ...shadows.sm,
-  },
-  searchInput: {
-    flex: 1,
-    ...typography.body,
-    color: colors.textPrimary,
-    padding: 0,
-  },
-  // ── Categories ──
-  categoriesContainer: {
-    backgroundColor: colors.white,
-    paddingVertical: spacing.sm,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.gray100,
-  },
-  categoriesContent: {
-    paddingHorizontal: spacing.md,
-    gap: spacing.sm,
-  },
-  categoryChip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.full,
-    backgroundColor: colors.gray100,
-    borderWidth: 1.5,
-    borderColor: 'transparent',
-  },
-  categoryChipActive: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
-  },
-  categoryText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: colors.textSecondary,
-  },
-  categoryTextActive: {
-    color: colors.white,
-  },
-  // ── List ──
-  listContent: {
-    paddingHorizontal: spacing.page - 4,
-    paddingTop: spacing.md,
-    paddingBottom: 100,
-  },
-  row: {
-    justifyContent: 'space-between',
-    marginBottom: spacing.md,
-  },
-  skeletonContainer: {
-    padding: spacing.page,
-  },
-  skeletonRow: {
-    flexDirection: 'row',
-    gap: spacing.md,
-    marginBottom: spacing.md,
-  },
-  // ── Map ──
-  mapContainer: { flex: 1 },
-  map: { flex: 1 },
-  // ── Modal ──
-  modalOverlay: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0,0,0,0.45)',
-  },
-  modalCard: {
-    backgroundColor: colors.white,
-    borderTopLeftRadius: 28,
-    borderTopRightRadius: 28,
-    overflow: 'hidden',
-    ...shadows.xl,
-  },
-  modalImage: {
-    width: '100%',
-    height: 220,
-    resizeMode: 'cover',
-  },
-  modalBody: {
-    padding: spacing.lg,
-    paddingBottom: Platform.OS === 'ios' ? 36 : spacing.lg,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: colors.textPrimary,
-    letterSpacing: -0.3,
-    marginBottom: 4,
-  },
-  modalPrice: {
-    fontSize: 22,
-    fontWeight: '900',
-    color: colors.primary,
-    marginBottom: spacing.sm,
-  },
-  modalLocationRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    marginBottom: spacing.lg,
-  },
-  modalLocationText: {
-    ...typography.caption,
-    color: colors.textTertiary,
-    flex: 1,
-  },
-  modalActions: {
-    flexDirection: 'row',
-    gap: spacing.md,
-  },
-  modalBtn: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: spacing.sm,
-    paddingVertical: spacing.md,
-    borderRadius: radius.xl,
-    backgroundColor: colors.gray100,
-    borderWidth: 1,
-    borderColor: colors.gray200,
-  },
-  modalBtnPrimary: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
-  },
-  modalBtnText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: colors.textPrimary,
-  },
-  modalClose: {
-    position: 'absolute',
-    top: spacing.md,
-    right: spacing.md,
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: 'rgba(0,0,0,0.45)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  headerTitle: { fontSize: 28, fontWeight: '900', color: colors.white },
+  skeletonContainer: { padding: spacing.page },
+  skeletonRow: { flexDirection: 'row', gap: spacing.md, marginBottom: spacing.md },
 });

@@ -1,15 +1,34 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException, Form
+"""
+The Photo App - Premium API
+Modular, scalable backend with separated concerns
+"""
+
+from fastapi import FastAPI, File, UploadFile, HTTPException, Form, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
 import uuid
-import shutil
+from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv()
+from app.services import (
+    FileHandler,
+    AIService,
+    GeocodingService,
+    StorageService,
+    DatabaseService,
+)
 
-app = FastAPI(title="The Photo App API", version="1.0.0")
+# Load from the unified master .env (backend/.env)
+load_dotenv(Path(__file__).parent.parent / ".env")
 
+app = FastAPI(
+    title="The Photo App API",
+    version="2.0.0 - Premium",
+    description="Premium marketplace backend with modular architecture"
+)
+
+# CORS Configuration
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -18,13 +37,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-VALID_ROOMS = ['Kitchen', 'Bathroom', 'Bedroom', 'Living Room', 'Garage', 'Office', 'Other']
+
+# ============================================================================
+# Models
+# ============================================================================
 
 class ListingResponse(BaseModel):
+    """Response model for item analysis"""
     title: str
     description: str | None = None
-    description_en: str | None = None  # Deprecated, kept for compatibility
-    description_de: str | None = None  # Deprecated, kept for compatibility
+    description_en: str | None = None
+    description_de: str | None = None
     price: str
     category: str
     item_id: str | None = None
@@ -34,23 +57,50 @@ class ListingResponse(BaseModel):
     latitude: float | None = None
     longitude: float | None = None
 
+
+class RadiusSearchResult(BaseModel):
+    """Result item from radius search"""
+    item_id: str
+    title: str
+    price: str
+    address: str | None = None
+    image_url: str | None = None
+    distance_km: float
+
+
+# ============================================================================
+# Routes
+# ============================================================================
+
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to The Photo App API", "version": "2.0.0", "status": "online"}
+    """API health check"""
+    return {
+        "message": "Welcome to The Photo App API",
+        "version": "2.0.0",
+        "status": "online"
+    }
+
 
 @app.get("/health")
 def health_check():
+    """Detailed health check with service status"""
     from app.database import supabase
+    
     db_status = "connected" if supabase else "disconnected"
     gemini_status = "configured" if os.environ.get("GEMINI_API_KEY") else "missing"
-    deepseek_status = "configured" if os.environ.get("DEEPSEEK_API_KEY") else "missing (using Gemini fallback)"
-    maps_status = "configured" if os.environ.get("GOOGLE_MAPS_API_KEY") else "missing"
+    deepseek_status = "configured" if os.environ.get("DEEPSEEK_API_KEY") else "missing"
+    
     return {
         "status": "healthy",
         "database": db_status,
-        "ai": {"gemini": gemini_status, "deepseek": deepseek_status},
-        "maps": maps_status,
+        "ai": {
+            "gemini": gemini_status,
+            "deepseek": deepseek_status
+        },
+        "geocoding": "nominatim (openstreetmap) - free, no API key required"
     }
+
 
 @app.post("/api/analyze-image", response_model=ListingResponse)
 async def analyze_image(
@@ -58,157 +108,250 @@ async def analyze_image(
     user_id: str = Form(None),
     address: str = Form(None)
 ):
-    print(f"Received upload: filename={file.filename}, content_type={file.content_type}, user_id={user_id}, address={address}")
+    """
+    Analyze image and create marketplace listing
     
-    if not file.filename:
-        # Set a default filename if none provided (common on web uploads)
-        file.filename = "photo.jpg"
-        print("No filename provided, using default: photo.jpg")
-
-    # Security: Use UUID-based filename to prevent path traversal and race conditions
-    safe_filename = f"{uuid.uuid4().hex}_{os.path.basename(file.filename)}"
-    temp_dir = "temp_uploads"
-    os.makedirs(temp_dir, exist_ok=True)
-    file_path = os.path.join(temp_dir, safe_filename)
-
+    Steps:
+    1. Save uploaded file
+    2. Analyze with Gemini Vision
+    3. Generate description with Deepseek
+    4. Geocode address
+    5. Upload image to storage
+    6. Save to database
+    """
+    
+    print(f"[API] Received: {file.filename}, user={user_id}, address={address}")
+    
+    file_path = None
+    item_id = None
+    
     try:
-        with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-
-        if not os.environ.get("GEMINI_API_KEY"):
-            response_data = ListingResponse(
-                title=f"Mock AI: {file.filename}",
-                description="Please set GEMINI_API_KEY to see real AI results. This is mock data.",
-                description_en="Please set GEMINI_API_KEY to see real AI results. This is mock data.",
-                description_de="Bitte GEMINI_API_KEY setzen, um echte KI-Ergebnisse zu sehen. Dies sind Testdaten.",
-                price="45 EUR",
-                category="Electronics",
-                item_id=f"ITEM-{uuid.uuid4().hex[:8].upper()}",
-                image_url=None,
-                user_id=user_id,
-                address=address,
-                latitude=None,
-                longitude=None
-            )
-        else:
-            from app.vision import get_vision_engine
-            from app.description_engine import get_description_engine
-            
-            vision_engine = get_vision_engine()
-            description_engine = get_description_engine()
-            
-            if not vision_engine:
-                raise HTTPException(status_code=500, detail="AI engine not initialized. Check GEMINI_API_KEY.")
-            
-            # Step 1: Gemini analyzes the image
-            ai_result = vision_engine.analyze_image(file_path)
-            
-            # Step 2: Deepseek generates high-conversion description
-            gemini_base_desc = ai_result.get("description_en", "")
-            high_conversion_desc = description_engine.generate_description(
-                title=ai_result.get("title", ""),
-                category=ai_result.get("category", ""),
-                gemini_description=gemini_base_desc,
-                price=ai_result.get("price")
-            )
-
-            # Geocode address if provided
-            lat, lng = None, None
-            if address:
-                try:
-                    import requests
-                    geocode_url = f"https://maps.googleapis.com/maps/api/geocode/json"
-                    params = {
-                        "address": address,
-                        "key": os.environ.get("GOOGLE_MAPS_API_KEY", "")
-                    }
-                    geo_response = requests.get(geocode_url, params=params, timeout=5)
-                    if geo_response.status_code == 200:
-                        geo_data = geo_response.json()
-                        if geo_data.get("results"):
-                            location = geo_data["results"][0]["geometry"]["location"]
-                            lat = location.get("lat")
-                            lng = location.get("lng")
-                except Exception as geocode_err:
-                    print(f"Warning: Could not geocode address: {geocode_err}")
-
-            response_data = ListingResponse(
-                title=ai_result.get("title", f"Analyzed: {file.filename}"),
-                description=high_conversion_desc,
-                description_en=ai_result.get("description_en", "No description generated."),
-                description_de=ai_result.get("description_de", "Keine Beschreibung erstellt."),
-                price=ai_result.get("price", "TBD"),
-                category=ai_result.get("category", "Uncategorized"),
-                item_id=f"ITEM-{uuid.uuid4().hex[:8].upper()}",
-                image_url=None,
-                user_id=user_id,
-                address=address,
-                latitude=lat,
-                longitude=lng
-            )
-
-        # Upload image to Supabase Storage and save item to database
-        from app.database import supabase
-        image_public_url = None
+        # Step 1: Save upload
+        if not file.filename:
+            file.filename = "photo.jpg"
         
-        if supabase:
-            try:
-                # Upload image to Supabase Storage
-                storage_path = f"{response_data.item_id}.jpg"
-                with open(file_path, "rb") as img_file:
-                    supabase.storage.from_("item_images").upload(
-                        storage_path,
-                        img_file,
-                        {"content-type": "image/jpeg", "upsert": "true"}
-                    )
-                # Get public URL
-                image_public_url = supabase.storage.from_("item_images").get_public_url(storage_path)
-                print(f"Image uploaded: {image_public_url}")
-                # Update the response with the image URL
-                response_data.image_url = image_public_url
-            except Exception as storage_err:
-                print(f"Warning: Could not upload image to storage. Error: {storage_err}")
-            
-            try:
-                db_data = {
-                    "title": response_data.title,
-                    "description": response_data.description,
-                    "description_en": response_data.description_en,
-                    "description_de": response_data.description_de,
-                    "price": response_data.price,
-                    "category": response_data.category,
-                    "item_id": response_data.item_id,
-                    "status": "draft",  # draft until user confirms listing
-                    "image_url": image_public_url,
-                }
-                if user_id:
-                    db_data["user_id"] = user_id
-                if response_data.address:
-                    db_data["address"] = response_data.address
-                if response_data.latitude is not None:
-                    db_data["latitude"] = response_data.latitude
-                if response_data.longitude is not None:
-                    db_data["longitude"] = response_data.longitude
-
-                supabase.table("items").insert(db_data).execute()
-                print(f"Successfully saved item to items table!")
-            except Exception as db_err:
-                print(f"Warning: Could not save to database. Error: {db_err}")
-
-        return response_data
-
+        file_path = FileHandler.save_upload(file, file.filename)
+        item_id = f"ITEM-{uuid.uuid4().hex[:8].upper()}"
+        print(f"[API] File saved: {file_path}, item_id={item_id}")
+        
+        # Step 2 & 3: AI Analysis
+        print("[API] Starting AI analysis...")
+        ai_result = AIService.analyze_image(file_path)
+        high_conversion_desc = AIService.generate_description(
+            title=ai_result.get("title", ""),
+            category=ai_result.get("category", ""),
+            gemini_desc=ai_result.get("description_en", ""),
+            price=ai_result.get("price")
+        )
+        
+        # Step 4: Geocoding
+        print("[API] Geocoding address...")
+        lat, lng = None, None
+        if address:
+            lat, lng = GeocodingService.geocode(address)
+            if lat and lng:
+                print(f"[API] Geocoded: {address} → ({lat}, {lng})")
+        
+        # Step 5: Upload image
+        print("[API] Uploading image...")
+        image_url = StorageService.upload_image(file_path, item_id)
+        if image_url:
+            print(f"[API] Image URL: {image_url}")
+        
+        # Step 6: Save to database
+        print("[API] Saving to database...")
+        db_data = {
+            "item_id": item_id,
+            "title": ai_result.get("title", "Unknown"),
+            "description": high_conversion_desc,
+            "description_en": ai_result.get("description_en", ""),
+            "description_de": ai_result.get("description_de", ""),
+            "price": ai_result.get("price", "0"),
+            "category": ai_result.get("category", "Other"),
+            "status": "draft",
+            "address": address,
+            "latitude": lat,
+            "longitude": lng,
+            "image_url": image_url,
+            "user_id": user_id
+        }
+        
+        db_saved = DatabaseService.save_item(db_data)
+        if db_saved:
+            print("[API] Item saved successfully!")
+        
+        # Return response
+        return ListingResponse(
+            title=ai_result.get("title", f"Analyzed: {file.filename}"),
+            description=high_conversion_desc,
+            description_en=ai_result.get("description_en", ""),
+            description_de=ai_result.get("description_de", ""),
+            price=ai_result.get("price", "0"),
+            category=ai_result.get("category", "Other"),
+            item_id=item_id,
+            image_url=image_url,
+            user_id=user_id,
+            address=address,
+            latitude=lat,
+            longitude=lng
+        )
+        
     except HTTPException:
         raise
     except Exception as e:
-        print(f"Error during image analysis: {e}")
+        print(f"[API ERROR] {e}")
         raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
     finally:
-        if os.path.exists(file_path):
-            try:
-                os.remove(file_path)
-            except OSError:
-                pass
+        # Cleanup temp file
+        if file_path:
+            FileHandler.cleanup(file_path)
+
+
+@app.get("/api/items", response_model=list[RadiusSearchResult])
+async def get_items(
+    limit: int = Query(20, ge=1, le=100, description="Items per page"),
+    offset: int = Query(0, ge=0, description="Pagination offset"),
+    category: str = Query(None, description="Filter by category"),
+):
+    """
+    Get paginated list of items (optimized for mobile apps)
+    
+    Example: /api/items?limit=20&offset=0&category=Electronics
+    """
+    from app.database import supabase
+    
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Database connection failed")
+    
+    try:
+        # Build query with pagination
+        query = supabase.table("items").select(
+            "item_id, title, price, address, image_url, latitude, longitude, category"
+        ).eq("status", "listed").order("created_at", desc=True)
+        
+        if category and category != "All":
+            query = query.eq("category", category)
+        
+        # Add pagination
+        query = query.range(offset, offset + limit - 1)
+        
+        response = query.execute()
+        items = response.data or []
+        
+        results = [
+            RadiusSearchResult(
+                item_id=item["item_id"],
+                title=item["title"],
+                price=item["price"],
+                address=item.get("address"),
+                image_url=item.get("image_url"),
+                distance_km=0  # Not applicable for regular items fetch
+            )
+            for item in items
+        ]
+        
+        print(f"[API] Fetched {len(results)} items (limit={limit}, offset={offset})")
+        return results
+    
+    except Exception as e:
+        print(f"[API ERROR] Items fetch failed: {e}")
+        raise HTTPException(status_code=500, detail=f"Fetch failed: {str(e)}")
+
+
+@app.get("/api/search-radius", response_model=list[RadiusSearchResult])
+async def search_radius(
+    latitude: float = Query(..., description="Search center latitude"),
+    longitude: float = Query(..., description="Search center longitude"),
+    radius_km: float = Query(25.0, description="Search radius in kilometers"),
+    category: str = Query(None, description="Filter by category"),
+    min_price: float = Query(None, description="Minimum price"),
+    max_price: float = Query(None, description="Maximum price"),
+):
+    """
+    Search for items within a radius using PostGIS
+    
+    Example: /api/search-radius?latitude=53.5511&longitude=9.9936&radius_km=25
+    """
+    from app.database import supabase
+    
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Database connection failed")
+    
+    try:
+        # Build the PostGIS SQL query
+        radius_meters = radius_km * 1000  # Convert km to meters
+        
+        # Query using Supabase RPC with PostGIS
+        # Since Supabase REST doesn't support PostGIS functions directly,
+        # we'll use a stored procedure approach or raw SQL via the query endpoint
+        
+        # For now, we'll fetch all items and filter in Python (suboptimal but works)
+        # In production, you'd create a PostgreSQL function
+        
+        response = supabase.table("items").select(
+            "item_id, title, price, address, image_url, latitude, longitude"
+        ).eq("status", "listed").execute()
+        
+        items = response.data
+        results = []
+        
+        for item in items:
+            if item.get("latitude") and item.get("longitude"):
+                # Simple distance calculation (Haversine formula)
+                from math import radians, cos, sin, asin, sqrt
+                
+                lat1, lon1 = radians(latitude), radians(longitude)
+                lat2, lon2 = radians(item["latitude"]), radians(item["longitude"])
+                
+                dlat = lat2 - lat1
+                dlon = lon2 - lon1
+                a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+                c = 2 * asin(sqrt(a))
+                r = 6371  # Earth's radius in km
+                distance = c * r
+                
+                if distance <= radius_km:
+                    # Apply additional filters
+                    if category and item.get("category") != category:
+                        continue
+                    
+                    if min_price and float(item.get("price", 0)) < min_price:
+                        continue
+                    
+                    if max_price and float(item.get("price", 0)) > max_price:
+                        continue
+                    
+                    results.append(RadiusSearchResult(
+                        item_id=item["item_id"],
+                        title=item["title"],
+                        price=item["price"],
+                        address=item.get("address"),
+                        image_url=item.get("image_url"),
+                        distance_km=round(distance, 2)
+                    ))
+        
+        # Sort by distance
+        results.sort(key=lambda x: x.distance_km)
+        
+        print(f"[API] Radius search: center=({latitude},{longitude}), radius={radius_km}km, results={len(results)}")
+        
+        return results
+        
+    except Exception as e:
+        print(f"[API ERROR] Radius search failed: {e}")
+        raise HTTPException(status_code=500, detail=f"Search failed: {str(e)}")
+
+
+# ============================================================================
+# Startup
+# ============================================================================
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run(
+        "app.main:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=True,
+        log_level="info"
+    )

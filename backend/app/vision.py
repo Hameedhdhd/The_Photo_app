@@ -12,11 +12,12 @@ class VisionEngine:
 
     def _init_client(self, api_key):
         try:
-            from google import genai
-            self.client = genai.Client(api_key=api_key)
+            import google.generativeai as genai
+            genai.configure(api_key=api_key)
+            self.client = genai
             self._initialized = True
         except ImportError:
-            print("google-genai is not installed")
+            print("google-generativeai is not installed")
         except Exception as e:
             print(f"Failed to initialize Gemini client: {e}")
 
@@ -33,10 +34,10 @@ class VisionEngine:
         # We must explicitly instruct it to return ONLY JSON, no markdown
         full_prompt = prompt + "\n\nCRITICAL: Return ONLY a raw JSON object. Do not wrap it in ```json blocks or any markdown."
 
-        response = self.client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=[full_prompt, pil_image],
-        )
+        # Using google-generativeai (v0.3.0) syntax
+        # Use models/gemini-2.5-flash which is available in your region/API
+        model = self.client.GenerativeModel('gemini-2.5-flash')
+        response = model.generate_content([full_prompt, pil_image])
 
         text = response.text.strip()
 

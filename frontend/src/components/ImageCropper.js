@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Animated, {
-  useAnimatedStyle, useSharedValue, withSpring, runOnJS
+  useAnimatedStyle, useSharedValue, withSpring, runOnJS, useAnimatedReaction
 } from 'react-native-reanimated';
 import { Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,9 +15,11 @@ import Button from './Button';
 import { colors, typography, spacing, radius, shadows } from '../theme';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
-const CROP_SIZE = SCREEN_WIDTH - 48;
-const CROP_X = 24;
-const CROP_Y = (SCREEN_HEIGHT * 0.42 - CROP_SIZE) / 2 + 80;
+const MIN_CROP_SIZE = 120;
+const MAX_CROP_SIZE = SCREEN_WIDTH - 48;
+const INITIAL_CROP_SIZE = SCREEN_WIDTH - 48;
+const INITIAL_CROP_X = 24;
+const INITIAL_CROP_Y = (SCREEN_HEIGHT * 0.42 - INITIAL_CROP_SIZE) / 2 + 80;
 
 export default function ImageCropper({ imageUri, onCrop, onRetake }) {
   const [processing, setProcessing] = useState(false);
@@ -83,9 +85,9 @@ export default function ImageCropper({ imageUri, onCrop, onRetake }) {
           {
             crop: {
               originX: Math.max(0, -translateX.value / scale.value),
-              originY: Math.max(0, (-translateY.value + (CROP_Y - 80)) / scale.value),
-              width: CROP_SIZE / scale.value,
-              height: CROP_SIZE / scale.value,
+              originY: Math.max(0, (-translateY.value + (INITIAL_CROP_Y - 80)) / scale.value),
+              width: INITIAL_CROP_SIZE / scale.value,
+              height: INITIAL_CROP_SIZE / scale.value,
             },
           },
           { resize: { width: 800 } },
@@ -137,10 +139,10 @@ export default function ImageCropper({ imageUri, onCrop, onRetake }) {
 
         {/* Crop Overlay */}
         <View style={styles.cropOverlay} pointerEvents="none">
-          <View style={[styles.darkOverlay, { top: 0, left: 0, right: 0, height: CROP_Y - 10 }]} />
-          <View style={[styles.darkOverlay, { bottom: 0, left: 0, right: 0, height: SCREEN_HEIGHT - CROP_Y - CROP_SIZE - 80 }]} />
-          <View style={[styles.darkOverlay, { top: CROP_Y - 10, left: 0, width: CROP_X, height: CROP_SIZE + 20 }]} />
-          <View style={[styles.darkOverlay, { top: CROP_Y - 10, right: 0, width: CROP_X, height: CROP_SIZE + 20 }]} />
+          <View style={[styles.darkOverlay, { top: 0, left: 0, right: 0, height: INITIAL_CROP_Y - 10 }]} />
+          <View style={[styles.darkOverlay, { bottom: 0, left: 0, right: 0, height: SCREEN_HEIGHT - INITIAL_CROP_Y - INITIAL_CROP_SIZE - 80 }]} />
+          <View style={[styles.darkOverlay, { top: INITIAL_CROP_Y - 10, left: 0, width: INITIAL_CROP_X, height: INITIAL_CROP_SIZE + 20 }]} />
+          <View style={[styles.darkOverlay, { top: INITIAL_CROP_Y - 10, right: 0, width: INITIAL_CROP_X, height: INITIAL_CROP_SIZE + 20 }]} />
 
           {/* Crop Frame */}
           <View style={styles.cropFrame}>
@@ -262,10 +264,10 @@ const styles = StyleSheet.create({
   },
   cropFrame: {
     position: 'absolute',
-    top: CROP_Y - 10,
-    left: CROP_X,
-    width: CROP_SIZE,
-    height: CROP_SIZE,
+    top: INITIAL_CROP_Y - 10,
+    left: INITIAL_CROP_X,
+    width: INITIAL_CROP_SIZE,
+    height: INITIAL_CROP_SIZE,
     borderWidth: 2,
     borderColor: 'rgba(255,255,255,0.85)',
   },

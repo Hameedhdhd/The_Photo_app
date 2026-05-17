@@ -16,7 +16,8 @@ const IMAGE_HEIGHT = CARD_WIDTH * 1.1;
 
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
-export default function ListingCard({ item, index, onPress, onToggleFavorite, onMessage }) {
+// Use React.memo to prevent re-renders when props haven't changed
+const ListingCard = React.memo(function ListingCard({ item, index, onPress, onToggleFavorite, onMessage }) {
   const isFavorite = item.favorite || false;
   const scale = useSharedValue(1);
   const favoriteScale = useSharedValue(1);
@@ -121,7 +122,7 @@ export default function ListingCard({ item, index, onPress, onToggleFavorite, on
       </AnimatedTouchable>
     </Animated.View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   card: {
@@ -231,3 +232,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+export default ListingCard;

@@ -83,7 +83,7 @@ export function LoadingScreen({ message = 'Loading...' }) {
   const logoAnimatedStyle = useAnimatedStyle(() => ({
     transform: [
       {
-        rotate: interpolate(rotate.value, [0, 1], [0, 360], Extrapolate.CLAMP),
+        rotate: interpolate(rotate.value, [0, 1], ['0deg', '360deg']),
       },
     ],
   }));
